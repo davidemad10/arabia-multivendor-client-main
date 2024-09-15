@@ -1,10 +1,8 @@
-import * as z from "zod"
-
+import * as z from "zod";
 
 export const buyerRegisterValidation = z.object({
-    email: z.string().email({message:"Invalid email"}),
-})
-
+  email: z.string().email({ message: "Invalid email" }),
+});
 
 // export const SignupValidation = z.object({
 //     name: z.string().min(2, { message: 'Too Short' }),
