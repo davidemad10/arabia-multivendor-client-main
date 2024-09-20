@@ -65,7 +65,7 @@ function classNames(...classes: string[]) {
 export default function Example() {
   const [mainImage, setMainImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(0);
-
+  const [activeTab, setActiveTab] = useState("product-details");
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -232,16 +232,75 @@ export default function Example() {
           </div>
         </div>
         <div className="mt-16 h-96">
+          {/* Product Details */}
           <div className="mt-5 flex justify-center gap-14 border-b border-gray-300 pb-5">
-            <button className="text-sm font-medium text-gray-400 hover:text-gray-700 focus:outline-none focus:text-gray-900">
+            <button
+              className={classNames(
+                activeTab === "product-details"
+                  ? "text-gray-900"
+                  : "text-gray-400",
+                "text-sm font-medium hover:text-gray-700 focus:outline-none"
+              )}
+              onClick={() => setActiveTab("product-details")}
+            >
               PRODUCT DETAILS
             </button>
-            <button className="text-sm font-medium text-gray-400 hover:text-gray-700 focus:outline-none focus:text-gray-900">
+            <button
+              className={classNames(
+                activeTab === "reviews" ? "text-gray-900" : "text-gray-400",
+                "text-sm font-medium hover:text-gray-700 focus:outline-none"
+              )}
+              onClick={() => setActiveTab("reviews")}
+            >
               REVIEWS
             </button>
-            <button className="text-sm font-medium text-gray-400 hover:text-gray-700 focus:outline-none focus:text-gray-900">
+            <button
+              className={classNames(
+                activeTab === "shipping-payment"
+                  ? "text-gray-900"
+                  : "text-gray-400",
+                "text-sm font-medium hover:text-gray-700 focus:outline-none"
+              )}
+              onClick={() => setActiveTab("shipping-payment")}
+            >
               SHIPPING & PAYMENT
             </button>
+          </div>
+          <div className="mt-8">
+            {activeTab === "product-details" && (
+              <div>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Product Details
+                </h2>
+                <p className="mt-4 text-sm text-gray-600">
+                  {product.description}
+                </p>
+                <ul className="mt-4 list-disc pl-5 text-sm text-gray-600">
+                  {product.highlights.map((highlight, index) => (
+                    <li key={index}>{highlight}</li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-sm text-gray-600">{product.details}</p>
+              </div>
+            )}
+            {activeTab === "reviews" && (
+              <div>
+                <h2 className="text-lg font-medium text-gray-900">Reviews</h2>
+                <p className="mt-4 text-sm text-gray-600">
+                  Customer reviews will go here.
+                </p>
+              </div>
+            )}
+            {activeTab === "shipping-payment" && (
+              <div>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Shipping & Payment
+                </h2>
+                <p className="mt-4 text-sm text-gray-600">
+                  Shipping and payment details will go here.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
