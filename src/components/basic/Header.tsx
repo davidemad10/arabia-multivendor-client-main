@@ -134,7 +134,7 @@ export default function Header() {
             <div className="w-1/12 flex flexEnd">
               <img
                 className="w-24"
-                src="../../../public/assets/icons/654651.png"
+                src="../../../public/icons/654651.png"
                 alt="soucond-logo"
               />
             </div>

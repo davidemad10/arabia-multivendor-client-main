@@ -39,6 +39,74 @@ export default function Home() {
       },
     },
   ];
+
+  const categoriesData = [
+    {
+      id: 1,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 2,
+      image: "https://cdn-icons-png.flaticon.com/128/2278/2278984.png",
+      translations: {
+        en: {
+          name: "Category 2",
+        },
+        ar: {
+          name: "فئة 2",
+        },
+      },
+      slug: "category-2",
+      is_featured: false,
+      lft: 3,
+      rght: 4,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 3,
+      image: "https://cdn-icons-png.flaticon.com/128/2954/2954918.png",
+      translations: {
+        en: {
+          name: "Category 3",
+        },
+        ar: {
+          name: "فئة 3",
+        },
+      },
+      slug: "category-3",
+      is_featured: false,
+      lft: 5,
+      rght: 6,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+  ];
+
   const categories = useGetCategories("", true);
 
   return (
@@ -76,13 +144,14 @@ export default function Home() {
             </div>
             <div className="">
               <HeroSlider
-                sliders={sliders.data || slidersData}
+                // sliders={sliders.data || []}
+                sliders={slidersData}
                 isPending={sliders.isPending}
               />
             </div>
             <div className="">
               <CategoriesSlider
-                categories={categories.data || []}
+                categories={categories.data || categoriesData}
                 isPending={categories.isPending}
               ></CategoriesSlider>
             </div>

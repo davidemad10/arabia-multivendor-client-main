@@ -1,50 +1,8 @@
-// import React from "react";
-
-// import styles from "../../../../public/styles/product-overview.module.css";
-
-// interface ProductOverviewProps {
-//   id: number;
-// }
-
-// const ProductOverview: React.FC<ProductOverviewProps> = ({ id }) => {
-//   return (
-//     <div></div>
-//     // <div className={`h-96 flex justify-center ${styles.overviewcontainer}`}>
-//     //   <div className={`w-1/3 ${styles.overviewcontainer}`}></div>
-//     //   <div className={`w-1/3 ${styles.overviewcontainer}`}></div>
-//     //   <div className={`w-1/3 ${styles.overviewcontainer}`}></div>
-//     // </div>
-//   );
-// };
-
-// export default ProductOverview;
-
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-"use client";
-
 import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { Radio, RadioGroup } from "@headlessui/react";
+
+import "../../../styles/product-overview.css";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -98,15 +56,17 @@ const product = {
   details:
     'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 };
+
 const reviews = { href: "#", average: 4, totalCount: 117 };
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+  const [mainImage, setMainImage] = useState(product.images[0]);
 
   return (
     <div className="bg-white">
@@ -151,7 +111,7 @@ export default function Example() {
         </nav>
 
         {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+        {/* <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <img
               alt={product.images[0].alt}
@@ -181,6 +141,33 @@ export default function Example() {
               src={product.images[3].src}
               className="h-full w-full object-cover object-center"
             />
+          </div>
+        </div> */}
+        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-4 lg:gap-x-8 lg:px-8">
+          {/* Main Image */}
+          <div className="col-span-3 aspect-h-4 aspect-w-3 overflow-hidden rounded-lg">
+            <img
+              alt={mainImage.alt}
+              src={mainImage.src}
+              className="h-full w-full object-cover object-center main-image"
+            />
+          </div>
+
+          {/* Thumbnail Images */}
+          <div className="hidden lg:flex lg:flex-col lg:gap-y-4 lg:col-span-1">
+            {product.images.map((image, index) => (
+              <div
+                key={index}
+                className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg cursor-pointer mb-4"
+                onClick={() => setMainImage(image)}
+              >
+                <img
+                  alt={image.alt}
+                  src={image.src}
+                  className="h-full w-full object-cover object-center thumbnail"
+                />
+              </div>
+            ))}
           </div>
         </div>
 

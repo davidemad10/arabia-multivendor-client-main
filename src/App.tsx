@@ -1,5 +1,5 @@
-import "./App.css";
-import "./Manual.css";
+import "./styles/App.css";
+import "./styles/Manual.css";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import RootLayout from "./layouts/root";
 import { Home, Products } from "./pages";
