@@ -1,71 +1,21 @@
 import { useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
-
+import { Rating } from "@mui/material";
 import "../../../styles/product-overview.css";
-
-const product = {
-  name: "Basic Tee 6-Pack",
-  price: "$192",
-  href: "#",
-  breadcrumbs: [
-    { id: 1, name: "Men", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  images: [
-    {
-      src: "https://images.unsplash.com/photo-1562424995-2efe650421dd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Two each of gray, white, and black shirts laying flat.",
-    },
-    {
-      src: "https://plus.unsplash.com/premium_photo-1667891838018-a6df081da495?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain black basic tee.",
-    },
-    {
-      src: "https://plus.unsplash.com/premium_photo-1665413642308-c5c1ed052d12?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain gray basic tee.",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain white basic tee.",
-    },
-  ],
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: false },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "2XL", inStock: true },
-    { name: "3XL", inStock: true },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-};
-
-const reviews = { href: "#", average: 4, totalCount: 117 };
+import { calculateAverageRating } from "../../../constants";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function ProductOverview({ product }) {
   const [mainImage, setMainImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(0);
-  const [activeTab, setActiveTab] = useState("product-details");
+  const [selectedColor, setSelectedColor] = useState("");
+
+  const averageRating = parseFloat(
+    calculateAverageRating(product.reviews).toString()
+  );
+
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -163,31 +113,28 @@ export default function Example() {
                     key={color.name}
                     className={classNames(
                       color.class,
-                      "h-6 w-6 rounded-full border border-gray-300"
+                      "h-6 w-6 rounded-full border border-gray-300 cursor-pointer",
+                      selectedColor === color.name
+                        ? "ring-2 ring-indigo-500"
+                        : ""
                     )}
                     title={color.name}
+                    onClick={() => setSelectedColor(color.name)}
                   />
                 ))}
               </div>
             </div>
             {/* Reviews */}
             <div className="flex items-center mt-6">
-              <div className="flex items-center">
-                {[0, 1, 2, 3, 4].map((rating) => (
-                  <StarIcon
-                    key={rating}
-                    aria-hidden="true"
-                    className={classNames(
-                      reviews.average > rating
-                        ? "text-gray-900"
-                        : "text-gray-200",
-                      "h-5 w-5 flex-shrink-0"
-                    )}
-                  />
-                ))}
-              </div>
+              <Rating
+                name="half-rating-read"
+                defaultValue={averageRating}
+                precision={0.1}
+                readOnly
+              />{" "}
+              <span>({averageRating})</span>
               <p className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                {reviews.totalCount} reviews
+                {product.reviews.length} reviews
               </p>
             </div>
             {/* quantity */}
@@ -229,78 +176,6 @@ export default function Example() {
             >
               Buy Now
             </button>
-          </div>
-        </div>
-        <div className="mt-16 h-96">
-          {/* Product Details */}
-          <div className="mt-5 flex justify-center gap-14 border-b border-gray-300 pb-5">
-            <button
-              className={classNames(
-                activeTab === "product-details"
-                  ? "text-gray-900"
-                  : "text-gray-400",
-                "text-sm font-medium hover:text-gray-700 focus:outline-none"
-              )}
-              onClick={() => setActiveTab("product-details")}
-            >
-              PRODUCT DETAILS
-            </button>
-            <button
-              className={classNames(
-                activeTab === "reviews" ? "text-gray-900" : "text-gray-400",
-                "text-sm font-medium hover:text-gray-700 focus:outline-none"
-              )}
-              onClick={() => setActiveTab("reviews")}
-            >
-              REVIEWS
-            </button>
-            <button
-              className={classNames(
-                activeTab === "shipping-payment"
-                  ? "text-gray-900"
-                  : "text-gray-400",
-                "text-sm font-medium hover:text-gray-700 focus:outline-none"
-              )}
-              onClick={() => setActiveTab("shipping-payment")}
-            >
-              SHIPPING & PAYMENT
-            </button>
-          </div>
-          <div className="mt-8">
-            {activeTab === "product-details" && (
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">
-                  Product Details
-                </h2>
-                <p className="mt-4 text-sm text-gray-600">
-                  {product.description}
-                </p>
-                <ul className="mt-4 list-disc pl-5 text-sm text-gray-600">
-                  {product.highlights.map((highlight, index) => (
-                    <li key={index}>{highlight}</li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-sm text-gray-600">{product.details}</p>
-              </div>
-            )}
-            {activeTab === "reviews" && (
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">Reviews</h2>
-                <p className="mt-4 text-sm text-gray-600">
-                  Customer reviews will go here.
-                </p>
-              </div>
-            )}
-            {activeTab === "shipping-payment" && (
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">
-                  Shipping & Payment
-                </h2>
-                <p className="mt-4 text-sm text-gray-600">
-                  Shipping and payment details will go here.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
