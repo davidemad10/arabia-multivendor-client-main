@@ -1,9 +1,10 @@
 import ProductOverview from "../../components/shared/products/productOverview";
 import ProductInfo from "../../components/shared/products/ProductInfo";
+import ProductsYouMayLike from "../../components/shared/products/ProductsYouMayLike";
 
 const product = {
   name: "Basic Tee 6-Pack",
-  price: "$192",
+  price: "  192",
   href: "#",
   breadcrumbs: [
     { id: 1, name: "Men", href: "#" },
@@ -44,48 +45,204 @@ const product = {
   ],
   description:
     'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
+  highlights: {
+    handmade: "Hand cut and sewn locally",
+    dye: "Dyed with our proprietary colors",
+    washing: "Pre-washed & pre-shrunk",
+    material: "Ultra-soft 100% cotton",
+  },
   reviews: [
     {
       username: "john_doe",
-      comment: "Great quality and very comfortable!",
+      comment: "Great quality and very comfortablee!",
       rating: 5,
+      avatar:
+        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
     },
     {
       username: "jane_smith",
       comment: "Good value for the price.",
       rating: 4,
+      avatar:
+        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
     },
     {
       username: "alex_jones",
       comment: "The fit is perfect and the material is soft.",
       rating: 5,
+      avatar:
+        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
     },
     {
       username: "emily_clark",
       comment: "Colors are nice but the fabric could be better.",
       rating: 3,
+      avatar:
+        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
     },
     {
       username: "michael_brown",
       comment: "Excellent product, will buy again.",
       rating: 5,
+      avatar:
+        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
     },
   ],
 };
+
+const products = [
+  {
+    id: 1,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 2,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 3,
+    name: "Basic Teee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 4,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+  {
+    id: 5,
+    name: "Basic Tee",
+    price: "  32",
+    href: "#",
+    image:
+      "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
+    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+  },
+];
 
 export default function ProductDetails() {
   return (
     <div>
       <ProductOverview product={product} />
       <ProductInfo product={product} />
+      <ProductsYouMayLike products={products} />
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function Header() {
               <Link to={"/"}>
                 <img
                   className="w-24"
-                  src="../../../public/assets/icons/4895665.png"
+                  src="../../../public/icons/4895665.png"
                   alt="logo"
                 />
               </Link>

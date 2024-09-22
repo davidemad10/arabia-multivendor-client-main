@@ -18,7 +18,7 @@ export default function ProductOverview({ product }) {
 
   return (
     <div className="bg-white">
-      <div className="pt-6">
+      <div className="pt-6 pb-10">
         <nav aria-label="Breadcrumb">
           <ol
             role="list"
