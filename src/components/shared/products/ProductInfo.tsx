@@ -59,21 +59,18 @@ export default function ProductInfo({ product }) {
               <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
                 {Object.keys(product.highlights).map((highlight, index) => (
                   <li key={index}>
-                    <strong>{highlight}</strong>:{" "}
-                    {product.highlights[highlight]}
-                    <br />
-                    <strong>{highlight}</strong>:{" "}
-                    {product.highlights[highlight]}
-                    <br />
-                    <strong>{highlight}</strong>:{" "}
-                    {product.highlights[highlight]}
-                    <br />
-                    <strong>{highlight}</strong>:{" "}
-                    {product.highlights[highlight]}
-                    <br />
-                    <strong>{highlight}</strong>:{" "}
-                    {product.highlights[highlight]}
-                    <br />
+                    <div className="flex flex-wrap">
+                      {Object.keys(product.highlights).map(
+                        (highlight, index) => (
+                          <div key={index} className="w-1/2">
+                            <div className="p-2">
+                              <strong>{highlight}</strong>
+                              <br /> {product.highlights[highlight]}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>

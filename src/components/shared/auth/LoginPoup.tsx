@@ -74,11 +74,7 @@ const LoginPoup: React.FC<LoginPoupProps> = ({
                   },
                 }}
               >
-                <img
-                  className="object-fill"
-                  src="/تنزيل.png"
-                  alt="Truck Delivery"
-                />
+                <img className="object-fill" src="../" alt="Truck Delivery" />
                 <img className="object-fill" src="/تنزيل.png" alt="Discount" />
               </motion.div>
 
@@ -92,7 +88,7 @@ const LoginPoup: React.FC<LoginPoupProps> = ({
                     repeatDelay: 0,
                     ease: "linear",
                     delay: 4,
-                  }, // تأخير يبدأ بعد الحركة الأولى
+                  },
                 }}
               >
                 <img

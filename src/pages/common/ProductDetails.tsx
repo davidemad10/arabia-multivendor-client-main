@@ -47,7 +47,7 @@ const product = {
     'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
   highlights: {
     handmade: "Hand cut and sewn locally",
-    dye: "Dyed with our proprietary colors",
+    dye: "Dyed with our propriPack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on ao fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive coletary colors",
     washing: "Pre-washed & pre-shrunk",
     material: "Ultra-soft 100% cotton",
   },
@@ -95,10 +95,12 @@ const products = [
     id: 1,
     name: "Basic Tee",
     price: "  32",
+    originalPrice: "  40",
     href: "#",
     image:
       "https://img.freepik.com/free-photo/front-view-smartphone-with-geometry-tools_23-2149404189.jpg?ga=GA1.1.1957910710.1726994598&semt=ais_hybrid",
-    imageAlt: "Two each of gray, white, and black shirts laying flat.",
+    imageAlt: "Two each of gray, white, and black shirts laying flat .",
+    discount: 10,
   },
   {
     id: 2,
