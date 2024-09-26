@@ -1,58 +1,174 @@
-
-import HeroSlider from '../../../components/shared/advertisement/HeroSlider'
-import CategoriesSlider from '../../../components/shared/products/CategoriesSlider'
-import ProductsSlider from '../../../components/shared/products/ProductsSlider'
-import BrandsUlove from '../../../components/shared/products/BrandsUlove'
-import { Helmet } from 'react-helmet';
-import { useGetHeroSliders } from '../../../lib/react-query/advertisement';
-import { useTranslation } from 'react-i18next';
-import { useGetCategories } from '../../../lib/react-query/product';
+import HeroSlider from "../../components/shared/advertisement/HeroSlider";
+import CategoriesSlider from "../../components/shared/products/CategoriesSlider";
+import ProductsSlider from "../../components/shared/products/ProductsSlider";
+import { Helmet } from "react-helmet";
+import { useGetHeroSliders } from "../../react-query/advertisement";
+import { useTranslation } from "react-i18next";
+import { useGetCategories } from "../../react-query/product";
 
 export default function Home() {
+  const { t } = useTranslation();
+  const sliders = useGetHeroSliders();
+  const slidersData = [
+    {
+      id: 1,
+      category: "example-category",
+      translations: {
+        en: {
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+        },
+        ar: {
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+        },
+      },
+    },
+    {
+      id: 2,
+      category: "example-category",
+      translations: {
+        en: {
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+        },
+        ar: {
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+        },
+      },
+    },
+  ];
 
-  const { t } = useTranslation()
-  const sliders = useGetHeroSliders()
-  const categories = useGetCategories('', true)
+  const categoriesData = [
+    {
+      id: 1,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 2,
+      image: "https://cdn-icons-png.flaticon.com/128/2278/2278984.png",
+      translations: {
+        en: {
+          name: "Category 2",
+        },
+        ar: {
+          name: "فئة 2",
+        },
+      },
+      slug: "category-2",
+      is_featured: false,
+      lft: 3,
+      rght: 4,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 3,
+      image: "https://cdn-icons-png.flaticon.com/128/2954/2954918.png",
+      translations: {
+        en: {
+          name: "Category 3",
+        },
+        ar: {
+          name: "فئة 3",
+        },
+      },
+      slug: "category-3",
+      is_featured: false,
+      lft: 5,
+      rght: 6,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+  ];
 
+  const categories = useGetCategories("", true);
 
   return (
     <div>
       <Helmet>
         <title>أربيا - متجر إلكتروني متعدد البائعين</title>
         <link rel="icon" type="image/svg+xml" href="/654651.png" />
-        <meta name="description" content="أربيا هو متجر إلكتروني متنوع يقدم مجموعة واسعة من المنتجات من مختلف البائعين. تسوق الآن واكتشف العروض الحصرية والمنتجات المميزة." />
-        <meta name="keywords" content="أربيا, متجر إلكتروني, تسوق عبر الإنترنت, منتجات متعددة, بائعين, عروض خاصة, تسوق" />
-        <meta property="og:title" content="أربيا - متجر إلكتروني متعدد البائعين" />
-        <meta property="og:description" content="أربيا هو وجهتك المفضلة للتسوق عبر الإنترنت. استعرض مجموعة واسعة من المنتجات والعروض من أفضل البائعين." />
-        <meta property="og:image" content="https://example.com/path/to/your/og-image.jpg" />
+        <meta
+          name="description"
+          content="أربيا هو متجر إلكتروني متنوع يقدم مجموعة واسعة من المنتجات من مختلف البائعين. تسوق الآن واكتشف العروض الحصرية والمنتجات المميزة."
+        />
+        <meta
+          name="keywords"
+          content="أربيا, متجر إلكتروني, تسوق عبر الإنترنت, منتجات متعددة, بائعين, عروض خاصة, تسوق"
+        />
+        <meta
+          property="og:title"
+          content="أربيا - متجر إلكتروني متعدد البائعين"
+        />
+        <meta
+          property="og:description"
+          content="أربيا هو وجهتك المفضلة للتسوق عبر الإنترنت. استعرض مجموعة واسعة من المنتجات والعروض من أفضل البائعين."
+        />
+        <meta
+          property="og:image"
+          content="https://example.com/path/to/your/og-image.jpg"
+        />
         <meta property="og:url" content="https://example.com/home" />
       </Helmet>
       <main>
-        <div className=' flexCenter flex-col'>
-          <div className=' container flex justify-center flex-col'>
-            <div className='pb-1 w-full'>
+        <div className=" flexCenter flex-col">
+          <div className=" container flex justify-center flex-col">
+            <div className="pb-1 w-full">
               <img src="/Banner-Egypt-1697117327.jpg" alt="" />
             </div>
-            <div className=''>
-              <HeroSlider sliders={sliders.data || []} isPending={sliders.isPending} />
+            <div className="">
+              <HeroSlider
+                // sliders={sliders.data || []}
+                sliders={slidersData}
+                isPending={sliders.isPending}
+              />
             </div>
-            <div className=''>
-              <CategoriesSlider categories={categories.data || []} isPending={categories.isPending}></CategoriesSlider>
+            <div className="">
+              <CategoriesSlider
+                categories={categories.data || categoriesData}
+                isPending={categories.isPending}
+              ></CategoriesSlider>
             </div>
-            <div className='w-full flexCenter '>
-              <div className='w-1/5'>
+            <div className="w-full flexCenter ">
+              <div className="w-1/5">
                 <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
               </div>
-              <div className='w-1/5'>
+              <div className="w-1/5">
                 <img src="/24-b2s-gaming-monitors-ar3.jpg" alt="" />
               </div>
-              <div className='w-1/5'>
+              <div className="w-1/5">
                 <img src="/23-b2s-smarthome-ar3.jpg" alt="" />
               </div>
-              <div className='w-1/5'>
+              <div className="w-1/5">
                 <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
               </div>
-              <div className='w-1/5'>
+              <div className="w-1/5">
                 <img src="/22-b2s-projectors-ar3.jpg" alt="" />
               </div>
             </div>
@@ -108,12 +224,11 @@ export default function Home() {
               <button className='button1 px-6 h-14 w-52 font-bold'>اكتشف منتجات أخرى</button>
             </div> */}
 
-
-            <div className='w-full flexCenter flex-col'>
-              <div className=' block'>
+            <div className="w-full flexCenter flex-col">
+              <div className=" block">
                 <img src="/c9b30476-e522-45b1-b0db-f0614b26896d.avif" alt="" />
               </div>
-              <div className='flexCenter gap-4'>
+              <div className="flexCenter gap-4">
                 <div>
                   <img src="/879.avif" alt="" />
                 </div>
@@ -121,7 +236,10 @@ export default function Home() {
                   <img src="/879.avif" alt="" />
                 </div>
                 <div>
-                  <img src="/c2e07874-0e43-49e3-b73a-c481dc63c818.avif" alt="" />
+                  <img
+                    src="/c2e07874-0e43-49e3-b73a-c481dc63c818.avif"
+                    alt=""
+                  />
                 </div>
                 <div>
                   <img src="/879.avif" alt="" />
@@ -133,26 +251,28 @@ export default function Home() {
                   <img src="/879.avif" alt="" />
                 </div>
                 <div>
-                  <img src="/3b2804b6-956e-481d-8442-776edf7d2003.avif" alt="" />
+                  <img
+                    src="/3b2804b6-956e-481d-8442-776edf7d2003.avif"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
-            <div className='w-full block'>
+            <div className="w-full block">
               <img src="/00ceba07-888888745.avif" alt="" />
             </div>
-            <div className=''>
+            <div className="">
               <ProductsSlider></ProductsSlider>
             </div>
-
           </div>
         </div>
-
       </main>
     </div>
-  )
+  );
 }
 
-{/* <Helmet>
+{
+  /* <Helmet>
   <title>Arbia - Multi-vendor Online Store</title>
   <meta name="description" content="Arbia is a diverse online store offering a wide range of products from various vendors. Shop now and discover exclusive deals and featured products." />
   <meta name="keywords" content="Arbia, online store, shop online, multi-vendor products, vendors, special offers, shopping" />
@@ -162,5 +282,8 @@ export default function Home() {
   <meta property="og:url" content="https://example.com/home" />
   <link rel="alternate" hreflang="en" href="https://example.com/home/en" />
   <link rel="alternate" hreflang="ar" href="https://example.com/home/ar" />
-  </Helmet> */}
-{/* <button className='button1 px-6 h-14 w-52 font-bold text-white'>ابدأ التسوق</button> */ }
+  </Helmet> */
+}
+{
+  /* <button className='button1 px-6 h-14 w-52 font-bold text-white'>ابدأ التسوق</button> */
+}
