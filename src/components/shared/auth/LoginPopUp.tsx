@@ -9,6 +9,8 @@ import { z } from "zod";
 import { buyerRegisterValidation } from "../../../utils/validation";
 import InputPassword from "./InputPassword";
 import { useBuyerRegister } from "../../../react-query/auth";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import DiscountIcon from "@mui/icons-material/Discount";
 
 interface LoginPopUpProps {
   isLoginPopUpOpen: boolean;
@@ -74,8 +76,11 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
                   },
                 }}
               >
-                <img className="object-fill" src="../" alt="Truck Delivery" />
-                <img className="object-fill" src="/تنزيل.png" alt="Discount" />
+                <p>
+                  <LocalShippingIcon /> Truck Delivery<span> </span>
+                  <span> </span>
+                  <DiscountIcon /> Discount
+                </p>
               </motion.div>
 
               <motion.div
@@ -91,11 +96,11 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
                   },
                 }}
               >
-                <img
-                  className="object-fill"
-                  src="/تنزيل.png"
-                  alt="Truck Delivery"
-                />
+                <p>
+                  <LocalShippingIcon /> Truck Delivery <span> </span>
+                  <span> </span>
+                  <DiscountIcon /> Discount
+                </p>
               </motion.div>
             </div>
             {buyerRegister.isSuccess ? (

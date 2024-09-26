@@ -5,7 +5,6 @@ import { RiShoppingCart2Line, RiUserLine } from "react-icons/ri";
 import { GrFavorite } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
 import SideCart from "../shared/cart/SideCart";
-import { TiArrowSortedDown } from "react-icons/ti";
 import LoginPopUp from "../shared/auth/LoginPopUp";
 import LanguageSelector from "./LanguageSelector";
 
@@ -35,7 +34,7 @@ export default function Header() {
   return (
     <header className="flexCenter">
       <div
-        className={`flex fixed gap-2 pb-2 ${
+        className={`flex fixed gap-2 p-6 pr-8 ${
           showHeader ? "top-0" : "-top-44"
         } duration-200 bg-white z-10 flex-col w-full`}
       >
@@ -53,8 +52,8 @@ export default function Header() {
             </div>
 
             {/* header navigation */}
-            <div className="container mx-auto hidden xl:flexCenter w-4 h-16">
-              <ul className="flex gap-5">
+            <div className="container hidden xl:flexCenter w-min h-16">
+              <ul className="mx-auto flex gap-5">
                 {headerLinks.map((link) => (
                   <li key={link.route}>
                     <NavLink
@@ -73,7 +72,7 @@ export default function Header() {
             </div>
 
             {/* Search Bar */}
-            <div className="w-2/6 md:flex">
+            <div className="w-2/6 md:flex justify-center">
               <div className="relative">
                 <input
                   placeholder="البحث عن المنتجات والعلامات التجارية والفئات"
