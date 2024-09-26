@@ -10,14 +10,14 @@ import { buyerRegisterValidation } from "../../../utils/validation";
 import InputPassword from "./InputPassword";
 import { useBuyerRegister } from "../../../react-query/auth";
 
-interface LoginPoupProps {
-  isLoginPoupOpen: boolean;
-  setLoginPoup: () => void;
+interface LoginPopUpProps {
+  isLoginPopUpOpen: boolean;
+  setLoginPopUp: () => void;
 }
 
-const LoginPoup: React.FC<LoginPoupProps> = ({
-  isLoginPoupOpen,
-  setLoginPoup,
+const LoginPopUp: React.FC<LoginPopUpProps> = ({
+  isLoginPopUpOpen,
+  setLoginPopUp,
 }) => {
   const buyerRegister = useBuyerRegister();
   const [userEmail, setUseremail] = useState("");
@@ -40,8 +40,8 @@ const LoginPoup: React.FC<LoginPoupProps> = ({
 
   return (
     <Dialog
-      open={isLoginPoupOpen}
-      onClose={setLoginPoup}
+      open={isLoginPopUpOpen}
+      onClose={setLoginPopUp}
       className="relative z-10"
     >
       <DialogBackdrop
@@ -56,7 +56,7 @@ const LoginPoup: React.FC<LoginPoupProps> = ({
             className=" relative py-5 gap-5 flexCenter flex-col transform h-[550px] max-sm:h-[400px] overflow-hidden rounded-lg w-[500px] max-md:w-11/12 bg-white shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in "
           >
             <button
-              onClick={setLoginPoup}
+              onClick={setLoginPopUp}
               className=" absolute w-fit rounded-full top-4 z-10 right-4 p-2 bg-gray-200 text-2xl"
             >
               <IoMdClose></IoMdClose>
@@ -139,4 +139,4 @@ const LoginPoup: React.FC<LoginPoupProps> = ({
   );
 };
 
-export default LoginPoup;
+export default LoginPopUp;
