@@ -242,9 +242,9 @@ const products = [
 export default function ProductDetails() {
   return (
     <div>
-      {/* <ProductOverview product={product} />
+      <ProductOverview product={product} />
       <ProductInfo product={product} />
-      <ProductsYouMayLike products={products} /> */}
+      <ProductsYouMayLike products={products} />
     </div>
   );
 }
