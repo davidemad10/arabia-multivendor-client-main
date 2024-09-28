@@ -50,7 +50,7 @@ export default function ProductInfo({ product }) {
                 Product Details
               </h2>
               <p className="mt-4 text-sm text-gray-600">
-                {product.description}
+                {product.translations.en.description}
               </p>
             </div>
 
@@ -58,16 +58,18 @@ export default function ProductInfo({ product }) {
             <div className="lg:w-5/12 w-full">
               <h2 className="text-lg font-medium text-gray-900">Highlights</h2>
               <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
-                {Object.keys(product.highlights).map((highlight, index) => (
-                  <li key={index} className="mb-2">
-                    <div className="w-full">
-                      <div className="p-2">
-                        <strong>{highlight}</strong>
-                        <br /> {product.highlights[highlight]}
+                {Object.keys(product.specifications).map(
+                  (specifications, index) => (
+                    <li key={index} className="mb-2">
+                      <div className="w-full">
+                        <div className="p-2">
+                          <strong>{specifications}</strong>
+                          <br /> {product.specifications[specifications]}
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           </div>

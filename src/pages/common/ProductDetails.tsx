@@ -3,91 +3,112 @@ import ProductInfo from "../../components/shared/products/ProductInfo";
 import ProductsYouMayLike from "../../components/shared/products/ProductsYouMayLike";
 
 const product = {
-  name: "Basic Tee 6-Pack",
-  price: "  192",
-  href: "#",
-  breadcrumbs: [
-    { id: 1, name: "Men", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  images: [
-    {
-      src: "https://images.unsplash.com/photo-1562424995-2efe650421dd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Two each of gray, white, and black shirts laying flat.",
+  sku: "colorsku",
+  productName: null,
+  category: {
+    id: 1,
+    translations: {
+      en: {
+        name: "category1",
+      },
     },
-    {
-      src: "https://plus.unsplash.com/premium_photo-1667891838018-a6df081da495?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain black basic tee.",
+    image:
+      "http://127.0.0.1:8000/media/categories/images/category1/Demon-Slayer-Logo.png",
+    slug: "categoryimageslug",
+    is_featured: true,
+    lft: 1,
+    rght: 2,
+    tree_id: 1,
+    level: 0,
+    parent: null,
+  },
+  brand: {
+    id: 1,
+    translations: {
+      en: {
+        name: "brand1",
+      },
     },
-    {
-      src: "https://plus.unsplash.com/premium_photo-1665413642308-c5c1ed052d12?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain gray basic tee.",
+    slug: "brandslug",
+    image: "http://127.0.0.1:8000/media/brands/images/brand1/3615061.png",
+  },
+  translations: {
+    en: {
+      name: "product1",
+      description: "this is description for product one",
     },
-    {
-      src: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
-      alt: "Model wearing plain white basic tee.",
-    },
-  ],
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: false },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "2XL", inStock: true },
-    { name: "3XL", inStock: true },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: {
-    handmade: "Hand cut and sewn locally",
-    dye: "Dyed with our propriPack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on ao fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive coletary colors",
-    washing: "Pre-washed & pre-shrunk",
-    material: "Ultra-soft 100% cotton",
+  },
+  specifications: {
+    key: "value",
   },
   reviews: [
     {
-      username: "john_doe",
-      comment: "Great quality and very comfortablee!",
-      rating: 5,
-      avatar:
-        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
+      id: 1,
+      rating: 4.5,
+      comment: "review1",
+      username: "user1",
+      avatar: "",
     },
     {
-      username: "jane_smith",
-      comment: "Good value for the price.",
-      rating: 4,
-      avatar:
-        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
+      id: 2,
+      rating: 3.5,
+      comment: "review2",
+      username: "user2",
+      avatar: "",
     },
     {
-      username: "alex_jones",
-      comment: "The fit is perfect and the material is soft.",
-      rating: 5,
-      avatar:
-        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
+      id: 1,
+      rating: 4.5,
+      comment: "review1",
+      username: "user1",
+      avatar: "",
     },
     {
-      username: "emily_clark",
-      comment: "Colors are nice but the fabric could be better.",
-      rating: 3,
-      avatar:
-        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
-    },
-    {
-      username: "michael_brown",
-      comment: "Excellent product, will buy again.",
-      rating: 5,
-      avatar:
-        "https://img.freepik.com/free-psd/3d-illustration-business-man-with-glasses_23-2149436194.jpg?size=626&ext=jpg",
+      id: 2,
+      rating: 3.5,
+      comment: "review2",
+      username: "user2",
+      avatar: "",
     },
   ],
+  thumbnail: "http://127.0.0.1:8000/media/product/images/product1/logo.jpeg",
+  image1:
+    "http://127.0.0.1:8000/media/product/images/product1/sticker-png-attack-on-titan-icon-media-render04.png",
+  image2: "http://127.0.0.1:8000/media/product/images/product1/download.jpg",
+  image3:
+    "http://127.0.0.1:8000/media/product/images/product1/de5oltn-034b5612-9e42-4e45-b617-73282c0924d2.png",
+  image4:
+    "http://127.0.0.1:8000/media/product/images/product1/Demon-Slayer-Logo.png",
+  color: [
+    {
+      id: 1,
+      name: "Red",
+    },
+    {
+      id: 3,
+      name: "Black",
+    },
+  ],
+  size: [
+    {
+      id: 1,
+      name: "XL",
+    },
+    {
+      id: 2,
+      name: "2XL",
+    },
+  ],
+  slug: "colorredslug",
+  price_before_discount: "15.00",
+  price_after_discount: "10.00",
+  stock_quantity: 100,
+  total_sold: 21,
+  total_views: 500,
+  is_available: true,
+  created: "2024-09-24T13:36:17.937485Z",
+  updated: "2024-09-27T18:16:23.129976Z",
+  supplier: "03715695-5c00-4a61-a413-9d1f905be34f",
 };
 
 const products = [

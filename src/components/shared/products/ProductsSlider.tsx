@@ -4,7 +4,7 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import ProductCard from "./ProductCard";
+import ProductCard from "../../reusables/ProductCard";
 import { Link } from "react-router-dom";
 
 export default function ProductsSlider() {
