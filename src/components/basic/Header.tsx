@@ -5,21 +5,19 @@ import { RiShoppingCart2Line, RiUserLine } from "react-icons/ri";
 import { GrFavorite } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
 import SideCart from "../shared/cart/SideCart";
-import LoginPopUp from "../shared/auth/LoginPopUp";
 import LanguageSelector from "./LanguageSelector";
+import { Trans, useTranslation } from "react-i18next";
 
 export default function Header() {
   const { pathname } = useLocation();
+  const { i18n, t } = useTranslation();
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 
-  const [isLoginPopUpOpen, setIsLoginPopUpOpen] = useState(false);
-  const toggleLoginPopUp = () => setIsLoginPopUpOpen((prev) => !prev);
-
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu toggle
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,14 +55,14 @@ export default function Header() {
                 {headerLinks.map((link) => (
                   <li key={link.route}>
                     <NavLink
-                      className={`hover:text-Red pb-3 border-Red text-blackText font-bold ${
+                      className={`hover:text-Red pb-3 border-Red text-blackText ${
                         pathname === link.route
                           ? "text-Red border-b-2 font-extrabold"
                           : ""
                       }`}
                       to={link.route}
                     >
-                      {link.label}
+                      {<Trans i18nKey={`${link.label}`}></Trans>}
                     </NavLink>
                   </li>
                 ))}
@@ -75,7 +73,7 @@ export default function Header() {
             <div className="w-2/6 md:flex justify-center">
               <div className="relative">
                 <input
-                  placeholder="البحث عن المنتجات والعلامات التجارية والفئات"
+                  placeholder={t("search")}
                   type="text"
                   className="border placeholder:text-sm outline-none focus:border-Red border-gray-400 h-12 text-lg rounded-md p-4 pr-10 pl-4 w-full"
                 />
@@ -100,12 +98,9 @@ export default function Header() {
             <div className="hidden xl:flexCenter gap-5 items-center">
               <LanguageSelector />
               <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-              <div
-                onClick={toggleLoginPopUp}
-                className="flex flexCenter cursor-pointer group"
-              >
-                <span className="font-bold text-blackText group-hover:text-Red">
-                  تسجيل دخول
+              <div className="flex flexCenter cursor-pointer group">
+                <span className=" text-blackText group-hover:text-Red">
+                  <Trans i18nKey="login"></Trans>
                 </span>
                 <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
               </div>
@@ -132,7 +127,9 @@ export default function Header() {
             {/* Mobile Navigation Menu */}
             {isMenuOpen && (
               <div
-                className={`fixed top-0 right-0 h-full w-64 bg-white border-l border-gray-300 transform transition-transform duration-300 ease-in-out ${
+                className={`fixed top-0 ${
+                  i18n.dir() === "rtl" ? "left-0" : "right-0"
+                } h-full w-64 bg-white border-l border-gray-300 transform transition-transform duration-300 ease-in-out ${
                   isMenuOpen ? "translate-x-0" : "translate-x-full"
                 } xl:hidden`}
               >
@@ -149,12 +146,9 @@ export default function Header() {
                 {/* User Actions at the Top */}
                 <div className="flex flex-col items-center gap-4 p-4 border-b border-gray-300">
                   <LanguageSelector />
-                  <div
-                    onClick={toggleLoginPopUp}
-                    className="flex items-center justify-center gap-2 w-full cursor-pointer group"
-                  >
-                    <span className="font-bold text-blackText group-hover:text-Red">
-                      تسجيل دخول
+                  <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
+                    <span className="text-blackText group-hover:text-Red">
+                      <Trans i18nKey="login"></Trans>
                     </span>
                     <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
                   </div>
@@ -183,15 +177,15 @@ export default function Header() {
                   {headerLinks.map((link) => (
                     <li key={link.route}>
                       <NavLink
-                        className={`block hover:text-Red pb-3 border-Red w-full h-full text-blackText font-bold ${
+                        className={`block hover:text-Red pb-3 border-Red w-full h-full text-blackText ${
                           pathname === link.route
                             ? "text-Red border-b-2 font-extrabold"
                             : ""
                         } transition-colors duration-200`}
                         to={link.route}
-                        onClick={() => setIsMenuOpen(false)} // Close menu on link click
+                        onClick={() => setIsMenuOpen(false)}
                       >
-                        {link.label}
+                        {<Trans i18nKey={`${link.label}`}></Trans>}
                       </NavLink>
                     </li>
                   ))}
@@ -202,10 +196,6 @@ export default function Header() {
         </div>
 
         <SideCart isCartOpen={isCartOpen} setSideCart={toggleCart} />
-        <LoginPopUp
-          isLoginPopUpOpen={isLoginPopUpOpen}
-          setLoginPopUp={toggleLoginPopUp}
-        />
       </div>
     </header>
   );

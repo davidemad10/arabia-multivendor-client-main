@@ -7,6 +7,7 @@ import "./i18n.tsx";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import "./i18n.js";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 3, retryDelay: 1000 } },
@@ -17,7 +18,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-          <Suspense fallback="loading">
+          <Suspense
+            fallback={
+              <Backdrop
+                sx={(theme) => ({ color: "#fff", zIndex: 1 })}
+                open={true}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            }
+          >
             <App />
           </Suspense>
         </QueryClientProvider>

@@ -5,6 +5,7 @@ import {
   FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
+import { t } from "i18next";
 
 const Footer = () => {
   return (
@@ -17,7 +18,7 @@ const Footer = () => {
             alt="logo"
           />
           <h2 className="text-2xl max-md:text-xl text-blackText font-bold">
-            تواصل معنا
+            {t("contactus")}
           </h2>
           <div className="flexCenter mt-2 gap-3">
             <Link to={""} className="border-2 border-gray-400 p-1 rounded-full">
@@ -42,9 +43,7 @@ const Footer = () => {
             </Link>
           </div>
 
-          <div className="text-sm text-gray-500">
-            © 2024 اربيا. جميع الحقوق محفوظة
-          </div>
+          <div className="text-sm text-gray-500">{t("rightsReserved")}</div>
         </div>
       </div>
 
@@ -62,22 +61,17 @@ const Footer = () => {
         <ul className="flex gap-5">
           <li>
             <Link to={""} className="text-xs text-gray-600">
-              سياسة الخصوصية
+              {t("privacy policy")}{" "}
             </Link>
           </li>
           <li>
             <Link to={""} className="text-xs text-gray-600">
-              شروط الاستخدام
+              {t("terms and conditions")}{" "}
             </Link>
           </li>
           <li>
             <Link to={""} className="text-xs text-gray-600">
-              شروط البيع{" "}
-            </Link>
-          </li>
-          <li>
-            <Link to={""} className="text-xs text-gray-600">
-              كُن بائع معنا
+              {t("be a vendor")}{" "}
             </Link>
           </li>
         </ul>

@@ -21,6 +21,7 @@ export interface Slider {
   category: string;
   id: number;
   translations: {
+    lang: any;
     en: {
       image: string;
     };

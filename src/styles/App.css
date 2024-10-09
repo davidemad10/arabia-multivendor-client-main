@@ -1,64 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-* {
-    @apply  box-border list-none  p-0 m-0 scroll-smooth;
-}
-body {
-    @apply bg-slate-100/50 ;
-}
+  * {
+    @apply box-border list-none  p-0 m-0 scroll-smooth;
+  }
+  body {
+    @apply bg-slate-100/50;
+  }
 }
 
 @layer components {
-.flexCenter {
+  .flexCenter {
     @apply flex items-center justify-center;
-}
+  }
 
-.flexBetween {
+  .flexBetween {
     @apply flex items-center justify-between;
-}
-.flexAround {
+  }
+  .flexAround {
     @apply flex items-center justify-around;
-}
+  }
 
-.flexStart {
+  .flexStart {
     @apply flex items-center justify-start;
-}
+  }
 
-.flexEnd {
+  .flexEnd {
     @apply flex items-center justify-end;
-}
-.button1 {
-    @apply hover:bg-red-600  bg-Red text-white  duration-75 rounded-lg ;
-}
-.buttonDisabled {
-    @apply   bg-gray-200 text-gray-400 pointer-events-none  rounded-lg ;
+  }
+  .button1 {
+    @apply hover:bg-red-600  bg-Red text-white  duration-75 rounded-lg;
+  }
+  .buttonDisabled {
+    @apply bg-gray-200 text-gray-400 pointer-events-none  rounded-lg;
+  }
 }
 
-}
-
-@layer utilities{
-.custom-scrollbar::-webkit-scrollbar {
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
     height: 3px;
     border-radius: 2px;
-}
+  }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+  .custom-scrollbar::-webkit-scrollbar-track {
     background: #09090a;
-}
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
+  .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #eee;
     border-radius: 20px;
-}
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #7878a3;
-}
+  }
 }

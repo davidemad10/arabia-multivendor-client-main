@@ -1,27 +1,25 @@
 export const headerLinks = [
   {
-    route: "/",
-    label: "الكترونيات",
+    route: "#",
+    label: "electronics",
   },
   {
-    route: "proucts",
-    label: "موبيلات",
+    route: "#",
+    label: "mobiles",
   },
   {
-    route: "cart",
-    label: "نسائي",
+    route: "#",
+    label: "ladies",
   },
   {
-    route: "about-us",
-    label: "رجالي",
+    route: "#",
+    label: "men",
   },
   {
-    route: "aboutي-us",
-    label: "بقالة",
+    route: "#",
+    label: "groceries",
   },
 ];
-
-export const footerLinks = [{}];
 
 export const calculateAverageRating = (reviews) => {
   if (reviews.length == 0) return 0;

@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { FaShoppingCart } from "react-icons/fa";
 import Box from "@mui/material/Box";
+import { t } from "i18next";
 
 export default function ProductYouLikeCard({ product }) {
   const hasDiscount = product.discount > 0;
@@ -77,7 +78,7 @@ export default function ProductYouLikeCard({ product }) {
           startIcon={<FaShoppingCart />}
           sx={{ width: "100%" }}
         >
-          Add to Cart
+          {t("addToCart")}
         </Button>
       </CardActions>
     </Card>

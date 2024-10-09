@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import ProductYouLikeCard from "./ProductYouLikeCard";
+import { t } from "i18next";
 
 export default function ProductsYouMayLike({ products }) {
   const sliderRef = useRef(null);
@@ -19,7 +20,7 @@ export default function ProductsYouMayLike({ products }) {
   return (
     <div className="relative p-10 pt-14">
       <h2 className="text-xl font-bold my-4 mx-4 text-gray-500">
-        Products You May Like
+        {t("ProductYouLike")}
       </h2>
       <div className="flex items-center justify-between">
         {products.length > 4 && (

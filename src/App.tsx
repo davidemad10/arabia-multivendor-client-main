@@ -1,26 +1,25 @@
 import "./styles/App.css";
 import "./styles/Manual.css";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import RootLayout from "./layouts/root";
 import { Home, Products } from "./pages";
 import ProductDetails from "./pages/common/ProductDetails";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SignIn from "./pages/users/SignIn/SignIn";
+import SignUp from "./pages/users/SignUp/SignUp";
 
 function App() {
   return (
     <div className="rtl:font-Almarai ltr:font-Poppins">
       <Routes>
-        {/* <Route element={<AuthLayout></AuthLayout>}>
-            <Route path='/sign-in' element={<SigninForm></SigninForm>}></Route>
-            <Route path='/sign-up' element={<SignupForm></SignupForm>}></Route>
-          </Route> */}
-
         <Route element={<RootLayout></RootLayout>}>
           <Route index element={<Home></Home>}></Route>
           <Route path="/:category" element={<Products></Products>}></Route>
+          <Route path="/signin" element={<SignIn></SignIn>}></Route>
+          <Route path="/signup" element={<SignUp></SignUp>}></Route>
           <Route
-            path="/products/:id"
+            path="/products/:sku"
             element={<ProductDetails></ProductDetails>}
           ></Route>
         </Route>

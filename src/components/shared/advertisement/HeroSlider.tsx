@@ -10,6 +10,8 @@ interface HeroSliderProps {
   isPending: boolean;
 }
 
+const lang = "ar";
+
 export default function HeroSlider({ sliders, isPending }: HeroSliderProps) {
   return (
     <Swiper
@@ -21,23 +23,22 @@ export default function HeroSlider({ sliders, isPending }: HeroSliderProps) {
       loop
       pagination={true}
       autoplay={{ delay: 7000 }}
-      className=" container h-96 cursor-grab"
+      className=" container h-96 cursor-grab my-10"
     >
       {isPending && !sliders ? (
         <div className='w-full relative flex flexCenter h-screen bg-[url("./panar")] bg-cover'>
-          logking
+          loading
         </div>
       ) : (
         <>
           {sliders.map((slider) => (
             <SwiperSlide key={slider.id}>
-              <div className="w-full bg-cover flex flexCenter h-screen">
-                <img
-                  className="h-full w-full"
-                  src={slider.translations.ar.image}
-                  alt=""
-                />
-              </div>
+              <div
+                className="w-full flex flexCenter h-screen bg-contain bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `url(${slider.translations[lang].image})`,
+                }}
+              ></div>
             </SwiperSlide>
           ))}
         </>

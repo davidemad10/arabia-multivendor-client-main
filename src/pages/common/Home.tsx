@@ -20,7 +20,7 @@ export default function Home() {
         },
         ar: {
           image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+            "https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=600",
         },
       },
     },
@@ -30,11 +30,11 @@ export default function Home() {
       translations: {
         en: {
           image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
         },
         ar: {
           image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
         },
       },
     },

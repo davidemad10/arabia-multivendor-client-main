@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { t } from "i18next";
 
 import { calculateAverageRating } from "../../../constants";
 import { Rating } from "@mui/material";
@@ -26,7 +27,7 @@ export default function ProductInfo({ product }) {
           )}
           onClick={() => setActiveTab("product-details")}
         >
-          PRODUCT DETAILS
+          {t("productDetails")}
         </button>
         <button
           className={classNames(
@@ -35,7 +36,7 @@ export default function ProductInfo({ product }) {
           )}
           onClick={() => setActiveTab("reviews")}
         >
-          REVIEWS ({product.reviews.length})
+          {t("reviews")} ({product.reviews.length})
         </button>
       </div>
 
@@ -47,7 +48,7 @@ export default function ProductInfo({ product }) {
             {/* Product Description */}
             <div className="lg:w-5/12 w-full max-h-40">
               <h2 className="text-lg font-medium text-gray-900">
-                Product Details
+                {t("productDetails")}
               </h2>
               <p className="mt-4 text-sm text-gray-600">
                 {product.translations.en.description}
@@ -55,65 +56,73 @@ export default function ProductInfo({ product }) {
             </div>
 
             {/* Product Highlights */}
-            <div className="lg:w-5/12 w-full">
-              <h2 className="text-lg font-medium text-gray-900">Highlights</h2>
-              <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
-                {Object.keys(product.specifications).map(
-                  (specifications, index) => (
-                    <li key={index} className="mb-2">
-                      <div className="w-full">
-                        <div className="p-2">
-                          <strong>{specifications}</strong>
-                          <br /> {product.specifications[specifications]}
+            {product.specifications && (
+              <div className="lg:w-5/12 w-full">
+                <h2 className="text-lg font-medium text-gray-900">
+                  {t("highlights")}
+                </h2>
+                <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
+                  {Object.keys(product.specifications).map(
+                    (specifications, index) => (
+                      <li key={index} className="mb-2">
+                        <div className="w-full">
+                          <div className="p-2">
+                            <strong>{specifications}</strong>
+                            <br /> {product.specifications[specifications]}
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            )}
           </div>
         )}
 
         {/* Reviews Tab */}
         {activeTab === "reviews" && (
           <div className="max-w-3xl mx-auto px-4">
-            <div className="mt-4 max-h-80 space-y-6 overflow-y-auto custom-scrollbar">
-              {product.reviews.map((review, index) => (
-                <div key={index} className="border-b border-gray-300 pb-6">
-                  <div className="flex space-x-4">
-                    {/* Avatar */}
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full object-cover"
-                        src={review.avatar} // Assuming there's an avatar property
-                        alt={`${review.username}'s avatar`}
-                      />
-                    </div>
-
-                    {/* Review Content */}
-                    <div className="flex-1">
-                      {/* Username and Rating */}
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm font-medium text-gray-900">
-                          {review.username}
-                        </div>
-                        <Rating
-                          name="half-rating-read"
-                          defaultValue={review.rating}
-                          precision={0.5}
-                          readOnly
+            {product.reviews.length > 0 ? (
+              <div className="mt-4 max-h-80 space-y-6 overflow-y-auto custom-scrollbar">
+                {product.reviews.map((review, index) => (
+                  <div key={index} className="border-b border-gray-300 pb-6">
+                    <div className="flex space-x-4">
+                      {/* Avatar */}
+                      <div className="flex-shrink-0">
+                        <img
+                          className="h-10 w-10 rounded-full object-cover"
+                          src={review.avatar} // Assuming there's an avatar property
+                          alt={`${review.username}'s avatar`}
                         />
                       </div>
-                      {/* Review Comment */}
-                      <p className="mt-2 text-sm text-gray-600">
-                        {review.comment}
-                      </p>
+
+                      {/* Review Content */}
+                      <div className="flex-1">
+                        {/* Username and Rating */}
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium text-gray-900">
+                            {review.username}
+                          </div>
+                          <Rating
+                            name="half-rating-read"
+                            defaultValue={review.rating}
+                            precision={0.5}
+                            readOnly
+                          />
+                        </div>
+                        {/* Review Comment */}
+                        <p className="mt-2 text-sm text-gray-600">
+                          {review.comment}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center min-h-32">{t("noReviews")}</div>
+            )}
           </div>
         )}
       </div>
