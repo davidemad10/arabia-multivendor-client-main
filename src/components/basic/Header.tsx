@@ -99,24 +99,31 @@ export default function Header() {
             {/* User Actions */}
             <div className="hidden xl:flexCenter gap-5 items-center">
               <LanguageSelector />
-              <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-              <div className="flex flexCenter cursor-pointer group">
-                <span className=" text-blackText group-hover:text-Red">
-                  <Link to={"signin"}>
-                    <Trans i18nKey="login"></Trans>
-                  </Link>
-                </span>
-                <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
-              </div>
-              <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-              <div className="flex flexCenter cursor-pointer group">
-                <span className=" text-blackText group-hover:text-Red">
-                  <Link to={"signup"}>
-                    <Trans i18nKey="register"></Trans>
-                  </Link>
-                </span>
-                <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
-              </div>
+              {loggedInUser ? (
+                ""
+              ) : (
+                <div className="flex flex-row gap-4">
+                  <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                  <div className="flex flexCenter cursor-pointer group">
+                    <span className=" text-blackText group-hover:text-Red">
+                      <Link to={"signin"}>
+                        <Trans i18nKey="login"></Trans>
+                      </Link>
+                    </span>
+                    <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
+                  </div>
+                  <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                  <div className="flex flexCenter cursor-pointer group">
+                    <span className=" text-blackText group-hover:text-Red">
+                      <Link to={"signup"}>
+                        <Trans i18nKey="register"></Trans>
+                      </Link>
+                    </span>
+                    <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
+                  </div>
+                </div>
+              )}
+
               {loggedInUser && (
                 <div>
                   <span className="h-8 bg-gray-300 rounded-full w-px"></span>
@@ -163,22 +170,28 @@ export default function Header() {
                 {/* User Actions at the Top */}
                 <div className="flex flex-col items-center gap-4 p-4 border-b border-gray-300">
                   <LanguageSelector />
-                  <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
-                    <span className="text-blackText group-hover:text-Red">
-                      <Link to={"signin"}>
-                        <Trans i18nKey="login"></Trans>
-                      </Link>
-                    </span>
-                    <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
-                  </div>
-                  <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
-                    <span className="text-blackText group-hover:text-Red">
-                      <Link to={"signup"}>
-                        <Trans i18nKey="register"></Trans>
-                      </Link>
-                    </span>
-                    <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
-                  </div>
+                  {loggedInUser ? (
+                    ""
+                  ) : (
+                    <div>
+                      <div className="flex items-center justify-center my-3 w-full cursor-pointer group">
+                        <span className="text-blackText group-hover:text-Red">
+                          <Link to={"signin"}>
+                            <Trans i18nKey="login"></Trans>
+                          </Link>
+                        </span>
+                        <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
+                      </div>
+                      <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
+                        <span className="text-blackText group-hover:text-Red">
+                          <Link to={"signup"}>
+                            <Trans i18nKey="register"></Trans>
+                          </Link>
+                        </span>
+                        <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-center gap-4">
                     {loggedInUser && (
                       <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer transition-colors duration-200">
