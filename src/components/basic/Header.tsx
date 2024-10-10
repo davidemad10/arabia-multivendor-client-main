@@ -9,6 +9,8 @@ import LanguageSelector from "./LanguageSelector";
 import { Trans, useTranslation } from "react-i18next";
 
 export default function Header() {
+  const loggedInUser = false;
+
   const { pathname } = useLocation();
   const { i18n, t } = useTranslation();
 
@@ -100,17 +102,32 @@ export default function Header() {
               <span className="h-8 bg-gray-300 rounded-full w-px"></span>
               <div className="flex flexCenter cursor-pointer group">
                 <span className=" text-blackText group-hover:text-Red">
-                  <Trans i18nKey="login"></Trans>
+                  <Link to={"signin"}>
+                    <Trans i18nKey="login"></Trans>
+                  </Link>
                 </span>
                 <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
               </div>
               <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-              <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer">
-                <GrFavorite className="inline-block" />
-                <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
-                  <span className="text-white text-sm">1</span>
-                </div>
+              <div className="flex flexCenter cursor-pointer group">
+                <span className=" text-blackText group-hover:text-Red">
+                  <Link to={"signup"}>
+                    <Trans i18nKey="register"></Trans>
+                  </Link>
+                </span>
+                <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
               </div>
+              {loggedInUser && (
+                <div>
+                  <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                  <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer">
+                    <GrFavorite className="inline-block" />
+                    <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
+                      <span className="text-white text-sm">1</span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <span className="h-8 bg-gray-300 rounded-full w-px"></span>
               <button
                 onClick={toggleCart}
@@ -148,17 +165,29 @@ export default function Header() {
                   <LanguageSelector />
                   <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
                     <span className="text-blackText group-hover:text-Red">
-                      <Trans i18nKey="login"></Trans>
+                      <Link to={"signin"}>
+                        <Trans i18nKey="login"></Trans>
+                      </Link>
+                    </span>
+                    <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
+                  </div>
+                  <div className="flex items-center justify-center gap-2 w-full cursor-pointer group">
+                    <span className="text-blackText group-hover:text-Red">
+                      <Link to={"signup"}>
+                        <Trans i18nKey="register"></Trans>
+                      </Link>
                     </span>
                     <RiUserLine className="text-blackText text-2xl group-hover:text-Red transition-colors duration-200" />
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer transition-colors duration-200">
-                      <GrFavorite className="inline-block" />
-                      <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
-                        <span className="text-white text-sm">1</span>
+                    {loggedInUser && (
+                      <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer transition-colors duration-200">
+                        <GrFavorite className="inline-block" />
+                        <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
+                          <span className="text-white text-sm">1</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <button
                       onClick={toggleCart}
                       type="button"
