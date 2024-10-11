@@ -11,10 +11,13 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import { GoogleIcon, FacebookIcon } from "../CustomIcons";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import { useState } from "react";
+import { IconButton, InputAdornment } from "@mui/material";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -51,6 +54,15 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
+
+  const handleClickShowPassword = (element) => {
+    element == "password"
+      ? setShowPassword((prev) => !prev)
+      : setShowConfirmPassword((prev) => !prev);
+  };
+
   const schema = z
     .object({
       fullname: z
@@ -111,7 +123,9 @@ export default function SignUp() {
           >
             Sign up
           </Typography>
+
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {/* full name */}
             <FormControl>
               <FormLabel htmlFor="fullname">Full name</FormLabel>
               <TextField
@@ -131,6 +145,7 @@ export default function SignUp() {
                 color={formik.errors.fullname ? "error" : "primary"}
               />
             </FormControl>
+            {/* email */}
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
@@ -149,7 +164,7 @@ export default function SignUp() {
                 color={formik.errors.email ? "error" : "primary"}
               />
             </FormControl>
-
+            {/* password */}
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
@@ -157,9 +172,8 @@ export default function SignUp() {
                 fullWidth
                 name="password"
                 placeholder="••••••"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
-                autoComplete="new-password"
                 variant="outlined"
                 value={formik.values.password}
                 onChange={formik.handleChange}
@@ -169,9 +183,22 @@ export default function SignUp() {
                 }
                 helperText={formik.touched.password && formik.errors.password}
                 color={formik.errors.password ? "error" : "primary"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => handleClickShowPassword("password")}
+                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
-
+            {/*Confirm password */}
             <FormControl>
               <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
               <TextField
@@ -179,7 +206,7 @@ export default function SignUp() {
                 fullWidth
                 name="confirmPassword"
                 placeholder="••••••"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 autoComplete="new-password"
                 variant="outlined"
@@ -195,8 +222,26 @@ export default function SignUp() {
                   formik.errors.confirmPassword
                 }
                 color={formik.errors.confirmPassword ? "error" : "primary"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => handleClickShowPassword("Not")}
+                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
+                      >
+                        {showConfirmPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
+            {/* Phone number */}
             <FormControl>
               <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
               <TextField
@@ -221,9 +266,19 @@ export default function SignUp() {
               />
             </FormControl>
 
-            <Button type="submit" fullWidth variant="contained">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                background: "black",
+                borderRadius: "7px",
+                marginTop: "10px",
+              }}
+            >
               Sign up
             </Button>
+
             <Typography sx={{ textAlign: "center" }}>
               Already have an account?{" "}
               <span>
@@ -237,10 +292,12 @@ export default function SignUp() {
               </span>
             </Typography>
           </Box>
-          {/* <Divider>
+
+          <Divider>
             <Typography sx={{ color: "text.secondary" }}>or</Typography>
-          </Divider> */}
-          {/* <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          </Divider>
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -257,7 +314,7 @@ export default function SignUp() {
             >
               Sign up with Facebook
             </Button>
-          </Box> */}
+          </Box>
         </Card>
       </SignUpContainer>
     </form>
