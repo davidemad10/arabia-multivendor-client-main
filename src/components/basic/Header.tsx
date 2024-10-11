@@ -55,7 +55,7 @@ export default function Header() {
             <div className="container hidden xl:flexCenter w-min h-16">
               <ul className="mx-auto flex gap-5">
                 {headerLinks.map((link) => (
-                  <li key={link.route}>
+                  <li key={link.label}>
                     <NavLink
                       className={`hover:text-Red pb-3 border-Red text-blackText ${
                         pathname === link.route
@@ -217,7 +217,7 @@ export default function Header() {
                 {/* Navigation Links */}
                 <ul className="flex flex-col gap-2 p-4">
                   {headerLinks.map((link) => (
-                    <li key={link.route}>
+                    <li key={link.label}>
                       <NavLink
                         className={`block hover:text-Red pb-3 border-Red w-full h-full text-blackText ${
                           pathname === link.route

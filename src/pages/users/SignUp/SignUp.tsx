@@ -1,8 +1,6 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
@@ -11,7 +9,12 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
+import Divider from "@mui/material/Divider";
 import { GoogleIcon, FacebookIcon } from "../CustomIcons";
+
+import { useFormik } from "formik";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -48,88 +51,56 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState("");
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
-    React.useState("");
-
-  //! dont forget to add mobile number
-  //! dont forget to add mobile number
-  //! dont forget to add mobile number
-  //! dont forget to add mobile number
-  //! dont forget to add mobile number
-  //! dont forget to add mobile number
-
-  const validateInputs = () => {
-    const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
-    const confirmPassword = document.getElementById(
-      "confirmPassword"
-    ) as HTMLInputElement;
-    const name = document.getElementById("name") as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    if (password.value != confirmPassword.value) {
-      setConfirmPasswordError(true);
-      setConfirmPasswordErrorMessage("Passwords don't match");
-      isValid = false;
-    } else {
-      setConfirmPasswordError(false);
-      setConfirmPasswordErrorMessage("");
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage("");
-    }
-
-    return isValid;
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (nameError || emailError || passwordError || confirmPasswordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
+  const schema = z
+    .object({
+      fullname: z
+        .string()
+        .min(5, { message: "Must be 5 or more characters long" })
+        .max(30, { message: "Must be 30 characters long or less" }),
+      email: z
+        .string()
+        .email({ message: "Invalid email address" })
+        .min(1, { message: "The Email address is required" }),
+      password: z
+        .string()
+        .min(8, { message: "Must be 8 or more characters long" })
+        .max(30, { message: "Must be 30 characters or less" }),
+      confirmPassword: z
+        .string()
+        .min(8, { message: "Must be 8 or more characters long" })
+        .max(30, { message: "Must be 30 characters long or less" }),
+      phoneNumber: z
+        .string()
+        .length(11, { message: "the phone number must be 11 characters" })
+        .regex(/^[0-9]+$/, { message: "the phone number must be 11 numbers" }),
+    })
+    .superRefine(({ confirmPassword, password }, ctx) => {
+      if (confirmPassword !== password) {
+        ctx.addIssue({
+          code: "custom",
+          message: "The passwords did not match",
+          path: ["confirmPassword"],
+        });
+      }
     });
-  };
+
+  const formik = useFormik({
+    initialValues: {
+      fullname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phoneNumber: "",
+    },
+    validationSchema: toFormikValidationSchema(schema),
+    onSubmit: (values) => {
+      console.log("Submitted");
+      console.log(values);
+    },
+  });
 
   return (
-    <>
+    <form onSubmit={formik.handleSubmit}>
       <CssBaseline enableColorScheme />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
@@ -140,23 +111,24 @@ export default function SignUp() {
           >
             Sign up
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="fullname">Full name</FormLabel>
               <TextField
-                autoComplete="name"
-                name="name"
+                autoComplete="fullname"
+                name="fullname"
                 required
                 fullWidth
-                id="name"
+                id="fullname"
                 placeholder="Jon Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? "error" : "primary"}
+                onBlur={formik.handleBlur}
+                value={formik.values.fullname}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.fullname && Boolean(formik.errors.fullname)
+                }
+                helperText={formik.touched.fullname && formik.errors.fullname}
+                color={formik.errors.fullname ? "error" : "primary"}
               />
             </FormControl>
             <FormControl>
@@ -169,11 +141,15 @@ export default function SignUp() {
                 name="email"
                 autoComplete="email"
                 variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
-                color={passwordError ? "error" : "primary"}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                color={formik.errors.email ? "error" : "primary"}
               />
             </FormControl>
+
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
@@ -185,11 +161,17 @@ export default function SignUp() {
                 id="password"
                 autoComplete="new-password"
                 variant="outlined"
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                color={passwordError ? "error" : "primary"}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                color={formik.errors.password ? "error" : "primary"}
               />
             </FormControl>
+
             <FormControl>
               <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
               <TextField
@@ -201,21 +183,45 @@ export default function SignUp() {
                 id="confirmPassword"
                 autoComplete="new-password"
                 variant="outlined"
-                error={confirmPasswordError}
-                helperText={confirmPasswordErrorMessage}
-                color={passwordError ? "error" : "primary"}
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
+                color={formik.errors.confirmPassword ? "error" : "primary"}
               />
             </FormControl>
-            {/* <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive updates via email."
-            /> */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-            >
+            <FormControl>
+              <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
+              <TextField
+                required
+                fullWidth
+                name="phoneNumber"
+                placeholder="01012345678"
+                type="text"
+                id="phoneNumber"
+                variant="outlined"
+                value={formik.values.phoneNumber}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.phoneNumber &&
+                  Boolean(formik.errors.phoneNumber)
+                }
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                }
+                color={formik.errors.phoneNumber ? "error" : "primary"}
+              />
+            </FormControl>
+
+            <Button type="submit" fullWidth variant="contained">
               Sign up
             </Button>
             <Typography sx={{ textAlign: "center" }}>
@@ -231,10 +237,10 @@ export default function SignUp() {
               </span>
             </Typography>
           </Box>
-          <Divider>
+          {/* <Divider>
             <Typography sx={{ color: "text.secondary" }}>or</Typography>
-          </Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          </Divider> */}
+          {/* <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -251,9 +257,9 @@ export default function SignUp() {
             >
               Sign up with Facebook
             </Button>
-          </Box>
+          </Box> */}
         </Card>
       </SignUpContainer>
-    </>
+    </form>
   );
 }
