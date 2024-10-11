@@ -248,7 +248,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 name="phoneNumber"
-                placeholder="01012345678"
+                placeholder="01111111111"
                 type="text"
                 id="phoneNumber"
                 variant="outlined"
@@ -283,7 +283,7 @@ export default function SignUp() {
               Already have an account?{" "}
               <span>
                 <Link
-                  href="/material-ui/getting-started/templates/sign-in/"
+                  href="signin"
                   variant="body2"
                   sx={{ alignSelf: "center" }}
                 >
