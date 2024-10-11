@@ -11,12 +11,13 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import { GoogleIcon, FacebookIcon } from "../CustomIcons";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   IconButton,
   InputAdornment,
@@ -1010,6 +1011,16 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const countryItems = useMemo(
+    () =>
+      countries.map((country, index) => (
+        <MenuItem key={index} value={country.code}>
+          {`${country.code} (${country.name})`}
+        </MenuItem>
+      )),
+    []
+  );
+
   const handleClickShowPassword = (element: string) => {
     element == "password"
       ? setShowPassword((prev) => !prev)
@@ -1063,8 +1074,13 @@ export default function SignUp() {
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: (values) => {
+      const final = {
+        ...values,
+        completephoneNumber: values.countryCode + values.phoneNumber,
+      };
       console.log("Submitted");
       console.log(values);
+      console.log(final);
     },
   });
 
@@ -1198,53 +1214,52 @@ export default function SignUp() {
                 }}
               />
             </FormControl>
-            {/* Phone number */}
 
+            {/* Phone number */}
             <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
-            <FormControl
-              variant="outlined"
-              style={{ marginRight: "16px", minWidth: "120px" }}
-            >
-              <InputLabel id="country-code-label">Country Code</InputLabel>
-              <Select
-                labelId="country-code-label"
-                id="countryCode"
-                name="countryCode"
-                value={formik.values.countryCode}
+            <div className="flex ">
+              <FormControl
+                variant="outlined"
+                style={{ marginRight: "16px", minWidth: "120px" }}
+              >
+                <InputLabel id="country-code-label">Country Code</InputLabel>
+                <Select
+                  labelId="country-code-label"
+                  id="countryCode"
+                  name="countryCode"
+                  value={formik.values.countryCode}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.countryCode &&
+                    Boolean(formik.errors.countryCode)
+                  }
+                >
+                  {countryItems}
+                </Select>
+              </FormControl>
+
+              <TextField
+                required
+                name="phoneNumber"
+                placeholder="111111111"
+                type="text"
+                id="phoneNumber"
+                variant="outlined"
+                value={formik.values.phoneNumber}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={
-                  formik.touched.countryCode &&
-                  Boolean(formik.errors.countryCode)
+                  formik.touched.phoneNumber &&
+                  Boolean(formik.errors.phoneNumber)
                 }
-              >
-                {countries.map((country) => (
-                  <MenuItem key={country.code} value={country.code}>
-                    {`${country.code} (${country.name})`}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              required
-              name="phoneNumber"
-              placeholder="111111111"
-              type="text"
-              id="phoneNumber"
-              variant="outlined"
-              value={formik.values.phoneNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
-              }
-              helperText={
-                formik.touched.phoneNumber && formik.errors.phoneNumber
-              }
-              color={formik.errors.phoneNumber ? "error" : "primary"}
-              fullWidth
-            />
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                }
+                color={formik.errors.phoneNumber ? "error" : "primary"}
+                fullWidth
+              />
+            </div>
 
             <Button
               type="submit"

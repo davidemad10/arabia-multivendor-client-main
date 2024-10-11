@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -14,6 +13,13 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
+import { z } from "zod";
+import { useFormik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { useState } from "react";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton, InputAdornment } from "@mui/material";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -56,12 +62,9 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+export default function SignIn() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,163 +74,162 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
-  const validateInputs = () => {
-    const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
+  const schema = z.object({
+    email: z
+      .string()
+      .email({ message: "Invalid email address" })
+      .min(1, { message: "The Email address is required" }),
+  });
 
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    return isValid;
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: toFormikValidationSchema(schema),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
 
   return (
-    <SignInContainer direction="column" justifyContent="space-between">
-      <Card variant="outlined">
-        <SitemarkIcon />
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-        >
-          Sign in
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            gap: 2,
-          }}
-        >
-          <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextField
-              error={emailError}
-              helperText={emailErrorMessage}
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              autoComplete="email"
-              autoFocus
-              required
-              fullWidth
-              variant="outlined"
-              color={emailError ? "error" : "primary"}
-              sx={{ ariaLabel: "email" }}
-            />
-          </FormControl>
-          <FormControl>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Link
-                component="button"
-                type="button"
-                onClick={handleClickOpen}
-                variant="body2"
-                sx={{
-                  alignSelf: "baseline",
-                  color: "black",
-                }}
-              >
-                Forgot your password?
-              </Link>
-            </Box>
-            <TextField
-              error={passwordError}
-              helperText={passwordErrorMessage}
-              name="password"
-              placeholder="••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              autoFocus
-              required
-              fullWidth
-              variant="outlined"
-              color={passwordError ? "error" : "primary"}
-            />
-          </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <ForgotPassword open={open} handleClose={handleClose} />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            onClick={validateInputs}
-            sx={{ background: "black", borderRadius: "10px" }}
+    <form onSubmit={formik.handleSubmit}>
+      <SignInContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            Sign In
-          </Button>
-          <Typography sx={{ textAlign: "center" }}>
-            Don&apos;t have an account?{" "}
-            <span>
-              <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
-              >
-                Sign up
-              </Link>
-            </span>
+            Sign in
           </Typography>
-        </Box>
-        <Divider>or</Divider>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => alert("Sign in with Google")}
-            startIcon={<GoogleIcon />}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              gap: 2,
+            }}
           >
-            Sign in with Google
-          </Button>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => alert("Sign in with Facebook")}
-            startIcon={<FacebookIcon />}
-          >
-            Sign in with Facebook
-          </Button>
-        </Box>
-      </Card>
-    </SignInContainer>
+            {/* email */}
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                placeholder="your@email.com"
+                name="email"
+                autoComplete="email"
+                variant="outlined"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                color={formik.errors.email ? "error" : "primary"}
+              />
+            </FormControl>
+            {/* password */}
+            <FormControl>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <Link
+                  component="button"
+                  type="button"
+                  onClick={handleClickOpen}
+                  variant="body2"
+                  sx={{
+                    alignSelf: "baseline",
+                    color: "black",
+                  }}
+                >
+                  Forgot your password?
+                </Link>
+              </Box>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                placeholder="••••••"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                variant="outlined"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                color={formik.errors.password ? "error" : "primary"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => handleClickShowPassword()}
+                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </FormControl>
+
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <ForgotPassword open={open} handleClose={handleClose} />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ background: "black", borderRadius: "10px" }}
+            >
+              Sign In
+            </Button>
+            <Typography sx={{ textAlign: "center" }}>
+              Don&apos;t have an account?{" "}
+              <span>
+                <Link
+                  href="/material-ui/getting-started/templates/sign-in/"
+                  variant="body2"
+                  sx={{ alignSelf: "center" }}
+                >
+                  Sign up
+                </Link>
+              </span>
+            </Typography>
+          </Box>
+          <Divider>or</Divider>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => alert("Sign in with Google")}
+              startIcon={<GoogleIcon />}
+            >
+              Sign in with Google
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => alert("Sign in with Facebook")}
+              startIcon={<FacebookIcon />}
+            >
+              Sign in with Facebook
+            </Button>
+          </Box>
+        </Card>
+      </SignInContainer>
+    </form>
   );
 }
