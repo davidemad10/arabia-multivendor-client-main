@@ -18,8 +18,11 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useState } from "react";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Margin, Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import { color } from "framer-motion";
+import { t } from "i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -105,7 +108,7 @@ export default function SignIn() {
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            Sign in
+            {t("login")}
           </Typography>
           <Box
             sx={{
@@ -117,7 +120,7 @@ export default function SignIn() {
           >
             {/* email */}
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">{t("email")}</FormLabel>
               <TextField
                 required
                 fullWidth
@@ -137,7 +140,7 @@ export default function SignIn() {
             {/* password */}
             <FormControl>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <FormLabel htmlFor="password">Password</FormLabel>
+                <FormLabel htmlFor="password">{t("password")}</FormLabel>
                 <Link
                   component="button"
                   type="button"
@@ -148,7 +151,7 @@ export default function SignIn() {
                     color: "black",
                   }}
                 >
-                  Forgot your password?
+                  {t("forgotPassword")}
                 </Link>
               </Box>
               <TextField
@@ -194,18 +197,27 @@ export default function SignIn() {
               variant="contained"
               sx={{ background: "black", borderRadius: "10px" }}
             >
-              Sign In
+              {t("login")}
             </Button>
-            <Typography sx={{ textAlign: "center" }}>
-              Don&apos;t have an account?{" "}
+            <Typography
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              {t("dontHaveAnAccount")}
               <span>
-                <Link
-                  href="/material-ui/getting-started/templates/sign-in/"
-                  variant="body2"
-                  sx={{ alignSelf: "center" }}
+                <NavLink
+                  to="/signup"
+                  style={{
+                    alignSelf: "center",
+                    color: "rgb(28, 120, 210)",
+                    textDecoration: "underline",
+                    marginLeft: "8px",
+                    marginRight: "8px",
+                  }}
                 >
-                  Sign up
-                </Link>
+                  {t("register")}
+                </NavLink>
               </span>
             </Typography>
           </Box>
@@ -217,7 +229,7 @@ export default function SignIn() {
               onClick={() => alert("Sign in with Google")}
               startIcon={<GoogleIcon />}
             >
-              Sign in with Google
+              {t("signInWithGoogle")}
             </Button>
             <Button
               fullWidth
@@ -225,7 +237,7 @@ export default function SignIn() {
               onClick={() => alert("Sign in with Facebook")}
               startIcon={<FacebookIcon />}
             >
-              Sign in with Facebook
+              {t("signInWithFacebook")}
             </Button>
           </Box>
         </Card>

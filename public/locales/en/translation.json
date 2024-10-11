@@ -1,6 +1,6 @@
 {
-  "login": "Signin",
-  "register": "Signup",
+  "login": "SignIn",
+  "register": "SignUp",
   "electronics": "Electronics",
   "mobiles": "Mobiles",
   "ladies": "Ladies",
@@ -20,5 +20,19 @@
   "rightsReserved": "All Rights Reserved, Arabia 2024 ©",
   "privacy policy": "privacy policy",
   "terms and conditions": "terms and conditions",
-  "be a vendor": "Be a vendor"
+  "be a vendor": "Be a vendor",
+  "activateAccount": "An OTP has been sent to your email address. Please enter the OTP to verify your email and activate your account. If you don't receive the email within a few minutes, check your spam folder or request a new OTP.",
+  "fullName": "Fullname",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confrim Password",
+  "phoneNumber": "Phone number",
+  "countryCode": "Country Code",
+  "dontHaveAnAccount": "Don't have an account ?",
+  "forgotPassword": "Forgot your password ?",
+  "haveAnAccount": "Already have an account ?",
+  "signInWithGoogle": "Sign In With Google",
+  "signInWithFacebook": "Sign In With Facebook",
+  "signUpWithGoogle": "Sign Up With Google",
+  "signUpWithFacebook": "Sign Up With Facebook"
 }

@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -25,6 +24,10 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
+
+import FormDialog from "../../../components/reusables/dialogue";
+import { t } from "i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -1010,6 +1013,7 @@ const countries = [
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [dialogueOpen, setDialogueOpen] = useState(false);
 
   const countryItems = useMemo(
     () =>
@@ -1081,237 +1085,250 @@ export default function SignUp() {
       console.log("Submitted");
       console.log(values);
       console.log(final);
+      setDialogueOpen(true);
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <CssBaseline enableColorScheme />
-      <SignUpContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-          >
-            Sign up
-          </Typography>
+    <>
+      <form onSubmit={formik.handleSubmit}>
+        <CssBaseline enableColorScheme />
+        <SignUpContainer direction="column" justifyContent="space-between">
+          <Card variant="outlined">
+            <Typography
+              component="h1"
+              variant="h4"
+              sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+            >
+              {t("register")}
+            </Typography>
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {/* full name */}
-            <FormControl>
-              <FormLabel htmlFor="fullname">Full name</FormLabel>
-              <TextField
-                autoComplete="fullname"
-                name="fullname"
-                required
-                fullWidth
-                id="fullname"
-                placeholder="Jon Snow"
-                onBlur={formik.handleBlur}
-                value={formik.values.fullname}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.fullname && Boolean(formik.errors.fullname)
-                }
-                helperText={formik.touched.fullname && formik.errors.fullname}
-                color={formik.errors.fullname ? "error" : "primary"}
-              />
-            </FormControl>
-            {/* email */}
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-                color={formik.errors.email ? "error" : "primary"}
-              />
-            </FormControl>
-            {/* password */}
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                placeholder="••••••"
-                type={showPassword ? "text" : "password"}
-                id="password"
-                variant="outlined"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-                color={formik.errors.password ? "error" : "primary"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => handleClickShowPassword("password")}
-                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </FormControl>
-            {/*Confirm password */}
-            <FormControl>
-              <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
-              <TextField
-                required
-                fullWidth
-                name="confirmPassword"
-                placeholder="••••••"
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                autoComplete="new-password"
-                variant="outlined"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.confirmPassword &&
-                  Boolean(formik.errors.confirmPassword)
-                }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                }
-                color={formik.errors.confirmPassword ? "error" : "primary"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => handleClickShowPassword("Not")}
-                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
-                      >
-                        {showConfirmPassword ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </FormControl>
-
-            {/* Phone number */}
-            <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
-            <div className="flex ">
-              <FormControl
-                variant="outlined"
-                style={{ marginRight: "16px", minWidth: "120px" }}
-              >
-                <InputLabel id="country-code-label">Country Code</InputLabel>
-                <Select
-                  labelId="country-code-label"
-                  id="countryCode"
-                  name="countryCode"
-                  value={formik.values.countryCode}
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {/* full name */}
+              <FormControl>
+                <FormLabel htmlFor="fullname">{t("fullName")}</FormLabel>
+                <TextField
+                  autoComplete="fullname"
+                  name="fullname"
+                  required
+                  fullWidth
+                  id="fullname"
+                  placeholder="Jon Snow"
+                  onBlur={formik.handleBlur}
+                  value={formik.values.fullname}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.fullname && Boolean(formik.errors.fullname)
+                  }
+                  helperText={formik.touched.fullname && formik.errors.fullname}
+                  color={formik.errors.fullname ? "error" : "primary"}
+                />
+              </FormControl>
+              {/* email */}
+              <FormControl>
+                <FormLabel htmlFor="email">{t("email")}</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  placeholder="your@email.com"
+                  name="email"
+                  autoComplete="email"
+                  variant="outlined"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                  color={formik.errors.email ? "error" : "primary"}
+                />
+              </FormControl>
+              {/* password */}
+              <FormControl>
+                <FormLabel htmlFor="password">{t("password")}</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  placeholder="••••••"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  variant="outlined"
+                  value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.countryCode &&
-                    Boolean(formik.errors.countryCode)
+                    formik.touched.password && Boolean(formik.errors.password)
                   }
-                >
-                  {countryItems}
-                </Select>
+                  helperText={formik.touched.password && formik.errors.password}
+                  color={formik.errors.password ? "error" : "primary"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => handleClickShowPassword("password")}
+                          onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormControl>
+              {/*Confirm password */}
+              <FormControl>
+                <FormLabel htmlFor="confirmPassword">
+                  {t("confirmPassword")}
+                </FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  placeholder="••••••"
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  variant="outlined"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                  color={formik.errors.confirmPassword ? "error" : "primary"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => handleClickShowPassword("Not")}
+                          onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
+                        >
+                          {showConfirmPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </FormControl>
 
-              <TextField
-                required
-                name="phoneNumber"
-                placeholder="111111111"
-                type="text"
-                id="phoneNumber"
-                variant="outlined"
-                value={formik.values.phoneNumber}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.phoneNumber &&
-                  Boolean(formik.errors.phoneNumber)
-                }
-                helperText={
-                  formik.touched.phoneNumber && formik.errors.phoneNumber
-                }
-                color={formik.errors.phoneNumber ? "error" : "primary"}
-                fullWidth
-              />
-            </div>
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                background: "black",
-                borderRadius: "7px",
-                marginTop: "10px",
-              }}
-            >
-              Sign up
-            </Button>
-
-            <Typography sx={{ textAlign: "center" }}>
-              Already have an account?{" "}
-              <span>
-                <Link
-                  href="signin"
-                  variant="body2"
-                  sx={{ alignSelf: "center" }}
+              {/* Phone number */}
+              <FormLabel htmlFor="phoneNumber">{t("phoneNumber")}</FormLabel>
+              <div className="flex ">
+                <FormControl
+                  variant="outlined"
+                  style={{ marginRight: "16px", minWidth: "120px" }}
                 >
-                  Sign in
-                </Link>
-              </span>
-            </Typography>
-          </Box>
+                  <InputLabel id="country-code-label">
+                    {t("countryCode")}
+                  </InputLabel>
+                  <Select
+                    labelId="country-code-label"
+                    id="countryCode"
+                    name="countryCode"
+                    value={formik.values.countryCode}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.countryCode &&
+                      Boolean(formik.errors.countryCode)
+                    }
+                  >
+                    {countryItems}
+                  </Select>
+                </FormControl>
 
-          <Divider>
-            <Typography sx={{ color: "text.secondary" }}>or</Typography>
-          </Divider>
+                <TextField
+                  required
+                  name="phoneNumber"
+                  placeholder="111111111"
+                  type="text"
+                  id="phoneNumber"
+                  variant="outlined"
+                  value={formik.values.phoneNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.phoneNumber &&
+                    Boolean(formik.errors.phoneNumber)
+                  }
+                  helperText={
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                  }
+                  color={formik.errors.phoneNumber ? "error" : "primary"}
+                  fullWidth
+                />
+              </div>
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert("Sign up with Google")}
-              startIcon={<GoogleIcon />}
-            >
-              Sign up with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert("Sign up with Facebook")}
-              startIcon={<FacebookIcon />}
-            >
-              Sign up with Facebook
-            </Button>
-          </Box>
-        </Card>
-      </SignUpContainer>
-    </form>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  background: "black",
+                  borderRadius: "7px",
+                  marginTop: "10px",
+                }}
+              >
+                {t("register")}
+              </Button>
+
+              <Typography sx={{ textAlign: "center" }}>
+                {t("haveAnAccount")}
+                <span>
+                  <NavLink
+                    to="/signin"
+                    style={{
+                      alignSelf: "center",
+                      color: "rgb(28, 120, 210)",
+                      textDecoration: "underline",
+                      marginLeft: "8px",
+                      marginRight: "8px",
+                    }}
+                  >
+                    {t("login")}
+                  </NavLink>
+                </span>
+              </Typography>
+            </Box>
+
+            <Divider>
+              <Typography sx={{ color: "text.secondary" }}>or</Typography>
+            </Divider>
+
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => alert("Sign up with Google")}
+                startIcon={<GoogleIcon />}
+              >
+                {t("signUpWithGoogle")}
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => alert("Sign up with Facebook")}
+                startIcon={<FacebookIcon />}
+              >
+                {t("signUpWithFacebook")}
+              </Button>
+            </Box>
+          </Card>
+        </SignUpContainer>
+      </form>
+      <FormDialog open={dialogueOpen} setOpen={setDialogueOpen}></FormDialog>
+    </>
   );
 }
