@@ -12,16 +12,15 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
+import { GoogleIcon, FacebookIcon } from "../CustomIcons";
 import { z } from "zod";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useState } from "react";
 
-import { Margin, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { color } from "framer-motion";
 import { t } from "i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({

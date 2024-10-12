@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -23,11 +24,15 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 import FormDialog from "../../../components/reusables/dialogue";
 import { t } from "i18next";
+import { registerUser } from "../../../api/userRequests";
+import { useSnackbar } from "notistack";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -1014,6 +1019,8 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [dialogueOpen, setDialogueOpen] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const countryItems = useMemo(
     () =>
@@ -1077,15 +1084,36 @@ export default function SignUp() {
       phoneNumber: "",
     },
     validationSchema: toFormikValidationSchema(schema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const final = {
-        ...values,
-        completephoneNumber: values.countryCode + values.phoneNumber,
+        email: values.email,
+        full_name: values.fullname,
+        password1: values.password,
+        password2: values.confirmPassword,
+        phone: values.countryCode + values.phoneNumber,
       };
       console.log("Submitted");
-      console.log(values);
       console.log(final);
-      setDialogueOpen(true);
+      setRequestLoading(true);
+      const response = await registerUser(final);
+      setRequestLoading(false);
+      const statusCode = response.message.response.status;
+      if (statusCode == 200) {
+        setDialogueOpen(true);
+      } else {
+        const errors = response.message.response.data;
+        Object.keys(errors).forEach((key) => {
+          const value = errors[key];
+          console.log(value);
+          enqueueSnackbar(`${value}`, {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          });
+        });
+      }
     },
   });
 
@@ -1270,19 +1298,34 @@ export default function SignUp() {
                   fullWidth
                 />
               </div>
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  background: "black",
-                  borderRadius: "7px",
-                  marginTop: "10px",
-                }}
-              >
-                {t("register")}
-              </Button>
+              {requestLoading ? (
+                <LoadingButton
+                  loading
+                  loadingIndicator="Loading…"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    background: "black",
+                    borderRadius: "7px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {t("register")}
+                </LoadingButton>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    background: "black",
+                    borderRadius: "7px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {t("register")}
+                </Button>
+              )}
 
               <Typography sx={{ textAlign: "center" }}>
                 {t("haveAnAccount")}

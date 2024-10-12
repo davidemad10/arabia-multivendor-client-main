@@ -6,6 +6,12 @@ export const fetchProducts = async () => {
 };
 
 export const fetchProduct = async (sku: number) => {
-  const response = await axiosInstance.get(`/products/${sku}`);
-  return response.data;
+  try {
+    const response = await axiosInstance.get(`/products/${sku}`);
+    return response.data;
+  } catch (error: any) {
+    return {
+      message: error.response?.data?.message || "An unexpected error occurred",
+    };
+  }
 };

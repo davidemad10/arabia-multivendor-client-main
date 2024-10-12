@@ -1,11 +1,6 @@
-import {
-  useQuery,
-  useQueryClient,
-  useMutation,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
-import { Categories, Slider } from "../types";
+import { Categories } from "../types";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 // Get Categories
@@ -19,6 +14,7 @@ export const GetCategories = async (
   );
   return response.data;
 };
+
 export function useGetCategories(parent: string, featured: boolean) {
   return useQuery({
     queryKey: ["categories", parent, featured],
@@ -26,5 +22,3 @@ export function useGetCategories(parent: string, featured: boolean) {
     refetchOnWindowFocus: false,
   });
 }
-
-// Get Categories

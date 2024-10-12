@@ -44,7 +44,7 @@ export default function FormDialog({ open, setOpen }) {
             id="otp"
             name="otp"
             label="OTP"
-            type="number"
+            type="text"
             fullWidth
             variant="standard"
           />
