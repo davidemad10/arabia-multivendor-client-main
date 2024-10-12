@@ -72,7 +72,7 @@ export default function Header() {
             </div>
 
             {/* Search Bar */}
-            <div className="w-2/6 md:flex justify-center">
+            <div className="w-5/12 md:flex mx-6 justify-center">
               <div className="relative">
                 <input
                   placeholder={t("search")}
@@ -105,7 +105,7 @@ export default function Header() {
                 <div className="flex flex-row gap-4">
                   <span className="h-8 bg-gray-300 rounded-full w-px"></span>
                   <div className="flex flexCenter cursor-pointer group">
-                    <span className=" text-blackText group-hover:text-Red">
+                    <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
                       <Link to={"signin"}>
                         <Trans i18nKey="login"></Trans>
                       </Link>
@@ -114,7 +114,7 @@ export default function Header() {
                   </div>
                   <span className="h-8 bg-gray-300 rounded-full w-px"></span>
                   <div className="flex flexCenter cursor-pointer group">
-                    <span className=" text-blackText group-hover:text-Red">
+                    <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
                       <Link to={"signup"}>
                         <Trans i18nKey="register"></Trans>
                       </Link>
