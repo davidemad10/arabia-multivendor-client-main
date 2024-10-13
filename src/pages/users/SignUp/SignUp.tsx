@@ -24,8 +24,6 @@ import {
   Select,
   InputLabel,
   MenuItem,
-  Alert,
-  Snackbar,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
@@ -1096,15 +1094,18 @@ export default function SignUp() {
       console.log(final);
       setRequestLoading(true);
       const response = await registerUser(final);
+      console.log(response);
+
       setRequestLoading(false);
-      const statusCode = response.message.response.status;
-      if (statusCode == 200) {
+      const statusCode = response.request?.status;
+      if (statusCode == 201) {
+        localStorage.setItem("email", values.email.toLowerCase());
         setDialogueOpen(true);
       } else {
         const errors = response.message.response.data;
         Object.keys(errors).forEach((key) => {
           const value = errors[key];
-          console.log(value);
+          // console.log(value);
           enqueueSnackbar(`${value}`, {
             variant: "error",
             anchorOrigin: {

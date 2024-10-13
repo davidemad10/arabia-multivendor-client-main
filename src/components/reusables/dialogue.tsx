@@ -7,15 +7,42 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { t } from "i18next";
+import { verifyEmail } from "../../api/userRequests";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 export default function FormDialog({ open, setOpen }) {
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  async function handleSubmit(otp: number) {
+    try {
+      const response = await verifyEmail(otp);
+      console.log(response);
+      enqueueSnackbar("Account activated successfully", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      handleClose();
+      navigate("/signin");
+    } catch (error: any) {
+      console.log(error);
+      enqueueSnackbar(`${error.response.data.message}`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+    }
+  }
 
   return (
     <React.Fragment>
@@ -28,9 +55,9 @@ export default function FormDialog({ open, setOpen }) {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
+            const otp = formJson.otp;
+            console.log(otp);
+            handleSubmit(otp);
           },
         }}
       >

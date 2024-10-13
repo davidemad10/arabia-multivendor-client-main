@@ -22,6 +22,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { t } from "i18next";
+import { login } from "../../../api/userRequests";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -93,8 +94,10 @@ export default function SignIn() {
       password: "",
     },
     validationSchema: toFormikValidationSchema(schema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      const response = await login(values);
+      console.log(response);
     },
   });
 

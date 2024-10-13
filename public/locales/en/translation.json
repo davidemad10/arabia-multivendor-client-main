@@ -25,7 +25,7 @@
   "fullName": "Fullname",
   "email": "Email",
   "password": "Password",
-  "confirmPassword": "Confrim Password",
+  "confirmPassword": "Confirm Password",
   "phoneNumber": "Phone number",
   "countryCode": "Country Code",
   "dontHaveAnAccount": "Don't have an account ?",
