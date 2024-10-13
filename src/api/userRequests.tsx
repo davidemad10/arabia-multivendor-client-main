@@ -42,17 +42,6 @@ export const verifyEmail = async (otp: number) => {
 };
 
 export const login = async (userCredentials: userCredentials) => {
-  try {
-    const response = await axiosInstance.post(
-      "/account/login/",
-      userCredentials
-    );
-    console.log(response?.message);
-
-    return response;
-  } catch (error: any) {
-    return {
-      message: error || "An unexpected error occurred",
-    };
-  }
+  const response = await axiosInstance.post("/account/login/", userCredentials);
+  return response;
 };

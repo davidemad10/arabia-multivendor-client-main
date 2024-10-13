@@ -20,9 +20,10 @@ import { useState } from "react";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { t } from "i18next";
 import { login } from "../../../api/userRequests";
+import { useSnackbar } from "notistack";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -65,9 +66,16 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+interface loginFormData {
+  email: string;
+  password: string;
+}
+
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,11 +89,63 @@ export default function SignIn() {
     setShowPassword((prev) => !prev);
   };
 
+  const handleSubmit = async (values: loginFormData) => {
+    try {
+      const data = {
+        ...values,
+        email: values.email.toLowerCase(),
+      };
+      console.log(data);
+      const response = await login(data);
+      console.log(response);
+      enqueueSnackbar("Logged In successfully", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      const token = response.data.tokens.access;
+      console.log(token);
+
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+      //! i need to handle access and refresh tokens
+
+      navigate("/", { replace: true });
+    } catch (error: any) {
+      enqueueSnackbar(
+        `${
+          error?.response?.data?.detail ||
+          "unexpected error occured, please try again in a few minutes"
+        }`,
+        {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        }
+      );
+    }
+  };
+
   const schema = z.object({
     email: z
       .string()
       .email({ message: "Invalid email address" })
       .min(1, { message: "The Email address is required" }),
+    password: z.string().min(1, { message: "The password is required" }),
   });
 
   const formik = useFormik({
@@ -95,9 +155,7 @@ export default function SignIn() {
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: async (values) => {
-      console.log(values);
-      const response = await login(values);
-      console.log(response);
+      handleSubmit(values);
     },
   });
 
@@ -157,7 +215,6 @@ export default function SignIn() {
                 </Link>
               </Box>
               <TextField
-                required
                 fullWidth
                 name="password"
                 placeholder="••••••"
