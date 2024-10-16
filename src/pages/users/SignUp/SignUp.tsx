@@ -1,6 +1,14 @@
+// External Libraries
+import { useMemo, useState } from "react";
+import { useFormik } from "formik";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { useSnackbar } from "notistack";
+import { NavLink } from "react-router-dom";
+
+// Material-UI Components
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -8,16 +16,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
-import { GoogleIcon, FacebookIcon } from "../CustomIcons";
-
-import { useFormik } from "formik";
-import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useMemo, useState } from "react";
-
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { styled } from "@mui/material";
 import {
   IconButton,
   InputAdornment,
@@ -25,12 +26,17 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
+// Local Components
 import FormDialog from "../../../components/reusables/dialogue";
-import { t } from "i18next";
+import { GoogleIcon, FacebookIcon } from "../CustomIcons";
+
+// API Requests
 import { registerUser } from "../../../api/userRequests";
-import { useSnackbar } from "notistack";
+
+// Localization
+import { t } from "i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -1088,7 +1094,7 @@ export default function SignUp() {
         full_name: values.fullname,
         password1: values.password,
         password2: values.confirmPassword,
-        phone: values.countryCode + values.phoneNumber,
+        phone: (values.countryCode + values.phoneNumber).replace(/\s/g, ""),
       };
       console.log("Submitted");
       console.log(final);
@@ -1105,7 +1111,6 @@ export default function SignUp() {
         const errors = response.message.response.data;
         Object.keys(errors).forEach((key) => {
           const value = errors[key];
-          // console.log(value);
           enqueueSnackbar(`${value}`, {
             variant: "error",
             anchorOrigin: {
