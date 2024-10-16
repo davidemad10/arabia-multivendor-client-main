@@ -45,3 +45,27 @@ export const login = async (userCredentials: userCredentials) => {
   const response = await axiosInstance.post("/account/login/", userCredentials);
   return response;
 };
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await axiosInstance.post("/account/passwordresetotp/", {
+      email,
+    });
+
+    console.log(response);
+    return response;
+  } catch (error: any) {
+    return {
+      error,
+    };
+  }
+};
+
+export const verifyResetOTP = async (otp: number) => {
+  const response = await axiosInstance.post("/account/passwordresetotp/", {
+    email: "abanoub.medhat.seif@gmail.com",
+    otp,
+  });
+  console.log("API raw response:", response);
+  return response;
+};

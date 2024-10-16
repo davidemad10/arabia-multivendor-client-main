@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-          <SnackbarProvider>
+          <SnackbarProvider autoHideDuration={3000}>
             <Suspense
               fallback={
                 <Backdrop

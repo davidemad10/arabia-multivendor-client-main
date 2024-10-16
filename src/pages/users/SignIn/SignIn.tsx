@@ -9,7 +9,6 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, FacebookIcon } from "../CustomIcons";
@@ -24,6 +23,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { t } from "i18next";
 import { login } from "../../../api/userRequests";
 import { useSnackbar } from "notistack";
+import MuiCard from "@mui/material/Card";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -109,18 +109,6 @@ export default function SignIn() {
       console.log(token);
 
       //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
 
       navigate("/", { replace: true });
     } catch (error: any) {
@@ -197,6 +185,7 @@ export default function SignIn() {
                 color={formik.errors.email ? "error" : "primary"}
               />
             </FormControl>
+
             {/* password */}
             <FormControl>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -249,7 +238,6 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
             <Button
               type="submit"
               fullWidth
@@ -258,6 +246,7 @@ export default function SignIn() {
             >
               {t("login")}
             </Button>
+
             <Typography
               sx={{
                 textAlign: "center",
@@ -280,7 +269,7 @@ export default function SignIn() {
               </span>
             </Typography>
           </Box>
-          <Divider>or</Divider>
+          {/* <Divider>or</Divider>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
               fullWidth
@@ -298,9 +287,10 @@ export default function SignIn() {
             >
               {t("signInWithFacebook")}
             </Button>
-          </Box>
+          </Box> */}
         </Card>
       </SignInContainer>
+      <ForgotPassword open={open} handleClose={handleClose} />
     </form>
   );
 }
