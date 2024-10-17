@@ -52,7 +52,7 @@ export default function Header() {
             </div>
 
             {/* header navigation */}
-            <div className="container hidden xl:flexCenter w-min h-16">
+            <div className="container hidden laptop:flexCenter w-min h-16">
               <ul className="mx-auto flex gap-5">
                 {headerLinks.map((link) => (
                   <li key={link.label}>
@@ -72,7 +72,7 @@ export default function Header() {
             </div>
 
             {/* Search Bar */}
-            <div className="w-5/12 md:flex mx-6 justify-center">
+            <div className="w-5/12 tablet:flex mx-6 justify-center">
               <div className="relative">
                 <input
                   placeholder={t("search")}
@@ -86,7 +86,7 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="flex xl:hidden">
+            <div className="flex laptop:hidden">
               <button
                 onClick={() => setIsMenuOpen((prev) => !prev)}
                 className="text-xl"
@@ -97,7 +97,7 @@ export default function Header() {
             </div>
 
             {/* User Actions */}
-            <div className="hidden xl:flexCenter gap-5 items-center">
+            <div className="hidden laptop:flexCenter gap-5 items-center">
               <LanguageSelector />
               {loggedInUser ? (
                 ""
@@ -155,7 +155,7 @@ export default function Header() {
                   i18n.dir() === "rtl" ? "left-0" : "right-0"
                 } h-full w-64 bg-white border-l border-gray-300 transform transition-transform duration-300 ease-in-out ${
                   isMenuOpen ? "translate-x-0" : "translate-x-full"
-                } xl:hidden`}
+                } laptop:hidden`}
               >
                 {/* Close Button */}
                 <div className="flex justify-end p-4">
