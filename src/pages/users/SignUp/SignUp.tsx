@@ -152,10 +152,9 @@ export default function SignUp() {
               width: "100%",
               fontSize: "clamp(2rem, 10vw, 2.15rem)",
               marginBottom: "100px",
-              letterSpacing: "3px",
             }}
           >
-            Welcome Back !
+            {t("welcomeHeader")}
           </Typography>{" "}
           <Typography
             component="h1"
@@ -164,11 +163,11 @@ export default function SignUp() {
               color: "white",
               textAlign: "center",
               width: "100%",
-              marginBottom: "50px",
+              marginBottom: "30px",
               fontSize: "clamp(1rem, 5vw, 1.15rem)",
             }}
           >
-            To keep connected with us please login with your personal info
+            {t("welcomemessage")}
           </Typography>{" "}
           <Typography sx={{ textAlign: "center" }}>
             <span>

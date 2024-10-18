@@ -34,5 +34,7 @@
   "signInWithGoogle": ". تسجيل الدخول بواسطة جوجل",
   "signInWithFacebook": ". تسجيل الدخول بواسطة فيس بوك",
   "signUpWithGoogle": ". انشاء حساب بواسطة جوجل",
-  "signUpWithFacebook": ". انشاء حساب بواسطة فيس بوك"
+  "signUpWithFacebook": ". انشاء حساب بواسطة فيس بوك",
+  "welcomeHeader": "مرحبًًا",
+  "welcomemessage": "لديك حساب بالفعل ؟ ... سجل دخولك و ابدأ التسوق الأن"
 }
