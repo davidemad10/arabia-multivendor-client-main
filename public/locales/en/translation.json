@@ -1,6 +1,6 @@
 {
-  "login": "SignIn",
-  "register": "SignUp",
+  "login": "Sign In",
+  "register": "Sign Up",
   "electronics": "Electronics",
   "mobiles": "Mobiles",
   "ladies": "Ladies",
@@ -36,5 +36,6 @@
   "signUpWithGoogle": "Sign Up With Google",
   "signUpWithFacebook": "Sign Up With Facebook",
   "welcomeHeader": "Marhaba !",
-  "welcomemessage": "Have an account already ? ... Enter your info and start shopping now"
+  "welcomemessage": "Have an account already ? ... Enter your info and start shopping now",
+  "NewComerMessage": "New here? Sign up and start exploring!"
 }

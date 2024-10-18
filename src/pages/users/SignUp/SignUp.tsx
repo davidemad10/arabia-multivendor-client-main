@@ -423,7 +423,7 @@ export default function SignUp() {
                       fullWidth
                       variant="contained"
                       sx={{
-                        background: "rgb(233, 71, 39)",
+                        background: "black",
                         borderRadius: "7px",
                         marginTop: "10px",
                       }}
