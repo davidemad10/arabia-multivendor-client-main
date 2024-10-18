@@ -6,10 +6,14 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { t } from "i18next";
+import { BorderTop } from "@mui/icons-material";
 
 const Footer = () => {
   return (
-    <footer className="w-full flex flex-col mt-14 bg-gradient-to-br from-orange-300 to-orange-600">
+    <footer
+      className="w-full flex flex-col mt-14 bg-white"
+      style={{ borderTop: "0.25px solid lightGrey" }}
+    >
       <div className="flexCenter w-full flex-col">
         <div className="flexCenter gap-3 flex-col">
           <img

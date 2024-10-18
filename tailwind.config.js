@@ -11,6 +11,7 @@ export default {
       colors: {
         Red: "#ff0000",
         blackText: "#414141",
+        mainColor: "rgb(233, 71, 39)",
       },
     },
     screens: {
