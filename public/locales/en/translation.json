@@ -37,5 +37,9 @@
   "signUpWithFacebook": "Sign Up With Facebook",
   "welcomeHeader": "Marhaba !",
   "welcomemessage": "Have an account already ? ... Enter your info and start shopping now",
-  "NewComerMessage": "New here? Sign up and start exploring!"
+  "NewComerMessage": "New here? Sign up and start exploring!",
+  "PersonalInfo": "Personal Info",
+  "next": "Next",
+  "previous": "Previous",
+  "submit": "Submit"
 }

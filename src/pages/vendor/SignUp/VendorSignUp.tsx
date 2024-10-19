@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { VendorData } from "./VendorData";
+import VendorData from "./VendorData";
 import { Documents } from "./Documents";
 import { Address } from "./Address";
 
@@ -7,7 +7,12 @@ import { Address } from "./Address";
 interface StepConfig {
   id: number;
   title: string;
-  component: FC;
+  component: FC<StepComponentProps>;
+}
+
+interface StepComponentProps {
+  onNext: () => void;
+  onPrev: () => void;
 }
 
 // Step configurations
@@ -57,14 +62,7 @@ const VendorSignUp = () => {
 
   return (
     <div>
-      <h1>{stepsConfig[currentStep].title}</h1>
-      <StepComponent />
-      <button onClick={PreviousStep} disabled={currentStep == 0}>
-        Previous
-      </button>
-      <button onClick={NextStep}>
-        {currentStep < stepsConfig.length - 1 ? "Next" : "Submit"}
-      </button>
+      <StepComponent onNext={NextStep} onPrev={PreviousStep} />
     </div>
   );
 };

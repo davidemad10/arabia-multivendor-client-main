@@ -5,7 +5,6 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useSnackbar } from "notistack";
 import { NavLink } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
 
 // Material-UI Components
 import Box from "@mui/material/Box";

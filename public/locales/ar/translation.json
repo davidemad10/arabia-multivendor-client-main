@@ -37,5 +37,9 @@
   "signUpWithFacebook": ". انشاء حساب بواسطة فيس بوك",
   "welcomeHeader": "مرحبا",
   "welcomemessage": "لديك حساب بالفعل ؟ ... سجل دخولك و ابدأ التسوق الأن",
-  "NewComerMessage": "مرحبًا! أنشئ حسابك وابدأ التسوق الآن!"
+  "NewComerMessage": "مرحبًا! أنشئ حسابك وابدأ التسوق الآن!",
+  "PersonalInfo": "البيانات الشخصية",
+  "next": "التالى",
+  "previous": "السابق",
+  "submit": "تسجيل"
 }
