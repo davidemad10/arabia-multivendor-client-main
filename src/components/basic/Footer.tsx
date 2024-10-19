@@ -74,7 +74,7 @@ const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link to={""} className="text-xs text-gray-600">
+            <Link to={"vendorsignup"} className="text-xs text-gray-600">
               {t("be a vendor")}{" "}
             </Link>
           </li>

@@ -23,6 +23,8 @@ export default function ForgotPassword({
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleSubmit = async (email: string) => {
+    //! error handling needs some modifications
+
     const response = await forgotPassword(email.toLowerCase());
     console.log("this is from inside handle email sending");
     console.log(response);

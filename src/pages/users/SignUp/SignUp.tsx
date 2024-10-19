@@ -30,7 +30,10 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 // Local imports
 import FormDialog from "../../../components/reusables/dialogue";
 import { GoogleIcon, FacebookIcon } from "../CustomIcons";
-import { Card, SignUpContainer } from "./CustomMUIComponents";
+import {
+  Card,
+  SignUpContainer,
+} from "../../../components/reusables/CustomMUIComponents";
 
 import countries from "./countries";
 

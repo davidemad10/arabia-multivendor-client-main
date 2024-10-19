@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignIn from "./pages/users/SignIn/SignIn";
 import SignUp from "./pages/users/SignUp/SignUp";
+import VendorSignUp from "./pages/vendor/SignUp/VendorSignUp";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
           <Route path="/:category" element={<Products></Products>}></Route>
           <Route path="/signin" element={<SignIn></SignIn>}></Route>
           <Route path="/signup" element={<SignUp></SignUp>}></Route>
+          <Route
+            path="/vendorsignup"
+            element={<VendorSignUp></VendorSignUp>}
+          ></Route>
           <Route
             path="/products/:sku"
             element={<ProductDetails></ProductDetails>}
