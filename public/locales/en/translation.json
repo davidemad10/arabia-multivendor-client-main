@@ -41,5 +41,11 @@
   "PersonalInfo": "Personal Info",
   "next": "Next",
   "previous": "Previous",
-  "submit": "Submit"
+  "submit": "Submit",
+  "documents": "Required Documents",
+  "idFront": "Front Face of the ID",
+  "idBack": "Back Face of the ID",
+  "taxCard": "Tax Card",
+  "bankStatment": "Bank Statement",
+  "commercialRecord": "Commercial Record"
 }

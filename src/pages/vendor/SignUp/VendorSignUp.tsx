@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import VendorData from "./VendorData";
-import { Documents } from "./Documents";
+import Documents from "./Documents";
 import { Address } from "./Address";
 
 // Step configuration type
@@ -34,8 +34,10 @@ const stepsConfig: StepConfig[] = [
   },
 ];
 
+// interface vendorFullData {}
+
 const VendorSignUp = () => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const [activeComponent, setActiveComponent] = useState(
     stepsConfig[currentStep]
   );
