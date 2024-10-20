@@ -1,5 +1,5 @@
 // External Libraries
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -32,13 +32,14 @@ import countries from "../../users/SignUp/countries";
 
 // Localization
 import { t } from "i18next";
+import { StepComponentProps } from "./Types";
 
-interface StepComponentProps {
-  onNext: () => void;
-  onPrev: () => void;
-}
-
-const VendorData: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
+const VendorData: React.FC<StepComponentProps> = ({
+  onNext,
+  onPrev,
+  userData,
+  setUserData,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -111,6 +112,13 @@ const VendorData: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
       };
       console.log("Submitted");
       console.log(final);
+
+      setUserData((prevState: any) => ({
+        ...prevState,
+        user: { ...final },
+      }));
+
+      console.log(userData);
       onNext();
     },
   });

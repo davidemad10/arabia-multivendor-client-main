@@ -13,6 +13,38 @@ interface StepConfig {
 interface StepComponentProps {
   onNext: () => void;
   onPrev: () => void;
+  userData: UserData;
+  setUserData: (newState: UserData) => void;
+}
+
+interface User {
+  email: string;
+  full_name: string;
+  password1: string;
+  password2: string;
+  phone: string;
+}
+
+interface Documents {
+  front_id: string;
+  back_id: string;
+  tax_card: string;
+  commercial_record: string;
+}
+
+interface Address {
+  country: string;
+  state: string;
+  city: string;
+  postal_code: string;
+  address_1: string;
+  address_2: string;
+}
+
+interface UserData {
+  user: User;
+  documents: Documents;
+  address: Address;
 }
 
 // Step configurations
@@ -34,17 +66,42 @@ const stepsConfig: StepConfig[] = [
   },
 ];
 
-// interface vendorFullData {}
-
 const VendorSignUp = () => {
   const [currentStep, setCurrentStep] = useState(2);
   const [activeComponent, setActiveComponent] = useState(
     stepsConfig[currentStep]
   );
+  const [userData, setUserData] = useState<UserData>({
+    user: {
+      email: "",
+      full_name: "",
+      password1: "",
+      password2: "",
+      phone: "",
+    },
+    documents: {
+      front_id: "",
+      back_id: "",
+      tax_card: "",
+      commercial_record: "",
+    },
+    address: {
+      country: "",
+      state: "",
+      city: "",
+      postal_code: "",
+      address_1: "",
+      address_2: "",
+    },
+  });
 
   useEffect(() => {
     setActiveComponent(() => stepsConfig[currentStep]);
   }, [currentStep]);
+
+  useEffect(() => {
+    console.log("Updated userData:", userData);
+  }, [userData]);
 
   const NextStep = () => {
     if (currentStep < stepsConfig.length - 1) {
@@ -64,7 +121,12 @@ const VendorSignUp = () => {
 
   return (
     <div>
-      <StepComponent onNext={NextStep} onPrev={PreviousStep} />
+      <StepComponent
+        onNext={NextStep}
+        onPrev={PreviousStep}
+        userData={userData}
+        setUserData={setUserData}
+      />
     </div>
   );
 };

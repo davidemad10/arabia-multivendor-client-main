@@ -20,15 +20,13 @@ import {
 
 // Localization
 import { t } from "i18next";
+import { StepComponentProps } from "./Types";
 
-interface AddressStepComponentProps {
-  onNext: () => void;
-  onPrev: () => void;
-}
-
-const AddressData: React.FC<AddressStepComponentProps> = ({
+const AddressData: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
+  userData,
+  setUserData,
 }) => {
   const schema = z.object({
     country: z.string().min(1, { message: "Country is required" }),
@@ -60,6 +58,12 @@ const AddressData: React.FC<AddressStepComponentProps> = ({
       };
       console.log("Submitted");
       console.log(final);
+
+      setUserData((prevState: object) => ({
+        ...prevState,
+        address: { ...final },
+      }));
+
       onNext();
     },
   });

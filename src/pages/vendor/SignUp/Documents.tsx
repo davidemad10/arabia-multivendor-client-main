@@ -19,6 +19,7 @@ import { t } from "i18next";
 import { Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import { UserData } from "./Types";
 
 // Validation schema using Zod
 const documentSchema = z.object({
@@ -43,10 +44,15 @@ const documentSchema = z.object({
 interface StepComponentProps {
   onNext: () => void;
   onPrev: () => void;
+  userData: UserData;
+  setUserData: (newState: UserData) => void;
 }
-
 // Form submission handler
-const handleSubmit = async (values: Record<string, any>) => {
+const handleSubmit = async (
+  values: Record<string, any>,
+  setUserData: (data: object) => void,
+  userData: UserData
+) => {
   console.log(values);
   const formData = new FormData();
 
@@ -74,9 +80,19 @@ const handleSubmit = async (values: Record<string, any>) => {
   for (const [key, value] of formData.entries()) {
     console.log(key, value);
   }
+
+  setUserData((prevState: object) => ({
+    ...prevState,
+    documents: { ...formData },
+  }));
 };
 
-const Documents: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
+const Documents: React.FC<StepComponentProps> = ({
+  onNext,
+  onPrev,
+  userData,
+  setUserData,
+}) => {
   return (
     <div className="w-2/5 shadow rounded mx-auto">
       <Formik
@@ -89,7 +105,7 @@ const Documents: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
         }}
         validationSchema={toFormikValidationSchema(documentSchema)}
         onSubmit={(values) => {
-          handleSubmit(values);
+          handleSubmit(values, setUserData, userData);
           onNext();
         }}
       >
