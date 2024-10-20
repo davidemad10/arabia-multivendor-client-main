@@ -47,5 +47,12 @@
   "idBack": "Back Face of the ID",
   "taxCard": "Tax Card",
   "bankStatement": "Bank Statement",
-  "commercialRecord": "Commercial Record"
+  "commercialRecord": "Commercial Record",
+  "country": "Country",
+  "state": "State",
+  "city": "City",
+  "postalCode": "Postal Code",
+  "address1": "Address 1",
+  "address2": "Address 2",
+  "addressInfo": "Address Info"
 }

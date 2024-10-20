@@ -47,5 +47,12 @@
   "idBack": "الوجه الخلفى من بطاقة الهوية",
   "taxCard": "البطاقة الضريبية",
   "bankStatement": "كشف حساب بنكى",
-  "commercialRecord": "السجل التجارى"
+  "commercialRecord": "السجل التجارى",
+  "country": "الدولة",
+  "state": "المحافظة",
+  "city": "المدينة",
+  "postalCode": "الكود البريدى",
+  "address1": "عنوان 1",
+  "address2": "عنوان 2",
+  "addressInfo": "العنوان بالتفصيل"
 }

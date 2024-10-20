@@ -1,3 +1,5 @@
+import imageCompression from "browser-image-compression";
+
 // Material-UI Components
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -44,8 +46,34 @@ interface StepComponentProps {
 }
 
 // Form submission handler
-const handleSubmit = (values: any) => {
+const handleSubmit = async (values: Record<string, any>) => {
   console.log(values);
+  const formData = new FormData();
+
+  // Iterate over values and handle files separately
+  for (const [key, value] of Object.entries(values)) {
+    if (value instanceof File) {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      };
+
+      try {
+        const compressedFile = await imageCompression(value, options);
+        formData.append(key, compressedFile);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+      }
+    } else {
+      formData.append(key, value);
+    }
+  }
+
+  console.log("FormData entries:");
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
 };
 
 const Documents: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
@@ -61,8 +89,8 @@ const Documents: React.FC<StepComponentProps> = ({ onNext, onPrev }) => {
         }}
         validationSchema={toFormikValidationSchema(documentSchema)}
         onSubmit={(values) => {
-          handleSubmit(values); // Log form values
-          onNext(); // Proceed to the next step
+          handleSubmit(values);
+          onNext();
         }}
       >
         {({ setFieldValue }) => (

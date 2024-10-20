@@ -1,5 +1,4 @@
 // External Libraries
-import { useMemo } from "react";
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -12,16 +11,12 @@ import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 
 // Local imports
 import {
   Card,
   SignUpContainer,
 } from "../../../components/reusables/CustomMUIComponents";
-
-import countries from "../../users/SignUp/countries"; // Assuming you have a countries list
 
 // Localization
 import { t } from "i18next";
@@ -86,7 +81,7 @@ const AddressData: React.FC<AddressStepComponentProps> = ({
                   fontSize: "clamp(2rem, 10vw, 2.15rem)",
                 }}
               >
-                {t("AddressInfo")}
+                {t("addressInfo")}
               </Typography>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -235,7 +230,7 @@ const AddressData: React.FC<AddressStepComponentProps> = ({
                   }}
                   type="submit"
                 >
-                  {t("next")}
+                  {t("submit")}
                 </Button>
               </div>
             </Card>
