@@ -54,36 +54,38 @@ const handleSubmit = async (
   userData: UserData
 ) => {
   console.log(values);
-  const formData = new FormData();
+  // const formData = new FormData();
 
-  // Iterate over values and handle files separately
-  for (const [key, value] of Object.entries(values)) {
-    if (value instanceof File) {
-      const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 800,
-        useWebWorker: true,
-      };
+  // // Iterate over values and handle files separately
+  // for (const [key, value] of Object.entries(values)) {
+  //   if (value instanceof File) {
+  //     const options = {
+  //       maxSizeMB: 1,
+  //       maxWidthOrHeight: 800,
+  //       useWebWorker: true,
+  //     };
 
-      try {
-        const compressedFile = await imageCompression(value, options);
-        formData.append(key, compressedFile);
-      } catch (error) {
-        console.error("Error compressing image:", error);
-      }
-    } else {
-      formData.append(key, value);
-    }
-  }
+  //     try {
+  //       const compressedFile = await imageCompression(value, options);
+  //       formData.append(key, compressedFile);
+  //     } catch (error) {
+  //       console.error("Error compressing image:", error);
+  //     }
+  //   } else {
+  //     formData.append(key, value);
+  //   }
+  // }
 
-  console.log("FormData entries:");
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
+  // console.log("FormData entries:");
+  // for (const [key, value] of formData.entries()) {
+  //   console.log(key, value);
+  // }
+
+  console.log(values);
 
   setUserData((prevState: object) => ({
     ...prevState,
-    documents: { ...formData },
+    documents: { ...values },
   }));
 };
 

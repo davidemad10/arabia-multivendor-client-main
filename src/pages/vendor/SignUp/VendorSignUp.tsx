@@ -69,7 +69,7 @@ const stepsConfig: StepConfig[] = [
 ];
 
 const VendorSignUp = () => {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(0);
   const [activeComponent, setActiveComponent] = useState(
     stepsConfig[currentStep]
   );
@@ -97,39 +97,6 @@ const VendorSignUp = () => {
     },
   });
 
-  const minimalUserData = {
-    user: {
-      id: "", // Optional (read-only, backend will generate it)
-      email: "testuser@example.com",
-      full_name: "Test User",
-      created_date: "", // Optional (read-only, backend will generate it)
-      created_time: "", // Optional (read-only, backend will generate it)
-      password1: "password123",
-      password2: "password123",
-      phone: "01234567890",
-    },
-    address: {
-      id: "", // Optional (read-only, backend will generate it)
-      country: "Egypt",
-      state: "Cairo",
-      city: "Heliopolis",
-      postal_code: "11757",
-      address_1: "123 Test Street",
-      address_2: "Apt 5B",
-    },
-    documents: {
-      front_id: new File([""], "front_id.jpg", { type: "image/jpeg" }),
-      back_id: new File([""], "back_id.jpg", { type: "image/jpeg" }),
-      tax_card: new File([""], "tax_card.pdf", { type: "application/pdf" }),
-      commercial_record: new File([""], "commercial_record.pdf", {
-        type: "application/pdf",
-      }),
-      bank_statement: new File([""], "bank_statement.pdf", {
-        type: "application/pdf",
-      }),
-    },
-  };
-
   useEffect(() => {
     setActiveComponent(() => stepsConfig[currentStep]);
   }, [currentStep]);
@@ -142,9 +109,9 @@ const VendorSignUp = () => {
     if (currentStep < stepsConfig.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      registerVendor(minimalUserData)
+      registerVendor(userData)
         .then((response) => console.log("Success:", response))
-        .catch((error) => console.error("Error:", error.response.data));
+        .catch((error) => console.error("Error:", error));
     }
   };
 
@@ -164,22 +131,6 @@ const VendorSignUp = () => {
         userData={userData}
         setUserData={setUserData}
       />
-      <Button
-        variant="contained"
-        sx={{
-          background: "black",
-          borderRadius: "7px",
-          marginTop: "10px",
-          width: "20%",
-        }}
-        onClick={() => {
-          registerVendor(minimalUserData)
-            .then((response) => console.log("Success:", response))
-            .catch((error) => console.error("Error:", error.response.data));
-        }}
-      >
-        Register here ya david
-      </Button>{" "}
     </div>
   );
 };

@@ -30,30 +30,9 @@ type UserData = {
 export const registerVendor = async (userData: any) => {
   const formData = new FormData();
 
-  // formData.append("user.email", userData.user.email);
-  // formData.append("user.full_name", userData.user.full_name);
-  // formData.append("user.password1", userData.user.password1);
-  // formData.append("user.password2", userData.user.password2);
-  // formData.append("user.phone", userData.user.phone);
+  console.log("inside the request ====>");
 
-  // formData.append("address.country", userData.address.country);
-  // formData.append("address.state", userData.address.state);
-  // formData.append("address.city", userData.address.city);
-  // formData.append("address.postal_code", userData.address.postal_code);
-  // formData.append("address.address_1", userData.address.address_1);
-  // formData.append("address.address_2", userData.address.address_2);
-
-  // formData.append("documents.front_id", userData.documents.front_id);
-  // formData.append("documents.back_id", userData.documents.back_id);
-  // formData.append("documents.tax_card", userData.documents.tax_card);
-  // formData.append(
-  //   "documents.commercial_record",
-  //   userData.documents.commercial_record
-  // );
-  // formData.append(
-  //   "documents.bank_statement",
-  //   userData.documents.bank_statement
-  // );
+  console.log(userData);
 
   formData.append("user[email]", userData.user.email);
   formData.append("user[full_name]", userData.user.full_name);
@@ -65,20 +44,26 @@ export const registerVendor = async (userData: any) => {
   formData.append("address[state]", userData.address.state);
   formData.append("address[city]", userData.address.city);
   formData.append("address[postal_code]", userData.address.postal_code);
-  formData.append("address[address_1]", userData.address.address_1);
-  formData.append("address[address_2]", userData.address.address_2);
+  formData.append("address[address_1]", userData.address.address1);
+  formData.append("address[address_2]", userData.address.address2);
 
-  formData.append("documents[front_id]", userData.documents.front_id);
-  formData.append("documents[back_id]", userData.documents.back_id);
-  formData.append("documents[tax_card]", userData.documents.tax_card);
+  formData.append("documents[front_id]", userData.documents.idFront);
+  formData.append("documents[back_id]", userData.documents.idBack);
+  formData.append("documents[tax_card]", userData.documents.taxCard);
   formData.append(
     "documents[commercial_record]",
-    userData.documents.commercial_record
+    userData.documents.commercialRecord
   );
   formData.append(
     "documents[bank_statement]",
-    userData.documents.bank_statement
+    userData.documents.bankStatement
   );
+
+  console.log("Logging the form data");
+
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
 
   // Send POST request with multipart/form-data
   try {
