@@ -28,11 +28,11 @@ const AddressData: React.FC<StepComponentProps> = ({
   setUserData,
 }) => {
   const schema = z.object({
-    country: z.string().min(1, { message: "Country is required" }),
-    state: z.string().min(1, { message: "State is required" }),
-    city: z.string().min(1, { message: "City is required" }),
-    postalCode: z.string().min(1, { message: "Postal code is required" }),
-    address1: z.string().min(1, { message: "Address 1 is required" }),
+    country: z.string().min(1),
+    state: z.string().min(1),
+    city: z.string().min(1),
+    postalCode: z.string().max(15).min(1),
+    address1: z.string().min(1),
     address2: z.string().optional(),
   });
 

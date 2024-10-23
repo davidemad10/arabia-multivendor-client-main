@@ -18,6 +18,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { StepComponentProps, UserData } from "../../../types/Vendor";
+import imageCompression from "browser-image-compression";
 
 // Validation schema using Zod
 const documentSchema = z.object({
@@ -38,16 +39,42 @@ const documentSchema = z.object({
   }),
 });
 
+const compressFile = async (file: File) => {
+  try {
+    const options = {
+      maxSizeMB: 1, // Max file size in MB
+      maxWidthOrHeight: 1920, // Resize to fit within this size
+      useWebWorker: true, // Enable web worker for faster compression
+    };
+    const compressedFile = await imageCompression(file, options);
+    return compressedFile;
+  } catch (error) {
+    console.error("Error compressing file:", error);
+    return file; // Return original file if compression fails
+  }
+};
+
 // Form submission handler
 const handleSubmit = async (
-  values: object,
+  values: { [key: string]: File | null },
   setUserData: (data: UserData) => void
 ) => {
-  console.log(values);
+  const compressedValues: { [key: string]: File | null } = {};
+
+  // Compress each file in the form values
+  for (const [key, value] of Object.entries(values)) {
+    if (value instanceof File) {
+      compressedValues[key] = await compressFile(value);
+    } else {
+      compressedValues[key] = value;
+    }
+  }
+
+  console.log("Compressed Files:", compressedValues);
 
   setUserData((prevState: UserData) => ({
     ...prevState,
-    documents: { ...values },
+    documents: { ...compressedValues },
   }));
 };
 
