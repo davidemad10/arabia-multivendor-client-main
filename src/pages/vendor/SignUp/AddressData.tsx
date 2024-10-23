@@ -58,12 +58,16 @@ const AddressData: React.FC<StepComponentProps> = ({
       console.log("Submitted");
       console.log(final);
 
-      setUserData((prevState: UserData) => ({
-        ...prevState,
-        address: { ...final },
-      }));
+      setUserData((prevState: UserData) => {
+        const updatedUserData = {
+          ...prevState,
+          address: { ...final },
+        };
 
-      onNext();
+        // Call onNext with the updated user data
+        onNext(updatedUserData); // Pass the complete updated user data here
+        return updatedUserData; // Ensure the state is updated
+      });
     },
   });
 

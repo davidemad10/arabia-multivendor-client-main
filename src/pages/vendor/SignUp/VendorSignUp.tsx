@@ -62,11 +62,11 @@ const VendorSignUp = () => {
     console.log("Updated userData:", userData);
   }, [userData]);
 
-  const NextStep = async () => {
+  const NextStep = async (updatedUserData) => {
     if (currentStep < stepsConfig.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      registerVendor(userData)
+      registerVendor(updatedUserData)
         .then((response) => console.log("Success:", response))
         .catch((error) => console.error("Error:", error));
     }
