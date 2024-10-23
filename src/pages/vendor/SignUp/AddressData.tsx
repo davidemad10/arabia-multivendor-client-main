@@ -20,12 +20,11 @@ import {
 
 // Localization
 import { t } from "i18next";
-import { StepComponentProps } from "./Types";
+import { StepComponentProps, UserData } from "../../../types/Vendor";
 
 const AddressData: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
-  userData,
   setUserData,
 }) => {
   const schema = z.object({
@@ -59,7 +58,7 @@ const AddressData: React.FC<StepComponentProps> = ({
       console.log("Submitted");
       console.log(final);
 
-      setUserData((prevState: object) => ({
+      setUserData((prevState: UserData) => ({
         ...prevState,
         address: { ...final },
       }));

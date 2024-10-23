@@ -1,5 +1,3 @@
-import imageCompression from "browser-image-compression";
-
 // Material-UI Components
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,7 +17,7 @@ import { t } from "i18next";
 import { Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { UserData } from "./Types";
+import { StepComponentProps, UserData } from "../../../types/Vendor";
 
 // Validation schema using Zod
 const documentSchema = z.object({
@@ -40,50 +38,14 @@ const documentSchema = z.object({
   }),
 });
 
-// TypeScript Props Interface
-interface StepComponentProps {
-  onNext: () => void;
-  onPrev: () => void;
-  userData: UserData;
-  setUserData: (newState: UserData) => void;
-}
 // Form submission handler
 const handleSubmit = async (
-  values: Record<string, any>,
-  setUserData: (data: object) => void,
-  userData: UserData
+  values: object,
+  setUserData: (data: UserData) => void
 ) => {
   console.log(values);
-  // const formData = new FormData();
 
-  // // Iterate over values and handle files separately
-  // for (const [key, value] of Object.entries(values)) {
-  //   if (value instanceof File) {
-  //     const options = {
-  //       maxSizeMB: 1,
-  //       maxWidthOrHeight: 800,
-  //       useWebWorker: true,
-  //     };
-
-  //     try {
-  //       const compressedFile = await imageCompression(value, options);
-  //       formData.append(key, compressedFile);
-  //     } catch (error) {
-  //       console.error("Error compressing image:", error);
-  //     }
-  //   } else {
-  //     formData.append(key, value);
-  //   }
-  // }
-
-  // console.log("FormData entries:");
-  // for (const [key, value] of formData.entries()) {
-  //   console.log(key, value);
-  // }
-
-  console.log(values);
-
-  setUserData((prevState: object) => ({
+  setUserData((prevState: UserData) => ({
     ...prevState,
     documents: { ...values },
   }));
@@ -92,7 +54,6 @@ const handleSubmit = async (
 const Documents: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
-  userData,
   setUserData,
 }) => {
   return (
@@ -107,7 +68,7 @@ const Documents: React.FC<StepComponentProps> = ({
         }}
         validationSchema={toFormikValidationSchema(documentSchema)}
         onSubmit={(values) => {
-          handleSubmit(values, setUserData, userData);
+          handleSubmit(values, setUserData);
           onNext();
         }}
       >
@@ -146,7 +107,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "idFront",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -167,7 +128,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "idBack",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -188,7 +149,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "taxCard",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -211,7 +172,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "commercialRecord",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -234,7 +195,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "bankStatement",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />

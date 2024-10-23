@@ -1,38 +1,8 @@
+import { UserData } from "../types/Vendor";
 import axiosInstance from "./axiosInstance";
 
-type User = {
-  email: string;
-  full_name: string;
-  password1: string;
-  password2: string;
-  phone: string;
-};
-
-type Address = {
-  country: string;
-  state: string;
-  city: string;
-  postal_code: string;
-  address1: string;
-  address2: string;
-};
-
-type Documents = {
-  [key: string]: File; // Assuming documents are keyed by string and the value is a File
-};
-
-type UserData = {
-  user: User;
-  documents: Documents;
-  address: Address;
-};
-
-export const registerVendor = async (userData: any) => {
+export const registerVendor = async (userData: UserData) => {
   const formData = new FormData();
-
-  console.log("inside the request ====>");
-
-  console.log(userData);
 
   formData.append("user[email]", userData.user.email);
   formData.append("user[full_name]", userData.user.full_name);
@@ -59,13 +29,6 @@ export const registerVendor = async (userData: any) => {
     userData.documents.bankStatement
   );
 
-  console.log("Logging the form data");
-
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
-
-  // Send POST request with multipart/form-data
   try {
     const response = await axiosInstance.post(
       "/account/supplier/register/",

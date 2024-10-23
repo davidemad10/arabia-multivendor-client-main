@@ -1,53 +1,9 @@
-import { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import VendorData from "./VendorData";
 import Documents from "./Documents";
 import AddressData from "./AddressData";
 import { registerVendor } from "../../../api/vendorRequests";
-import { Button } from "@mui/material";
-
-// Step configuration type
-interface StepConfig {
-  id: number;
-  title: string;
-  component: FC<StepComponentProps>;
-}
-
-interface StepComponentProps {
-  onNext: () => void;
-  onPrev: () => void;
-  userData: UserData;
-  setUserData: (newState: UserData) => void;
-}
-
-interface User {
-  email: string;
-  full_name: string;
-  password1: string;
-  password2: string;
-  phone: string;
-}
-
-interface Documents {
-  front_id: string;
-  back_id: string;
-  tax_card: string;
-  commercial_record: string;
-}
-
-interface Address {
-  country: string;
-  state: string;
-  city: string;
-  postal_code: string;
-  address_1: string;
-  address_2: string;
-}
-
-interface UserData {
-  user: User;
-  documents: Documents;
-  address: Address;
-}
+import { StepConfig, UserData } from "../../../types/Vendor";
 
 // Step configurations
 const stepsConfig: StepConfig[] = [
@@ -82,18 +38,19 @@ const VendorSignUp = () => {
       phone: "",
     },
     documents: {
-      front_id: "",
-      back_id: "",
-      tax_card: "",
-      commercial_record: "",
+      idFront: "",
+      idBack: "",
+      taxCard: "",
+      commercialRecord: "",
+      bankStatement: "",
     },
     address: {
       country: "",
       state: "",
       city: "",
       postal_code: "",
-      address_1: "",
-      address_2: "",
+      address1: "",
+      address2: "",
     },
   });
 
