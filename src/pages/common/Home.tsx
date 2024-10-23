@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 import { useGetHeroSliders } from "../../react-query/advertisement";
 import { useTranslation } from "react-i18next";
 import { useGetCategories } from "../../react-query/product";
+import BrandsSlider from "../../components/shared/products/BrandsSlider";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -16,11 +17,11 @@ export default function Home() {
       translations: {
         en: {
           image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+            "https://img.freepik.com/free-photo/image-happy-man-shopping-vacation-holding-paper-bags-smiling-standing-against-yellow-backg_1258-161114.jpg?t=st=1729618990~exp=1729622590~hmac=a70d476dd21c73b64fe913d29e6c4b290e7fe43d845bb38336b0a37e6d7b4c4f&w=1380",
         },
         ar: {
           image:
-            "https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=600",
+            "https://img.freepik.com/free-photo/image-happy-man-shopping-vacation-holding-paper-bags-smiling-standing-against-yellow-backg_1258-161114.jpg?t=st=1729618990~exp=1729622590~hmac=a70d476dd21c73b64fe913d29e6c4b290e7fe43d845bb38336b0a37e6d7b4c4f&w=1380",
         },
       },
     },
@@ -30,11 +31,11 @@ export default function Home() {
       translations: {
         en: {
           image:
-            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
+            "https://img.freepik.com/free-photo/black-friday-sale-label-yellow-copy-space-background_23-2148665786.jpg?t=st=1729619572~exp=1729623172~hmac=b2ffaafc312b64cc0f560f51e385f4937ab7a2d58bbc8e990e7cd764a5f44891&w=1380",
         },
         ar: {
           image:
-            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
+            "https://img.freepik.com/free-photo/black-friday-sale-label-yellow-copy-space-background_23-2148665786.jpg?t=st=1729619572~exp=1729623172~hmac=b2ffaafc312b64cc0f560f51e385f4937ab7a2d58bbc8e990e7cd764a5f44891&w=1380",
         },
       },
     },
@@ -44,7 +45,7 @@ export default function Home() {
     {
       id: 1,
       image:
-        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+        "https://img.freepik.com/premium-vector/home-electronics-appliances-circle-infographics-template-concept_94477-1118.jpg?w=826",
       translations: {
         en: {
           name: "Category 1",
@@ -105,6 +106,138 @@ export default function Home() {
       level: 1,
       parent: 0,
     },
+    {
+      id: 4,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 5,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 6,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 7,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 8,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
+    {
+      id: 9,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
+      translations: {
+        en: {
+          name: "Category 1",
+        },
+        ar: {
+          name: "فئة 1",
+        },
+      },
+      slug: "category-1",
+      is_featured: false,
+      lft: 1,
+      rght: 2,
+      depth: 1,
+      parent_id: null,
+      tree_id: 1,
+      level: 1,
+      parent: 0,
+    },
   ];
 
   const categories = useGetCategories("", true);
@@ -137,133 +270,34 @@ export default function Home() {
         <meta property="og:url" content="https://example.com/home" />
       </Helmet>
       <main>
-        <div className=" flexCenter flex-col">
-          <div className=" container flex justify-center flex-col">
-            <div className="pb-1 w-full">
-              <img src="/Banner-Egypt-1697117327.jpg" alt="" />
+        <div className="flexCenter flex-col">
+          <div className="container flex justify-center flex-col">
+            <HeroSlider sliders={slidersData} isPending={sliders.isPending} />
+            <CategoriesSlider
+              categories={categoriesData}
+              isPending={categories.isPending}
+            />
+            <div className="w-full flexCenter">
+              <BrandsSlider />
             </div>
-            <div className="">
-              <HeroSlider
-                // sliders={sliders.data || []}
-                sliders={slidersData}
-                isPending={sliders.isPending}
-              />
-            </div>
-            <div className="">
-              <CategoriesSlider
-                categories={categories.data || categoriesData}
-                isPending={categories.isPending}
-              ></CategoriesSlider>
-            </div>
-            <div className="w-full flexCenter ">
-              <div className="w-1/5">
-                <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/24-b2s-gaming-monitors-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/23-b2s-smarthome-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/22-b2s-projectors-ar3.jpg" alt="" />
-              </div>
-            </div>
-
-            {/* <div className=' container  flexCenter py-10 flex-col'>
-              <h4 className=' text-blackText font-medium text-2xl '>مباشرة من نايكي</h4>
-              <h3 className=' text-blackText font-bold text-4xl py-10'>مجموعة جديدة</h3>
-              <div className=' flexCenter w-full md:h-[700px] mb-10  '>
-                <div className=' flexCenter  h-full w-1/2   flex-wrap gap-9   '>
-                  <div className='w-2/5 md:h-[47.5%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
+            {/* 
+            <div className="w-full flexCenter">
+              {[
+                "/25-b2s-smart-watch-ar3.jpg",
+                "/24-b2s-gaming-monitors-ar3.jpg",
+                "/23-b2s-smarthome-ar3.jpg",
+              ].map((src, idx) => (
+                <div key={idx} className="w-1/5">
+                  <img src={src} alt="Ad" />
                 </div>
-                <div className=' gap-36 flex-col flexCenter w-2/5 rounded-lg bg-gray-100 h-full'>
-                  <div className='flex flexAround gap-96 w-full'>
-                    <h3 className=' text-white bg-black rounded-2xl px-3 py-1'>بيع -50%</h3>
-                    <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                  </div>
-                  <div className=' flexCenter w-full flex-col'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex w-full gap-5 flex-col items-start px-16 justify-center'>
-                      <h3 className='font-bold text-2xl text-black'>نايك اير فورس 1 شادو</h3>
-                      <p className='text-gray-400 text-sm'>العلامة التجارية: نايك</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button className='button1 px-6 h-14 w-52 font-bold'>اكتشف منتجات أخرى</button>
+              ))}
             </div> */}
 
-            <div className="w-full flexCenter flex-col">
-              <div className=" block">
-                <img src="/c9b30476-e522-45b1-b0db-f0614b26896d.avif" alt="" />
-              </div>
-              <div className="flexCenter gap-4">
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img
-                    src="/c2e07874-0e43-49e3-b73a-c481dc63c818.avif"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img
-                    src="/3b2804b6-956e-481d-8442-776edf7d2003.avif"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full block">
-              <img src="/00ceba07-888888745.avif" alt="" />
-            </div>
-            <div className="">
-              <ProductsSlider></ProductsSlider>
-            </div>
+            {/* Products Sliders */}
+            <ProductsSlider title="Trending Now" link="/trending" />
+            <ProductsSlider title="Time-limited Offers" link="/offers" />
+            <ProductsSlider title="Women Collection" link="/women" />
+            <ProductsSlider title="Electronics" link="/electronics" />
           </div>
         </div>
       </main>
