@@ -23,16 +23,13 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
-import countries from "../../users/SignUp/countries";
+import countries from "../../pages/users/SignUp/countries";
 
 // Localization
 import { t } from "i18next";
-import { StepComponentProps, UserData } from "../../../types/Vendor";
+import { StepComponentProps, UserData } from "../../types/Vendor";
 
 const VendorData: React.FC<StepComponentProps> = ({
   onNext,

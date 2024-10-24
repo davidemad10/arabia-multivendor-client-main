@@ -5,10 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Box, FormControl, FormLabel, Input } from "@mui/material";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
 // Localization
 import { t } from "i18next";
@@ -17,7 +14,7 @@ import { t } from "i18next";
 import { Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { StepComponentProps, UserData } from "../../../types/Vendor";
+import { StepComponentProps, UserData } from "../../types/Vendor";
 import imageCompression from "browser-image-compression";
 
 // Validation schema using Zod

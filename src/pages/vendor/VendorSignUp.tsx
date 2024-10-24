@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import VendorData from "./VendorData";
-import Documents from "./Documents";
-import AddressData from "./AddressData";
-import { registerVendor } from "../../../api/vendorRequests";
-import { StepConfig, UserData } from "../../../types/Vendor";
+import VendorData from "../../components/vendor/VendorData";
+import Documents from "../../components/vendor/Documents";
+import AddressData from "../../components/vendor/AddressData";
+import { registerVendor } from "../../api/vendorRequests";
+import { StepConfig, UserData } from "../../types/Vendor";
 import { enqueueSnackbar } from "notistack";
-import { TransitionsModal } from "../../../components/reusables/PopUpModal";
+import { TransitionsModal } from "../../components/reusables/PopUpModal";
 import { t } from "i18next";
-import { Navigate } from "react-router-dom";
 
 // Step configurations
 const stepsConfig: StepConfig[] = [

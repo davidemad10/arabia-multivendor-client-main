@@ -13,14 +13,11 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
 // Localization
 import { t } from "i18next";
-import { StepComponentProps, UserData } from "../../../types/Vendor";
+import { StepComponentProps, UserData } from "../../types/Vendor";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const AddressData: React.FC<StepComponentProps> = ({
@@ -65,7 +62,7 @@ const AddressData: React.FC<StepComponentProps> = ({
           ...prevState,
           address: { ...final },
         };
-
+        s;
         // Call onNext with the updated user data
         onNext(updatedUserData); // Pass the complete updated user data here
         return updatedUserData; // Ensure the state is updated
