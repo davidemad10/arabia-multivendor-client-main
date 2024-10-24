@@ -26,6 +26,7 @@ export default function ForgotPassword({
     const response = await forgotPassword(email.toLowerCase());
     if (response.status == 200) {
       localStorage.setItem("forgotEmail", email.toLowerCase());
+      // static massege
       enqueueSnackbar("An OTP was sent to your email to verify it's you", {
         variant: "success",
         anchorOrigin: {

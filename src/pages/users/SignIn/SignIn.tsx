@@ -20,13 +20,19 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { t } from "i18next";
-import { login } from "../../../api/userRequests";
+import {
+  signIn,
+  signOut,
+  selectIsAuthenticated,
+  selectUserError,
+} from "../../../redux/slices/userSlice";
 import { useSnackbar } from "notistack";
 
 import {
   Card,
   SignUpContainer as SignInContainer,
 } from "../../../components/reusables/CustomMUIComponents";
+import { useDispatch, useSelector } from "react-redux";
 
 interface loginFormData {
   email: string;
@@ -36,8 +42,11 @@ interface loginFormData {
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const error = useSelector(selectUserError);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,23 +67,27 @@ export default function SignIn() {
         email: values.email.toLowerCase(),
       };
       console.log(data);
-      const response = await login(data);
+      const response = await dispatch(signIn(data));
       console.log(response);
-      enqueueSnackbar("Logged In successfully", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-      });
-      const token = response.data.tokens.access;
-      console.log(token);
 
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-
-      navigate("/", { replace: true });
+      if (response.payload?.status == 200) {
+        enqueueSnackbar("Logged In successfully", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        navigate("/", { replace: true });
+      } else if (response.payload?.status == 401) {
+        enqueueSnackbar(`${t("invalidCredentials")}`, {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+      }
     } catch (error: any) {
       enqueueSnackbar(
         `${
