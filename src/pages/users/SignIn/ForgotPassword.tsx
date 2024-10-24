@@ -23,14 +23,20 @@ export default function ForgotPassword({
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleSubmit = async (email: string) => {
-    //! error handling needs some modifications
-
     const response = await forgotPassword(email.toLowerCase());
-    console.log("this is from inside handle email sending");
-    console.log(response);
-    if (response) {
+    if (response.status == 200) {
+      localStorage.setItem("forgotEmail", email.toLowerCase());
       enqueueSnackbar("An OTP was sent to your email to verify it's you", {
         variant: "success",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+    } else {
+      console.log(response.error.response.data.message);
+      enqueueSnackbar(`${response.error.response.data.message}`, {
+        variant: "error",
         anchorOrigin: {
           vertical: "top",
           horizontal: "right",
