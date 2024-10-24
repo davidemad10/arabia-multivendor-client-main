@@ -5,6 +5,7 @@ export interface StepComponentProps {
   onPrev: () => void;
   userData: UserData;
   setUserData: (newState: UserData) => void;
+  isLoading: boolean;
 }
 
 export interface StepConfig {

@@ -21,11 +21,13 @@ import {
 // Localization
 import { t } from "i18next";
 import { StepComponentProps, UserData } from "../../../types/Vendor";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const AddressData: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
   setUserData,
+  isLoading,
 }) => {
   const schema = z.object({
     country: z.string().min(1),
@@ -227,18 +229,35 @@ const AddressData: React.FC<StepComponentProps> = ({
                 >
                   {t("previous")}
                 </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: "black",
-                    borderRadius: "7px",
-                    marginTop: "10px",
-                    width: "20%",
-                  }}
-                  type="submit"
-                >
-                  {t("submit")}
-                </Button>
+                {isLoading ? (
+                  <LoadingButton
+                    loading
+                    loadingIndicator="Loading…"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                      width: "20%",
+                    }}
+                  >
+                    {t("submit")}
+                  </LoadingButton>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                      width: "20%",
+                    }}
+                    type="submit"
+                  >
+                    {t("submit")}
+                  </Button>
+                )}
               </div>
             </Card>
           </SignUpContainer>
