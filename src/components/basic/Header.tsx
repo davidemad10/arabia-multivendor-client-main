@@ -7,9 +7,17 @@ import { FiSearch } from "react-icons/fi";
 import SideCart from "../shared/cart/SideCart";
 import LanguageSelector from "./LanguageSelector";
 import { Trans, useTranslation } from "react-i18next";
+import {
+  Avatar,
+  Box,
+  FormControl,
+  InputLabel,
+  NativeSelect,
+} from "@mui/material";
+import { deepOrange } from "@mui/material/colors";
 
 export default function Header() {
-  const loggedInUser = false;
+  const loggedInUser = true;
 
   const { pathname } = useLocation();
   const { i18n, t } = useTranslation();
@@ -34,13 +42,13 @@ export default function Header() {
   return (
     <header className="flexCenter">
       <div
-        className={`flex fixed gap-2 p-6 pr-8 ${
+        className={`flex fixed gap-2 p-4 ${
           showHeader ? "top-0" : "-top-44"
         } duration-200 bg-white z-10 flex-col w-full`}
       >
         {/* Header Top Section */}
-        <div className={`flex z-10 flexCenter h-16 w-full`}>
-          <div className="container flexBetween flex">
+        <div className={`flex z-10 flexCenter justify-center h-16 w-full`}>
+          <div className="container flexBetween flex justify-evenly gap-10">
             <div className="w-2/12">
               <Link to="/">
                 <img
@@ -142,6 +150,7 @@ export default function Header() {
                   </div>
                 </div>
               )}
+
               <span className="h-8 bg-gray-300 rounded-full w-px"></span>
               <button
                 onClick={toggleCart}
@@ -154,6 +163,19 @@ export default function Header() {
                 </div>
               </button>
             </div>
+            {/* avatar and profile */}
+            {loggedInUser && (
+              <div className="w-500 mx-6 flex flexCenter">
+                <Avatar
+                  sx={{ bgcolor: deepOrange[500] }}
+                  alt="UserName"
+                  src="User Profile Pic"
+                />
+                <p>dropDown</p>
+                {/* //! i couldnt find a good drop down menu sorry 😢 */}
+                {/* //! Dont forget to add it into the mobile menu as well */}
+              </div>
+            )}
 
             {/* Mobile Navigation Menu */}
             {isMenuOpen && (
