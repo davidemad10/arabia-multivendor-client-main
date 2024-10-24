@@ -62,7 +62,6 @@ const AddressData: React.FC<StepComponentProps> = ({
           ...prevState,
           address: { ...final },
         };
-        s;
         // Call onNext with the updated user data
         onNext(updatedUserData); // Pass the complete updated user data here
         return updatedUserData; // Ensure the state is updated
