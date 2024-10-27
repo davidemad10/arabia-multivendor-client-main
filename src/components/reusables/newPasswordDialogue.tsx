@@ -20,13 +20,15 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { updatePassword } from "../../api/userRequests";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 export default function NewPasswordDialogue({ open, setOpen }) {
-  //   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
@@ -65,12 +67,37 @@ export default function NewPasswordDialogue({ open, setOpen }) {
         const response = await updatePassword(values);
         if (response.error) {
           console.error("Password update failed:", response.error);
+          enqueueSnackbar(`${response.error?.message}`, {
+            variant: "success",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          });
           return;
         }
-
+        enqueueSnackbar("Password updated successfully", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
         console.log("Password updated successfully:", response);
+        navigate("/signin");
+        handleClose();
       } catch (error: any) {
         console.error(error);
+        enqueueSnackbar(
+          "Couldn't reset your password please try again in a few minutes",
+          {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          }
+        );
       }
     },
   });

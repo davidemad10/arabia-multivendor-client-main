@@ -24,15 +24,25 @@ export default function ConfirmResetOTP({ open, setOpen }) {
     try {
       const response = await verifyResetOTP(otp);
       console.log(response);
-      enqueueSnackbar("OTP verified! password reset successfully.", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-      });
-      setResetPasswordDialogueOpen(true);
-      handleClose();
+      if (response.status == 200) {
+        enqueueSnackbar("OTP verified! password reset successfully.", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        setResetPasswordDialogueOpen(true);
+        handleClose();
+      } else {
+        enqueueSnackbar("Couldn't do it sorry", {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+      }
     } catch (error: any) {
       console.log(error);
       enqueueSnackbar(

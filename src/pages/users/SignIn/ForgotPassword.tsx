@@ -59,11 +59,12 @@ export default function ForgotPassword({
           component: "form",
           onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
+            event.stopPropagation();
             const formData = new FormData(event.currentTarget);
             const { email } = Object.fromEntries(formData.entries()) as {
               email: string;
             };
-            await handleSubmit(email); // Submit the email
+            await handleSubmit(email);
           },
         }}
       >

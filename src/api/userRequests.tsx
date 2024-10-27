@@ -50,15 +50,18 @@ export const forgotPassword = async (email: string) => {
 
 export const verifyResetOTP = async (otp: number) => {
   try {
-    const email = localStorage.getItem("forgotEmail");
     const response = await axiosInstance.post(
       "/account/passwordresetotpverfiy/",
+      { otp },
       {
-        email,
-        otp,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
       }
     );
-    console.log("API response (submit OTP) :", response);
+    console.log("API response (submit OTP):", response);
     return response;
   } catch (error: any) {
     console.error("Verify OTP Error:", error);
@@ -70,10 +73,13 @@ export const updatePassword = async (passwords: passwords) => {
   try {
     const response = await axiosInstance.post(
       "/account/passwordresetconfirm/",
-      passwords
+      { ...passwords },
+      {
+        withCredentials: true,
+      }
     );
     console.log("API response (update password):", response);
-    return response.data;
+    return { data: response.data, status: response.status };
   } catch (error: any) {
     console.error("Update Password Error:", error);
     return { error: error.response?.data || error.message };
