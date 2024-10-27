@@ -7,17 +7,13 @@ import { FiSearch } from "react-icons/fi";
 import SideCart from "../shared/cart/SideCart";
 import LanguageSelector from "./LanguageSelector";
 import { Trans, useTranslation } from "react-i18next";
-import {
-  Avatar,
-  Box,
-  FormControl,
-  InputLabel,
-  NativeSelect,
-} from "@mui/material";
+import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../../redux/slices/userSlice";
 
 export default function Header() {
-  const loggedInUser = true;
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const { pathname } = useLocation();
   const { i18n, t } = useTranslation();
@@ -114,7 +110,7 @@ export default function Header() {
             {/* User Actions */}
             <div className="hidden desktop:flexCenter gap-5 items-center">
               <LanguageSelector />
-              {loggedInUser ? (
+              {isAuthenticated ? (
                 ""
               ) : (
                 <div className="flex flex-row gap-4">
@@ -139,7 +135,7 @@ export default function Header() {
                 </div>
               )}
 
-              {loggedInUser && (
+              {isAuthenticated && (
                 <div>
                   <span className="h-8 bg-gray-300 rounded-full w-px"></span>
                   <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer">
@@ -164,7 +160,7 @@ export default function Header() {
               </button>
             </div>
             {/* avatar and profile */}
-            {loggedInUser && (
+            {isAuthenticated && (
               <div className="w-500 mx-6 flex flexCenter">
                 <Avatar
                   sx={{ bgcolor: deepOrange[500] }}
@@ -199,7 +195,7 @@ export default function Header() {
                 {/* User Actions at the Top */}
                 <div className="flex flex-col items-center gap-4 p-4 border-b border-gray-300">
                   <LanguageSelector />
-                  {loggedInUser ? (
+                  {isAuthenticated ? (
                     ""
                   ) : (
                     <div>
@@ -222,7 +218,7 @@ export default function Header() {
                     </div>
                   )}
                   <div className="flex items-center gap-4">
-                    {loggedInUser && (
+                    {isAuthenticated && (
                       <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer transition-colors duration-200">
                         <GrFavorite className="inline-block" />
                         <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">

@@ -57,5 +57,7 @@
   "addressInfo": "Address Info",
   "accountUnderReview": "Your account is currently under review to ensure that all the submitted documents are valid. This process may take a couple of days. We appreciate your patience and will notify you as soon as the review is complete.",
   "invalidCredentials": "Email or password is incorrect",
-  "sellWithArabia": "Sell On Arabia"
+  "sellWithArabia": "Sell On Arabia",
+  "rememberMe": "Remember Me",
+  "pleaseWait": "Please Wait ... "
 }

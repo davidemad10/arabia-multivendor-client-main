@@ -18,13 +18,12 @@ import { useState } from "react";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
 import { t } from "i18next";
 import {
   signIn,
-  signOut,
   selectIsAuthenticated,
   selectUserError,
+  selectUserStatus,
 } from "../../../redux/slices/userSlice";
 import { useSnackbar } from "notistack";
 
@@ -33,6 +32,8 @@ import {
   SignUpContainer as SignInContainer,
 } from "../../../components/reusables/CustomMUIComponents";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 interface loginFormData {
   email: string;
@@ -42,11 +43,12 @@ interface loginFormData {
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const error = useSelector(selectUserError);
+  const status = useSelector(selectUserStatus);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -80,6 +82,14 @@ export default function SignIn() {
         });
         navigate("/", { replace: true });
       } else if (response.payload?.status == 401) {
+        enqueueSnackbar(`${t("invalidCredentials")}`, {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+      } else if (response.payload?.status == 403) {
         enqueueSnackbar(`${t("invalidCredentials")}`, {
           variant: "error",
           anchorOrigin: {
@@ -223,16 +233,32 @@ export default function SignIn() {
 
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
+                  label={t("rememberMe")}
                 />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ background: "black", borderRadius: "10px" }}
-                >
-                  {t("login")}
-                </Button>
+                {status == "loading" ? (
+                  <LoadingButton
+                    loading
+                    loadingIndicator={t("pleaseWait")}
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    {t("login")}
+                  </LoadingButton>
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ background: "black", borderRadius: "10px" }}
+                  >
+                    {t("login")}
+                  </Button>
+                )}
               </Box>
               <Divider>
                 <Typography sx={{ color: "text.secondary" }}>or</Typography>

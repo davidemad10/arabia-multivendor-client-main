@@ -408,7 +408,7 @@ export default function SignUp() {
                   {requestLoading ? (
                     <LoadingButton
                       loading
-                      loadingIndicator="Loading…"
+                      loadingIndicator={t("pleaseWait")}
                       fullWidth
                       variant="contained"
                       sx={{

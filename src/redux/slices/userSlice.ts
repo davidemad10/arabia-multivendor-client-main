@@ -33,7 +33,7 @@ export const signIn = createAsyncThunk(
         "/account/login/",
         userCredentials
       );
-      return response.data;
+      return { data: response.data, status: 200 };
     } catch (error: any) {
       // Use `rejectWithValue` to pass the error message and status
       return rejectWithValue({
