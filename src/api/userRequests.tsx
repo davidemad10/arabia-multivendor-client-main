@@ -1,17 +1,5 @@
+import { passwords, registerUserData, userCredentials } from "../types";
 import axiosInstance from "./axiosInstance";
-
-interface registerUserData {
-  email: string;
-  full_name: string;
-  password1: string;
-  password2: string;
-  phone: string;
-}
-
-interface userCredentials {
-  email: string;
-  password: string;
-}
 
 export const registerUser = async (userData: registerUserData) => {
   try {
@@ -51,7 +39,7 @@ export const forgotPassword = async (email: string) => {
     const response = await axiosInstance.post("/account/passwordresetotp/", {
       email,
     });
-    console.log(response);
+    console.log("API response (Send OTP to the email) :", response);
     return response;
   } catch (error: any) {
     return {
@@ -61,11 +49,33 @@ export const forgotPassword = async (email: string) => {
 };
 
 export const verifyResetOTP = async (otp: number) => {
-  const email = localStorage.getItem("forgotEmail");
-  const response = await axiosInstance.post("/account/passwordresetotp/", {
-    email,
-    otp,
-  });
-  console.log("API raw response:", response);
-  return response;
+  try {
+    const email = localStorage.getItem("forgotEmail");
+    const response = await axiosInstance.post(
+      "/account/passwordresetotpverfiy/",
+      {
+        email,
+        otp,
+      }
+    );
+    console.log("API response (submit OTP) :", response);
+    return response;
+  } catch (error: any) {
+    console.error("Verify OTP Error:", error);
+    return { error: error.response?.data || error.message };
+  }
+};
+
+export const updatePassword = async (passwords: passwords) => {
+  try {
+    const response = await axiosInstance.post(
+      "/account/passwordresetconfirm/",
+      passwords
+    );
+    console.log("API response (update password):", response);
+    return response.data;
+  } catch (error: any) {
+    console.error("Update Password Error:", error);
+    return { error: error.response?.data || error.message };
+  }
 };

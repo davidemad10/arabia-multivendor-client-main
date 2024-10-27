@@ -6,12 +6,15 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { t } from "i18next";
+// import { t } from "i18next";
 import { verifyResetOTP } from "../../../api/userRequests";
 import { useSnackbar } from "notistack";
+import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
 
 export default function ConfirmResetOTP({ open, setOpen }) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [resetPasswordDialogueOpen, setResetPasswordDialogueOpen] =
+    React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -28,6 +31,7 @@ export default function ConfirmResetOTP({ open, setOpen }) {
           horizontal: "right",
         },
       });
+      setResetPasswordDialogueOpen(true);
       handleClose();
     } catch (error: any) {
       console.log(error);
@@ -83,6 +87,10 @@ export default function ConfirmResetOTP({ open, setOpen }) {
           <Button type="submit">Confirm OTP</Button>
         </DialogActions>
       </Dialog>
+      <NewPasswordDialogue
+        open={resetPasswordDialogueOpen}
+        setOpen={setResetPasswordDialogueOpen}
+      ></NewPasswordDialogue>
     </React.Fragment>
   );
 }

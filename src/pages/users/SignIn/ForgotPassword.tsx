@@ -20,31 +20,34 @@ export default function ForgotPassword({
   handleClose,
 }: ForgotPasswordProps) {
   const [otpOpen, setOtpOpen] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false); // Track loading state
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (email: string) => {
-    const response = await forgotPassword(email.toLowerCase());
-    if (response.status == 200) {
-      localStorage.setItem("forgotEmail", email.toLowerCase());
-      // static massege
-      enqueueSnackbar("An OTP was sent to your email to verify it's you", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-      });
-    } else {
-      console.log(response.error.response.data.message);
-      enqueueSnackbar(`${response.error.response.data.message}`, {
+    setLoading(true); // Start loading
+    try {
+      const response = await forgotPassword(email.toLowerCase());
+      if (response.status === 200) {
+        localStorage.setItem("forgotEmail", email.toLowerCase());
+        enqueueSnackbar("An OTP was sent to your email to verify it's you.", {
+          variant: "success",
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+        });
+        setOtpOpen(true); // Open OTP dialog
+        handleClose(); // Close the current dialog
+      } else {
+        throw new Error(
+          response.error?.response?.data?.message || "Unexpected error"
+        );
+      }
+    } catch (error: any) {
+      enqueueSnackbar(error.message, {
         variant: "error",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
+        anchorOrigin: { vertical: "top", horizontal: "right" },
       });
+    } finally {
+      setLoading(false); // Stop loading
     }
-    setOtpOpen(true);
   };
 
   return (
@@ -56,17 +59,15 @@ export default function ForgotPassword({
           component: "form",
           onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            event.stopPropagation();
             const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries((formData as any).entries());
-            console.log(formJson);
-            console.log(formJson.email);
-            await handleSubmit(formJson.email);
-            handleClose();
+            const { email } = Object.fromEntries(formData.entries()) as {
+              email: string;
+            };
+            await handleSubmit(email); // Submit the email
           },
         }}
       >
-        <DialogTitle>Reset password</DialogTitle>
+        <DialogTitle>Reset Password</DialogTitle>
         <DialogContent
           sx={{
             display: "flex",
@@ -76,29 +77,30 @@ export default function ForgotPassword({
           }}
         >
           <DialogContentText>
-            Enter your account&apos;s email address, and we&apos;ll send you a
-            link to reset your password.
+            Enter your account&apos;s email address, and we&apos;ll send you an
+            OTP to reset your password.
           </DialogContentText>
           <OutlinedInput
             autoFocus
             required
-            margin="dense"
             id="email"
             name="email"
-            label="Email address"
             placeholder="Email address"
             type="email"
             fullWidth
+            disabled={loading} // Disable input while loading
           />
         </DialogContent>
         <DialogActions sx={{ pb: 3, px: 3 }}>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" type="submit">
-            Continue
+          <Button onClick={handleClose} disabled={loading}>
+            Cancel
+          </Button>
+          <Button variant="contained" type="submit" disabled={loading}>
+            {loading ? "Processing..." : "Continue"}
           </Button>
         </DialogActions>
       </Dialog>
-      <ConfirmResetOTP open={otpOpen} setOpen={setOtpOpen}></ConfirmResetOTP>
+      <ConfirmResetOTP open={otpOpen} setOpen={setOtpOpen} />
     </>
   );
 }

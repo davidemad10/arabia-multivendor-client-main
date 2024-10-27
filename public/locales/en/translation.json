@@ -59,5 +59,7 @@
   "invalidCredentials": "Email or password is incorrect",
   "sellWithArabia": "Sell On Arabia",
   "rememberMe": "Remember Me",
-  "pleaseWait": "Please Wait ... "
+  "pleaseWait": "Please Wait ... ",
+  "resetYourPassword": "Please enter your new password to reset your account password. Make sure it is at least 8 characters long and contains a combination of letters, numbers, and special characters.",
+  "resetPasswordTitle": "Reset your password"
 }

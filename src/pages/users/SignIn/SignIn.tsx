@@ -19,12 +19,7 @@ import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
 import { t } from "i18next";
-import {
-  signIn,
-  selectIsAuthenticated,
-  selectUserError,
-  selectUserStatus,
-} from "../../../redux/slices/userSlice";
+import { signIn, selectUserStatus } from "../../../redux/slices/userSlice";
 import { useSnackbar } from "notistack";
 
 import {
@@ -34,6 +29,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
+import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
 
 interface loginFormData {
   email: string;
@@ -46,8 +42,6 @@ export default function SignIn() {
   const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
 
   const handleClickOpen = () => {
@@ -90,7 +84,7 @@ export default function SignIn() {
           },
         });
       } else if (response.payload?.status == 403) {
-        enqueueSnackbar(`${t("invalidCredentials")}`, {
+        enqueueSnackbar("Email not active yet", {
           variant: "error",
           anchorOrigin: {
             vertical: "top",
