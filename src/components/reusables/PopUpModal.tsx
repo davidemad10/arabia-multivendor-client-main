@@ -11,7 +11,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -43,7 +43,10 @@ export const TransitionsModal: FC<TransitionsModalProps> = ({
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+            <Typography
+              id="transition-modal-description"
+              sx={{ mt: 2, fontSize: 25 }}
+            >
               {dialogueText}
             </Typography>
           </Box>

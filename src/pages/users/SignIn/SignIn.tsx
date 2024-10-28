@@ -29,7 +29,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
-import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
+import { TransitionsModal } from "../../../components/reusables/PopUpModal";
+import FormDialog from "../../../components/reusables/dialogue";
 
 interface loginFormData {
   email: string;
@@ -39,6 +40,8 @@ interface loginFormData {
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [dialogueOpen, setDialogueOpen] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -66,7 +69,9 @@ export default function SignIn() {
       const response = await dispatch(signIn(data));
       console.log(response);
 
-      if (response.payload?.status == 200) {
+      const status = response.payload?.status;
+
+      if (status == 200) {
         enqueueSnackbar("Logged In successfully", {
           variant: "success",
           anchorOrigin: {
@@ -75,7 +80,7 @@ export default function SignIn() {
           },
         });
         navigate("/", { replace: true });
-      } else if (response.payload?.status == 401) {
+      } else if (status == 401) {
         enqueueSnackbar(`${t("invalidCredentials")}`, {
           variant: "error",
           anchorOrigin: {
@@ -83,8 +88,31 @@ export default function SignIn() {
             horizontal: "right",
           },
         });
-      } else if (response.payload?.status == 403) {
-        enqueueSnackbar("Email not active yet", {
+      } else if (status == 403) {
+        if (
+          response.payload?.message ==
+          "Your vendor account is not verified yet. Please wait while we review your documents for verification."
+        ) {
+          enqueueSnackbar("Inactive vendor account", {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          });
+          setModalOpen(true);
+        } else {
+          setDialogueOpen(true);
+          enqueueSnackbar("Inactive user account", {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          });
+        }
+      } else if (status == 404) {
+        enqueueSnackbar("User Not Found", {
           variant: "error",
           anchorOrigin: {
             vertical: "top",
@@ -332,6 +360,12 @@ export default function SignIn() {
           </span>
         </Typography>
       </div>
+      <TransitionsModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        dialogueText={t("accountUnderReview")}
+      ></TransitionsModal>
+      <FormDialog open={dialogueOpen} setOpen={setDialogueOpen}></FormDialog>
     </div>
   );
 }
