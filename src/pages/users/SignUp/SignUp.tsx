@@ -65,7 +65,7 @@ export default function SignUp() {
       fullname: z
         .string()
         .min(5, { message: "Must be 5 or more characters long" })
-        .max(30, { message: "Must be 30 characters long or less" }),
+        .max(50, { message: "Must be 50 characters long or less" }),
       email: z
         .string()
         .email({ message: "Invalid email address" })
@@ -107,35 +107,54 @@ export default function SignUp() {
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: async (values) => {
-      const final = {
-        email: values.email,
-        full_name: values.fullname,
-        password1: values.password,
-        password2: values.confirmPassword,
-        phone: (values.countryCode + values.phoneNumber).replace(/\s/g, ""),
-      };
-      console.log("Submitted");
-      console.log(final);
-      setRequestLoading(true);
-      const response = await registerUser(final);
-      console.log(response);
+      try {
+        const final = {
+          email: values.email,
+          full_name: values.fullname,
+          password1: values.password,
+          password2: values.confirmPassword,
+          phone: (values.countryCode + values.phoneNumber).replace(/\s/g, ""),
+        };
+        console.log("Submitted");
+        console.log(final);
+        setRequestLoading(true);
+        const response = await registerUser(final);
+        console.log(response);
 
-      setRequestLoading(false);
-      const statusCode = response.request?.status;
-      if (statusCode == 201) {
-        localStorage.setItem("email", values.email.toLowerCase());
-        setDialogueOpen(true);
-      } else {
-        const errors = response.message.response.data;
-        Object.keys(errors).forEach((key) => {
-          const value = errors[key];
-          enqueueSnackbar(`${value}`, {
+        setRequestLoading(false);
+        const statusCode = response?.status;
+        if (statusCode == 201) {
+          localStorage.setItem("email", values.email.toLowerCase());
+          setDialogueOpen(true);
+        } else if (statusCode == 500) {
+          enqueueSnackbar("An Unexpected error occured ya david", {
             variant: "error",
             anchorOrigin: {
               vertical: "top",
               horizontal: "right",
             },
           });
+        } else {
+          const errors = response.response?.data;
+          Object.keys(errors).forEach((key) => {
+            const value = errors[key];
+            enqueueSnackbar(`${value}`, {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+          });
+        }
+      } catch (error: any) {
+        console.log("Unexpected Error occured", error);
+        enqueueSnackbar(`An Unexpected error occured`, {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
         });
       }
     },

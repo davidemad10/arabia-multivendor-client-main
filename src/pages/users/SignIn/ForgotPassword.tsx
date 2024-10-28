@@ -9,6 +9,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { forgotPassword } from "../../../api/userRequests";
 import ConfirmResetOTP from "./confirmResetOtp";
 import { useSnackbar } from "notistack";
+import { t } from "i18next";
 
 interface ForgotPasswordProps {
   open: boolean;
@@ -33,8 +34,8 @@ export default function ForgotPassword({
           variant: "success",
           anchorOrigin: { vertical: "top", horizontal: "right" },
         });
-        setOtpOpen(true); // Open OTP dialog
-        handleClose(); // Close the current dialog
+        setOtpOpen(true);
+        handleClose();
       } else {
         throw new Error(
           response.error?.response?.data?.message || "Unexpected error"
@@ -68,7 +69,7 @@ export default function ForgotPassword({
           },
         }}
       >
-        <DialogTitle>Reset Password</DialogTitle>
+        <DialogTitle>{t("resetPassword")}</DialogTitle>
         <DialogContent
           sx={{
             display: "flex",
@@ -77,10 +78,7 @@ export default function ForgotPassword({
             width: "100%",
           }}
         >
-          <DialogContentText>
-            Enter your account&apos;s email address, and we&apos;ll send you an
-            OTP to reset your password.
-          </DialogContentText>
+          <DialogContentText>{t("enterEmailToSendOTP")}</DialogContentText>
           <OutlinedInput
             autoFocus
             required
@@ -89,15 +87,24 @@ export default function ForgotPassword({
             placeholder="Email address"
             type="email"
             fullWidth
-            disabled={loading} // Disable input while loading
+            disabled={loading}
           />
         </DialogContent>
-        <DialogActions sx={{ pb: 3, px: 3 }}>
-          <Button onClick={handleClose} disabled={loading}>
-            Cancel
+        <DialogActions sx={{ pb: 3, px: 3, gap: 3 }}>
+          <Button
+            onClick={handleClose}
+            disabled={loading}
+            sx={{ color: "black" }}
+          >
+            {t("cancel")}
           </Button>
-          <Button variant="contained" type="submit" disabled={loading}>
-            {loading ? "Processing..." : "Continue"}
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={loading}
+            sx={{ backgroundColor: "black" }}
+          >
+            {t("continue")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -7,13 +7,11 @@ export const registerUser = async (userData: registerUserData) => {
       "/account/buyer/register/",
       userData
     );
-    console.log(response);
-
+    console.log("API response ( Register User ) : ", response);
     return response;
   } catch (error: any) {
-    return {
-      message: error || "An unexpected error occurred",
-    };
+    console.error("Register User Error : ", error);
+    return { error: error.response?.data || error.message };
   }
 };
 
@@ -36,9 +34,19 @@ export const login = async (userCredentials: userCredentials) => {
 
 export const forgotPassword = async (email: string) => {
   try {
-    const response = await axiosInstance.post("/account/passwordresetotp/", {
-      email,
-    });
+    const response = await axiosInstance.post(
+      "/account/passwordresetotp/",
+      {
+        email,
+      },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
     console.log("API response (Send OTP to the email) :", response);
     return response;
   } catch (error: any) {

@@ -74,3 +74,8 @@ export interface passwords {
   new_password: string;
   confirm_password: string;
 }
+
+export interface confirmResetOTPparams {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}

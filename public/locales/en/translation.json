@@ -61,5 +61,9 @@
   "rememberMe": "Remember Me",
   "pleaseWait": "Please Wait ... ",
   "resetYourPassword": "Please enter your new password to reset your account password. Make sure it is at least 8 characters long and contains a combination of letters, numbers, and special characters.",
-  "resetPasswordTitle": "Reset your password"
+  "resetPasswordTitle": "Reset your password",
+  "enterEmailToSendOTP": "Enter your account's email address, and we'll send you an OTP to reset your password.",
+  "resetPassword": "Reset Password",
+  "cancel": "Cancel",
+  "continue": "Continue"
 }

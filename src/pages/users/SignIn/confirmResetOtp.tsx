@@ -10,8 +10,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { verifyResetOTP } from "../../../api/userRequests";
 import { useSnackbar } from "notistack";
 import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
+import { confirmResetOTPparams } from "../../../types";
 
-export default function ConfirmResetOTP({ open, setOpen }) {
+export default function ConfirmResetOTP({
+  open,
+  setOpen,
+}: confirmResetOTPparams) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [resetPasswordDialogueOpen, setResetPasswordDialogueOpen] =
     React.useState(false);
@@ -19,9 +23,11 @@ export default function ConfirmResetOTP({ open, setOpen }) {
   const handleClose = () => {
     setOpen(false);
   };
+  const [loading, setLoading] = React.useState(false);
 
   async function handleSubmit(otp: number) {
     try {
+      setLoading(true);
       const response = await verifyResetOTP(otp);
       console.log(response);
       if (response.status == 200) {
@@ -56,6 +62,8 @@ export default function ConfirmResetOTP({ open, setOpen }) {
           },
         }
       );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -78,7 +86,7 @@ export default function ConfirmResetOTP({ open, setOpen }) {
         }}
       >
         <DialogTitle>Email Reset Confirmation</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ width: "30vw", padding: "20px" }}>
           <DialogContentText>Enter OTP to reset password</DialogContentText>
           <TextField
             autoFocus
@@ -92,9 +100,17 @@ export default function ConfirmResetOTP({ open, setOpen }) {
             variant="standard"
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Confirm OTP</Button>
+        <DialogActions className="gap-3">
+          <Button onClick={handleClose} sx={{ color: "black" }}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading}
+            sx={{ backgroundColor: "black", color: "white" }}
+          >
+            Confirm OTP
+          </Button>
         </DialogActions>
       </Dialog>
       <NewPasswordDialogue
