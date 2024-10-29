@@ -1,25 +1,24 @@
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import BrandCard from "../../reusables/BrandCard";
+import axiosInstance from "../../../api/axiosInstance";
 
-// Define the structure for the Brand
 interface Brand {
   id: number;
   name: string;
   image: string;
 }
 
-// Define the props for the BrandsSlider component
 interface BrandsSlider {
   title: string;
   link: string;
-  Brands?: Brand[]; // Optional, with default mock data provided
+  Brands?: Brand[];
 }
 
-// Static data for testing purposes
 const mockBrands: Brand[] = [
   {
     id: 1,
@@ -81,14 +80,31 @@ const mockBrands: Brand[] = [
     image:
       "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
   },
-  // Add more brand data here...
 ];
 
 export default function BrandsSlider({
   title,
   link,
-  Brands = mockBrands, // Default to mock data for testing
+  Brands = mockBrands,
 }: BrandsSlider) {
+  const [brands, setBrands] = useState<Brand[]>([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axiosInstance.get("/products/brand/");
+        const brandsData = response.data.map((brand: any) => ({
+          id: brand.id,
+          name: brand.translations.en.name,
+          image: brand.image,
+        }));
+        setBrands(brandsData);
+      } catch (error) {
+        console.error("Failed to fetch brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
   return (
     <div className="container">
       <div className="flexBetween px-8 py-4 max-sm:flex-col max-md:gap-2">
@@ -117,7 +133,7 @@ export default function BrandsSlider({
         }}
         className="rounded-xl"
       >
-        {Brands.map((brand) => (
+        {brands.map((brand) => (
           <SwiperSlide key={brand.id} className="flex justify-center">
             <BrandCard brand={brand} />
           </SwiperSlide>

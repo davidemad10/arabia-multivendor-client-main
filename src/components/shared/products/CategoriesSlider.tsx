@@ -5,7 +5,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { Categories } from "../../../types";
-
+const BASE_URL = "http://127.0.0.1:8000";
 interface HeroSliderProps {
   categories: Categories[];
   isPending: boolean;
@@ -86,12 +86,13 @@ export default function CategoriesSlider({
             <SwiperSlide key={category.id} className="py-5">
               <div className="  flexCenter flex-col gap-1">
                 <img
-                  className=" w-24 h-24 max-md:w-16 max-md:h-16 rounded-full"
-                  src={category.image}
-                  alt=""
+                  className="w-24 h-24 max-md:w-16 max-md:h-16 rounded-full"
+                  src={`${BASE_URL}${category.image}`}
+                  alt={category.translations.en.name || "Category"}
                 />
-                <h2 className=" font-bold text-blackText max-md:text-sm text-lg">
-                  {category.translations.ar.name}
+                <h2 className="font-bold text-blackText max-md:text-sm text-lg">
+                  {category.translations.ar?.name ||
+                    category.translations.en.name}
                 </h2>
               </div>
             </SwiperSlide>
