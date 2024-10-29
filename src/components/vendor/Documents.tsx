@@ -1,5 +1,3 @@
-import imageCompression from "browser-image-compression";
-
 // Material-UI Components
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -7,10 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Box, FormControl, FormLabel, Input } from "@mui/material";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
 // Localization
 import { t } from "i18next";
@@ -19,7 +14,8 @@ import { t } from "i18next";
 import { Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { UserData } from "./Types";
+import { StepComponentProps, UserData } from "../../types/Vendor";
+import imageCompression from "browser-image-compression";
 
 // Validation schema using Zod
 const documentSchema = z.object({
@@ -40,57 +36,48 @@ const documentSchema = z.object({
   }),
 });
 
-// TypeScript Props Interface
-interface StepComponentProps {
-  onNext: () => void;
-  onPrev: () => void;
-  userData: UserData;
-  setUserData: (newState: UserData) => void;
-}
+const compressFile = async (file: File) => {
+  try {
+    const options = {
+      maxSizeMB: 1, // Max file size in MB
+      maxWidthOrHeight: 1920, // Resize to fit within this size
+      useWebWorker: true, // Enable web worker for faster compression
+    };
+    const compressedFile = await imageCompression(file, options);
+    return compressedFile;
+  } catch (error) {
+    console.error("Error compressing file:", error);
+    return file; // Return original file if compression fails
+  }
+};
+
 // Form submission handler
 const handleSubmit = async (
-  values: Record<string, any>,
-  setUserData: (data: object) => void,
-  userData: UserData
+  values: { [key: string]: File | null },
+  setUserData: (data: UserData) => void
 ) => {
-  console.log(values);
-  const formData = new FormData();
+  const compressedValues: { [key: string]: File | null } = {};
 
-  // Iterate over values and handle files separately
+  // Compress each file in the form values
   for (const [key, value] of Object.entries(values)) {
     if (value instanceof File) {
-      const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 800,
-        useWebWorker: true,
-      };
-
-      try {
-        const compressedFile = await imageCompression(value, options);
-        formData.append(key, compressedFile);
-      } catch (error) {
-        console.error("Error compressing image:", error);
-      }
+      compressedValues[key] = await compressFile(value);
     } else {
-      formData.append(key, value);
+      compressedValues[key] = value;
     }
   }
 
-  console.log("FormData entries:");
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
+  console.log("Compressed Files:", compressedValues);
 
-  setUserData((prevState: object) => ({
+  setUserData((prevState: UserData) => ({
     ...prevState,
-    documents: { ...formData },
+    documents: { ...compressedValues },
   }));
 };
 
 const Documents: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
-  userData,
   setUserData,
 }) => {
   return (
@@ -105,7 +92,7 @@ const Documents: React.FC<StepComponentProps> = ({
         }}
         validationSchema={toFormikValidationSchema(documentSchema)}
         onSubmit={(values) => {
-          handleSubmit(values, setUserData, userData);
+          handleSubmit(values, setUserData);
           onNext();
         }}
       >
@@ -144,7 +131,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "idFront",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -165,7 +152,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "idBack",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -186,7 +173,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "taxCard",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -209,7 +196,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "commercialRecord",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />
@@ -232,7 +219,7 @@ const Documents: React.FC<StepComponentProps> = ({
                       onChange={(e) =>
                         setFieldValue(
                           "bankStatement",
-                          e.currentTarget.files?.[0] || null
+                          (e.target as HTMLInputElement).files?.[0] || null
                         )
                       }
                     />

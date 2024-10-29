@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignIn from "./pages/users/SignIn/SignIn";
 import SignUp from "./pages/users/SignUp/SignUp";
-import VendorSignUp from "./pages/vendor/SignUp/VendorSignUp";
+import VendorSignUp from "./pages/vendor/VendorSignUp";
 
 function App() {
   return (

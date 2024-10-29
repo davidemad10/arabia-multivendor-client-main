@@ -1,5 +1,5 @@
 // External Libraries
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -23,21 +23,17 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
-import countries from "../../users/SignUp/countries";
+import countries from "../../pages/users/SignUp/countries";
 
 // Localization
 import { t } from "i18next";
-import { StepComponentProps } from "./Types";
+import { StepComponentProps, UserData } from "../../types/Vendor";
 
 const VendorData: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
-  userData,
   setUserData,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -104,8 +100,8 @@ const VendorData: React.FC<StepComponentProps> = ({
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: async (values) => {
       const final = {
-        email: values.email,
         full_name: values.fullname,
+        email: values.email,
         password1: values.password,
         password2: values.confirmPassword,
         phone: (values.countryCode + values.phoneNumber).replace(/\s/g, ""),
@@ -113,12 +109,11 @@ const VendorData: React.FC<StepComponentProps> = ({
       console.log("Submitted");
       console.log(final);
 
-      setUserData((prevState: any) => ({
+      setUserData((prevState: UserData) => ({
         ...prevState,
         user: { ...final },
       }));
 
-      console.log(userData);
       onNext();
     },
   });

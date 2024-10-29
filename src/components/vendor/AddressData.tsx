@@ -13,27 +13,25 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 // Local imports
-import {
-  Card,
-  SignUpContainer,
-} from "../../../components/reusables/CustomMUIComponents";
+import { Card, SignUpContainer } from "../reusables/CustomMUIComponents";
 
 // Localization
 import { t } from "i18next";
-import { StepComponentProps } from "./Types";
+import { StepComponentProps, UserData } from "../../types/Vendor";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const AddressData: React.FC<StepComponentProps> = ({
   onNext,
   onPrev,
-  userData,
   setUserData,
+  isLoading,
 }) => {
   const schema = z.object({
-    country: z.string().min(1, { message: "Country is required" }),
-    state: z.string().min(1, { message: "State is required" }),
-    city: z.string().min(1, { message: "City is required" }),
-    postalCode: z.string().min(1, { message: "Postal code is required" }),
-    address1: z.string().min(1, { message: "Address 1 is required" }),
+    country: z.string().min(1),
+    state: z.string().min(1),
+    city: z.string().min(1),
+    postalCode: z.string().max(15).min(1),
+    address1: z.string().min(1),
     address2: z.string().optional(),
   });
 
@@ -59,12 +57,15 @@ const AddressData: React.FC<StepComponentProps> = ({
       console.log("Submitted");
       console.log(final);
 
-      setUserData((prevState: object) => ({
-        ...prevState,
-        address: { ...final },
-      }));
-
-      onNext();
+      setUserData((prevState: UserData) => {
+        const updatedUserData = {
+          ...prevState,
+          address: { ...final },
+        };
+        // Call onNext with the updated user data
+        onNext(updatedUserData); // Pass the complete updated user data here
+        return updatedUserData; // Ensure the state is updated
+      });
     },
   });
 
@@ -224,18 +225,35 @@ const AddressData: React.FC<StepComponentProps> = ({
                 >
                   {t("previous")}
                 </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: "black",
-                    borderRadius: "7px",
-                    marginTop: "10px",
-                    width: "20%",
-                  }}
-                  type="submit"
-                >
-                  {t("submit")}
-                </Button>
+                {isLoading ? (
+                  <LoadingButton
+                    loading
+                    loadingIndicator="Loading…"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                      width: "20%",
+                    }}
+                  >
+                    {t("submit")}
+                  </LoadingButton>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                      width: "20%",
+                    }}
+                    type="submit"
+                  >
+                    {t("submit")}
+                  </Button>
+                )}
               </div>
             </Card>
           </SignUpContainer>

@@ -50,3 +50,9 @@ export interface Categories {
   level: number;
   parent: number;
 }
+
+export interface TransitionsModalProps {
+  dialogueText: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
