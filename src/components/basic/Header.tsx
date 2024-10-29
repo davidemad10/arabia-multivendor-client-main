@@ -11,6 +11,7 @@ import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../../redux/slices/userSlice";
+import ProfileDropdownMenu from "./profileDropdown/ProfileDropdownMenu";
 
 export default function Header() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -160,18 +161,7 @@ export default function Header() {
               </button>
             </div>
             {/* avatar and profile */}
-            {isAuthenticated && (
-              <div className="w-500 mx-6 flex flexCenter">
-                <Avatar
-                  sx={{ bgcolor: deepOrange[500] }}
-                  alt="UserName"
-                  src="User Profile Pic"
-                />
-                <p>dropDown</p>
-                {/* //! i couldnt find a good drop down menu sorry 😢 */}
-                {/* //! Dont forget to add it into the mobile menu as well */}
-              </div>
-            )}
+            {isAuthenticated && <ProfileDropdownMenu></ProfileDropdownMenu>}
 
             {/* Mobile Navigation Menu */}
             {isMenuOpen && (
