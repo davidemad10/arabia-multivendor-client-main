@@ -7,8 +7,6 @@ import { FiSearch } from "react-icons/fi";
 import SideCart from "../shared/cart/SideCart";
 import LanguageSelector from "./LanguageSelector";
 import { Trans, useTranslation } from "react-i18next";
-import { Avatar } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../../redux/slices/userSlice";
 import ProfileDropdownMenu from "./profileDropdown/ProfileDropdownMenu";
@@ -44,7 +42,7 @@ export default function Header() {
         } duration-200 bg-white z-10 flex-col w-full`}
       >
         {/* Header Top Section */}
-        <div className={`flex z-10 flexCenter justify-center h-16 w-full`}>
+        <div className={`flex flexCenter justify-center h-16 w-full`}>
           <div className="container flexBetween flex justify-evenly gap-10">
             <div className="w-2/12">
               <Link to="/">
@@ -55,36 +53,8 @@ export default function Header() {
                 />
               </Link>
             </div>
-
-            {/* header navigation */}
-            <div className="container hidden desktop:flexCenter w-min h-16">
-              <ul className="mx-auto flex gap-5">
-                {headerLinks.map((link) => (
-                  <li key={link.label}>
-                    <NavLink
-                      className={`hover:text-Red pb-3 border-Red text-blackText ${
-                        pathname === link.route
-                          ? "text-Red border-b-2 font-extrabold"
-                          : ""
-                      }`}
-                      to={link.route}
-                    >
-                      {<Trans i18nKey={`${link.label}`}></Trans>}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-              <span className="h-8 bg-gray-300 rounded-full w-px mx-5"></span>
-              <div className="flex flexCenter cursor-pointer group">
-                <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
-                  <Link to={"vendorsignup"}>{t("sellWithArabia")}</Link>
-                </span>
-                <RiUserLine className="text-blackText text-2xl group-hover:text-Red mx-2" />
-              </div>
-            </div>
-
             {/* Search Bar */}
-            <div className="w-5/12 tablet:flex mx-6 justify-center">
+            <div className="w-2/3 mx-6 justify-center">
               <div className="relative">
                 <input
                   placeholder={t("search")}
@@ -111,6 +81,8 @@ export default function Header() {
             {/* User Actions */}
             <div className="hidden desktop:flexCenter gap-5 items-center">
               <LanguageSelector />
+              <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+
               {isAuthenticated ? (
                 ""
               ) : (
@@ -159,9 +131,14 @@ export default function Header() {
                   <span className="text-white text-sm">1</span>
                 </div>
               </button>
+              {/* avatar and profile */}
+              {isAuthenticated && (
+                <>
+                  <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                  <ProfileDropdownMenu></ProfileDropdownMenu>
+                </>
+              )}
             </div>
-            {/* avatar and profile */}
-            {isAuthenticated && <ProfileDropdownMenu></ProfileDropdownMenu>}
 
             {/* Mobile Navigation Menu */}
             {isMenuOpen && (
@@ -184,9 +161,8 @@ export default function Header() {
 
                 {/* User Actions at the Top */}
                 <div className="flex flex-col items-center gap-4 p-4 border-b border-gray-300">
-                  <LanguageSelector />
                   {isAuthenticated ? (
-                    ""
+                    <ProfileDropdownMenu></ProfileDropdownMenu>
                   ) : (
                     <div>
                       <div className="flex items-center justify-center my-3 w-full cursor-pointer group">
@@ -207,6 +183,8 @@ export default function Header() {
                       </div>
                     </div>
                   )}
+                  <LanguageSelector />
+
                   <div className="flex items-center gap-4">
                     {isAuthenticated && (
                       <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer transition-colors duration-200">
@@ -249,6 +227,41 @@ export default function Header() {
                 </ul>
               </div>
             )}
+          </div>
+        </div>
+        <div className={`flex z-10 flexCenter justify-center h-16 w-full`}>
+          <div className={` flex z-10 p-0 h-16 w-full `}>
+            <div className="container flexBetween flex">
+              <div className=" w-11/12 gap-4 flex flexStart">
+                <div className="flex flexCenter gap-2 bg-Red px-6 py-2 ">
+                  <a className=" font-bold text-white" href="">
+                    جميل الفئات
+                  </a>
+                </div>
+                <ul className="flex gap-6">
+                  {headerLinks.map((link) => (
+                    <li key={link.label}>
+                      <NavLink
+                        className={`hover:text-Red pb-3 border-Red text-blackText ${
+                          pathname === link.route
+                            ? "text-Red border-b-2 font-extrabold"
+                            : "font-bold"
+                        }`}
+                        to={link.route}
+                      >
+                        {<Trans i18nKey={`${link.label}`}></Trans>}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flexCenter cursor-pointer group fixed left-10">
+                  <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
+                    <Link to={"vendorsignup"}>{t("sellWithArabia")}</Link>
+                  </span>
+                  <RiUserLine className="text-blackText text-2xl group-hover:text-Red mx-2" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

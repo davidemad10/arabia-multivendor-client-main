@@ -28,9 +28,6 @@ const ProfileDropdownMenu = () => {
             <li onClick={closeDropdown}>
               <FaUser className="menu-icon" /> View Profile
             </li>
-            <li onClick={closeDropdown}>
-              <FaCog className="menu-icon" /> Settings
-            </li>
             <li onClick={handleLogout}>
               <FaSignOutAlt className="menu-icon" /> Logout
             </li>
