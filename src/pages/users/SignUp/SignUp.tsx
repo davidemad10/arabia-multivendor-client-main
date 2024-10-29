@@ -127,7 +127,7 @@ export default function SignUp() {
           localStorage.setItem("email", values.email.toLowerCase());
           setDialogueOpen(true);
         } else if (statusCode == 500) {
-          enqueueSnackbar("An Unexpected error occured ya david", {
+          enqueueSnackbar("An Unexpected error occured", {
             variant: "error",
             anchorOrigin: {
               vertical: "top",

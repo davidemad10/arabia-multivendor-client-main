@@ -12,11 +12,14 @@ interface UserState {
   error: string | null;
 }
 
+const Access_token = sessionStorage.getItem("accessToken");
+const Refresh_token = sessionStorage.getItem("accessToken");
+
 // Initial state
 const initialState: UserState = {
-  token: null,
-  refreshToken: null,
-  isAuthenticated: false,
+  token: Access_token || null,
+  refreshToken: Refresh_token || null,
+  isAuthenticated: !!Access_token || false,
   status: "idle",
   error: null,
 };
@@ -84,6 +87,24 @@ const userSlice = createSlice({
           state,
           action: PayloadAction<{ token: string; refreshToken: string }>
         ) => {
+          const access = sessionStorage.getItem("accessToken");
+          const refresh = sessionStorage.getItem("refreshToken");
+          sessionStorage.setItem(
+            "accessToken",
+            action.payload.data.tokens.access
+          );
+          sessionStorage.setItem(
+            "refreshToken",
+            action.payload.data.tokens.refresh
+          );
+          console.log(
+            access,
+            refresh,
+            action.payload.data.tokens.access,
+            action.payload.data.tokens.refresh,
+            action
+          );
+
           state.token = action.payload.token;
           state.refreshToken = action.payload.refreshToken;
           state.isAuthenticated = true;
