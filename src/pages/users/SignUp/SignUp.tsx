@@ -162,7 +162,7 @@ export default function SignUp() {
 
   return (
     <>
-      <div className="w-2/3 mx-auto rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
+      <div className="w-2/3 mx-auto mt-16 rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
         <div className="w-1/2 p-10 py-48 hidden desktop:block">
           <Typography
             component="h1"

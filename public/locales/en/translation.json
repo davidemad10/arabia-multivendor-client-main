@@ -65,5 +65,7 @@
   "enterEmailToSendOTP": "Enter your account's email address, and we'll send you an OTP to reset your password.",
   "resetPassword": "Reset Password",
   "cancel": "Cancel",
-  "continue": "Continue"
+  "continue": "Continue",
+  "yourProfile": "Your Profile",
+  "logout": "Log out"
 }

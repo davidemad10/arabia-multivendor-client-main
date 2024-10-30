@@ -157,7 +157,7 @@ export default function SignIn() {
   });
 
   return (
-    <div className="w-3/5 max-h-fit mx-auto rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
+    <div className="w-3/5 max-h-fit mx-auto mt-16 rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
       <div className="w-5/6 desktop:w-1/2">
         <form onSubmit={formik.handleSubmit}>
           <SignInContainer

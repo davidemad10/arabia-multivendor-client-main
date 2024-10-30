@@ -116,7 +116,7 @@ const VendorSignUp = () => {
   const StepComponent = activeComponent.component;
 
   return (
-    <div>
+    <div className="mt-16">
       <StepComponent
         onNext={NextStep}
         onPrev={PreviousStep}
