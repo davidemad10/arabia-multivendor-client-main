@@ -68,11 +68,9 @@ export default function SignIn() {
 
       console.log("Submitting data:", data);
 
-      // Dispatch the signIn action
       const response = await dispatch(signIn(data));
       console.log("Response from signIn:", response);
 
-      // Check if the response is fulfilled
       if (signIn.fulfilled.match(response)) {
         enqueueSnackbar("Logged In successfully", {
           variant: "success",
@@ -83,7 +81,6 @@ export default function SignIn() {
         });
         navigate("/", { replace: true });
       } else if (signIn.rejected.match(response)) {
-        // Handle the rejected case with status codes
         const status = response.payload?.status;
 
         switch (status) {
@@ -135,7 +132,6 @@ export default function SignIn() {
     }
   };
 
-  // Helper function to handle inactive accounts
   const handleInactiveAccount = (message: string) => {
     if (
       message ===

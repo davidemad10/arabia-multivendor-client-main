@@ -83,7 +83,6 @@ const userSlice = createSlice({
   },
 });
 
-// Action for signing out
 export const { signOut } = userSlice.actions;
 
 // Selectors

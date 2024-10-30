@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import "./ProfileDropdownMenu.css";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { selectToken, signOut } from "../../../redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../../redux/slices/userSlice";
+import { getUser } from "../../../../public/utils/functions";
+import Avatar from "@mui/material/Avatar";
+import { deepOrange } from "@mui/material/colors";
 
 const ProfileDropdownMenu = () => {
   const { i18n } = useTranslation();
@@ -12,29 +15,12 @@ const ProfileDropdownMenu = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
+  const token = sessionStorage.getItem("accessToken");
 
   console.log(token);
-
-  // useEffect(() => {
-  //   const restoreToken = (token: any) => {
-  //     if (token) {
-  //       const storedToken = sessionStorage.getItem("accessToken");
-  //       if (storedToken) {
-  //         console.log("Restoring token from sessionStorage");
-  //         token = "hamada";
-  //         console.log(token);
-  //         console.log("Restoring token from sessionStorage");
-  //       } else {
-  //         console.log("No token found, logging out...");
-  //         // dispatch(signOut());
-  //       }
-  //     }
-  //   };
-
-  //   restoreToken(token);
-  //   console.log(token);
-  // }, [dispatch, token]);
+  const user = getUser(token);
+  console.log("This is user ==========>", user);
+  const { full_name, profile_picture } = user;
 
   const handleLogout = () => {
     dispatch(signOut());
@@ -45,10 +31,10 @@ const ProfileDropdownMenu = () => {
   return (
     <div className="profile-dropdown">
       <div className="profile-avatar" onClick={toggleDropdown}>
-        <img
-          src="/path-to-your-uploaded-image.png"
-          alt="Profile Avatar"
-          className="avatar-img"
+        <Avatar
+          sx={{ bgcolor: deepOrange[500] }}
+          alt={full_name}
+          src={profile_picture || "undefined"}
         />
       </div>
 
