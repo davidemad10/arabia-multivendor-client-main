@@ -23,29 +23,4 @@ export function useGetCategories(parent: string, featured: boolean) {
   });
 }
 
-// Get Brands
-import { useState, useEffect } from "react";
-import axiosInstance from "../api/axiosInstance";
-
-export function useBrands() {
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const response = await axiosInstance.get("/products/brand/");
-        setBrands(response.data);
-      } catch (error) {
-        setError("Failed to load brands");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBrands();
-  }, []);
-
-  return { brands, isLoading, error };
-}
+// Get Products by category

@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import SignIn from "./pages/users/SignIn/SignIn";
 import SignUp from "./pages/users/SignUp/SignUp";
 import VendorSignUp from "./pages/vendor/VendorSignUp";
+import CategoryPage from "./pages/common/CategoryPage";
+import BrandProducts from "./pages/common/BrandProducts";
 
 function App() {
   return (
@@ -27,6 +29,9 @@ function App() {
             path="/products/:sku"
             element={<ProductDetails></ProductDetails>}
           ></Route>
+
+          <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/brand/:slug" element={<BrandProducts />} />
         </Route>
       </Routes>
       <ToastContainer></ToastContainer>

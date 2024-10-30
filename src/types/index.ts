@@ -56,3 +56,16 @@ export interface TransitionsModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
+
+export interface Product {
+  id: number;
+  translations: {
+    en: {
+      name: string;
+    };
+    ar: {
+      name: string;
+    };
+  };
+  image: string;
+}

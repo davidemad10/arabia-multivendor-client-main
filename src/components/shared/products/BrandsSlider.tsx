@@ -6,11 +6,13 @@ import { Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import BrandCard from "../../reusables/BrandCard";
 import axiosInstance from "../../../api/axiosInstance";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Brand {
   id: number;
   name: string;
   image: string;
+  slug: string;
 }
 
 interface BrandsSlider {
@@ -19,74 +21,8 @@ interface BrandsSlider {
   Brands?: Brand[];
 }
 
-const mockBrands: Brand[] = [
-  {
-    id: 1,
-    name: "Brand A",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 2,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 3,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 4,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 5,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 6,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 7,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 8,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 9,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-  {
-    id: 10,
-    name: "Brand B",
-    image:
-      "https://parkmallsetif-dz.com/wp-content/uploads/2023/12/defacto.jpg",
-  },
-];
-
-export default function BrandsSlider({
-  title,
-  link,
-  Brands = mockBrands,
-}: BrandsSlider) {
+export default function BrandsSlider({ title, link, Brands }: BrandsSlider) {
+  const { i18n, t } = useTranslation();
   const [brands, setBrands] = useState<Brand[]>([]);
 
   useEffect(() => {
@@ -97,6 +33,7 @@ export default function BrandsSlider({
           id: brand.id,
           name: brand.translations.en.name,
           image: brand.image,
+          slug: brand.slug,
         }));
         setBrands(brandsData);
       } catch (error) {
@@ -107,36 +44,40 @@ export default function BrandsSlider({
   }, []);
   return (
     <div className="container">
-      <div className="flexBetween px-8 py-4 max-sm:flex-col max-md:gap-2">
+      <div className="flexBetween px-8 py-2 mt-4 max-sm:flex-col max-md:gap-2">
         <h1 className="text-blackText font-extrabold max-lg:text-2xl text-3xl">
-          EXPLORE OUR BRANDs
+          <Trans i18nKey="EXPLORE OUR BRANDS"></Trans>
         </h1>
-        <Link
+        {/* <Link
           to={link}
           className="button1 flexCenter max-md:px-0 max-md:text-xs px-2 h-9 max-md:w-24 w-28 text-sm font-bold"
         >
-          View All
-        </Link>
+          <Trans i18nKey="view all"></Trans>
+        </Link> */}
       </div>
       <Swiper
         modules={[Navigation]}
-        slidesPerView={4}
-        slidesPerGroup={4}
-        spaceBetween={20}
+        slidesPerView={5}
+        slidesPerGroup={5}
+        spaceBetween={10}
         navigation
         breakpoints={{
           270: { slidesPerView: 1, slidesPerGroup: 1 },
-          570: { slidesPerView: 2, slidesPerGroup: 2 },
-          900: { slidesPerView: 2, slidesPerGroup: 2 },
-          1280: { slidesPerView: 4, slidesPerGroup: 4 },
-          1500: { slidesPerView: 4, slidesPerGroup: 4 },
+          570: { slidesPerView: 3, slidesPerGroup: 3 },
+          900: { slidesPerView: 3, slidesPerGroup: 3 },
+          1280: { slidesPerView: 5, slidesPerGroup: 5 },
+          1500: { slidesPerView: 5, slidesPerGroup: 5 },
         }}
         className="rounded-xl"
       >
         {brands.map((brand) => (
-          <SwiperSlide key={brand.id} className="flex justify-center">
-            <BrandCard brand={brand} />
-          </SwiperSlide>
+          <div className="flex flex-col">
+            <SwiperSlide key={brand.id} className="flex justify-center">
+              <Link to={`/brand/${brand.slug}`}>
+                <BrandCard brand={brand} />
+              </Link>
+            </SwiperSlide>
+          </div>
         ))}
       </Swiper>
     </div>

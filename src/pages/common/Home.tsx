@@ -3,12 +3,14 @@ import HeroSlider from "../../components/shared/advertisement/HeroSlider";
 import CategoriesSlider from "../../components/shared/products/CategoriesSlider";
 import ProductsSlider from "../../components/shared/products/ProductsSlider";
 import { Helmet } from "react-helmet";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import BrandsSlider from "../../components/shared/products/BrandsSlider";
 import axiosInstance from "../../api/axiosInstance";
 import { Categories } from "../../types";
+import { Trans, useTranslation } from "react-i18next";
+
 export default function Home() {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const [categories, setCategories] = useState<Categories[]>([]);
   const [isPending, setIsPending] = useState<boolean>(true);

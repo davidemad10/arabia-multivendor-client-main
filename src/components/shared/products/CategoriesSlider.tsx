@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
@@ -15,6 +16,11 @@ export default function CategoriesSlider({
   categories,
   isPending,
 }: HeroSliderProps) {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (category: string) => {
+    navigate(`/category/${category}`);
+  };
   return (
     <Swiper
       modules={[Navigation, Pagination]}
@@ -83,7 +89,11 @@ export default function CategoriesSlider({
       ) : (
         <>
           {categories.map((category) => (
-            <SwiperSlide key={category.id} className="py-5">
+            <SwiperSlide
+              key={category.id}
+              onClick={() => handleCategoryClick(category.slug)}
+              className="py-5"
+            >
               <div className="  flexCenter flex-col gap-1">
                 <img
                   className="w-24 h-24 max-md:w-16 max-md:h-16 rounded-full"
