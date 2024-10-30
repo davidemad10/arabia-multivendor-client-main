@@ -63,15 +63,17 @@ export default function SignIn() {
     try {
       const data = {
         ...values,
-        email: values.email.toLowerCase(),
+        email: values.email.toLowerCase(), // Normalize email to lowercase
       };
-      console.log(data);
+
+      console.log("Submitting data:", data);
+
+      // Dispatch the signIn action
       const response = await dispatch(signIn(data));
-      console.log(response);
+      console.log("Response from signIn:", response);
 
-      const status = response.payload?.status;
-
-      if (status == 200) {
+      // Check if the response is fulfilled
+      if (signIn.fulfilled.match(response)) {
         enqueueSnackbar("Logged In successfully", {
           variant: "success",
           anchorOrigin: {
@@ -80,51 +82,47 @@ export default function SignIn() {
           },
         });
         navigate("/", { replace: true });
-      } else if (status == 401) {
-        enqueueSnackbar(`${t("invalidCredentials")}`, {
-          variant: "error",
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "right",
-          },
-        });
-      } else if (status == 403) {
-        if (
-          response.payload?.message ==
-          "Your vendor account is not verified yet. Please wait while we review your documents for verification."
-        ) {
-          enqueueSnackbar("Inactive vendor account", {
-            variant: "error",
-            anchorOrigin: {
-              vertical: "top",
-              horizontal: "right",
-            },
-          });
-          setModalOpen(true);
-        } else {
-          setDialogueOpen(true);
-          enqueueSnackbar("Inactive user account", {
-            variant: "error",
-            anchorOrigin: {
-              vertical: "top",
-              horizontal: "right",
-            },
-          });
+      } else if (signIn.rejected.match(response)) {
+        // Handle the rejected case with status codes
+        const status = response.payload?.status;
+
+        switch (status) {
+          case 401:
+            enqueueSnackbar(`${t("invalidCredentials")}`, {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+            break;
+          case 403:
+            handleInactiveAccount(response.payload.message);
+            break;
+          case 404:
+            enqueueSnackbar("User Not Found", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+            break;
+          default:
+            enqueueSnackbar("Unexpected error occurred", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
         }
-      } else if (status == 404) {
-        enqueueSnackbar("User Not Found", {
-          variant: "error",
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "right",
-          },
-        });
       }
     } catch (error: any) {
       enqueueSnackbar(
         `${
           error?.response?.data?.detail ||
-          "unexpected error occured, please try again in a few minutes"
+          "Unexpected error occurred, please try again in a few minutes."
         }`,
         {
           variant: "error",
@@ -134,6 +132,32 @@ export default function SignIn() {
           },
         }
       );
+    }
+  };
+
+  // Helper function to handle inactive accounts
+  const handleInactiveAccount = (message: string) => {
+    if (
+      message ===
+      "Your vendor account is not verified yet. Please wait while we review your documents for verification."
+    ) {
+      enqueueSnackbar("Inactive vendor account", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      setModalOpen(true);
+    } else {
+      setDialogueOpen(true);
+      enqueueSnackbar("Inactive user account", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
     }
   };
 
@@ -253,10 +277,6 @@ export default function SignIn() {
                   />
                 </FormControl>
 
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label={t("rememberMe")}
-                />
                 {status == "loading" ? (
                   <LoadingButton
                     loading

@@ -1,16 +1,43 @@
-import { useState } from "react";
-import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import "./ProfileDropdownMenu.css";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { selectToken, signOut } from "../../../redux/slices/userSlice";
 
 const ProfileDropdownMenu = () => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
+  const dispatch = useDispatch();
+  const token = useSelector(selectToken);
+
+  console.log(token);
+
+  // useEffect(() => {
+  //   const restoreToken = (token: any) => {
+  //     if (token) {
+  //       const storedToken = sessionStorage.getItem("accessToken");
+  //       if (storedToken) {
+  //         console.log("Restoring token from sessionStorage");
+  //         token = "hamada";
+  //         console.log(token);
+  //         console.log("Restoring token from sessionStorage");
+  //       } else {
+  //         console.log("No token found, logging out...");
+  //         // dispatch(signOut());
+  //       }
+  //     }
+  //   };
+
+  //   restoreToken(token);
+  //   console.log(token);
+  // }, [dispatch, token]);
 
   const handleLogout = () => {
+    dispatch(signOut());
     console.log("User logged out");
     closeDropdown();
   };
@@ -19,7 +46,7 @@ const ProfileDropdownMenu = () => {
     <div className="profile-dropdown">
       <div className="profile-avatar" onClick={toggleDropdown}>
         <img
-          src="/path-to-your-uploaded-image.png" // Use the uploaded image here
+          src="/path-to-your-uploaded-image.png"
           alt="Profile Avatar"
           className="avatar-img"
         />

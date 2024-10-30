@@ -6,20 +6,18 @@ import axiosInstance from "../../api/axiosInstance";
 // Define a type for the user slice state
 interface UserState {
   token: string | null;
-  refreshToken: string | null;
   isAuthenticated: boolean;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
-const Access_token = sessionStorage.getItem("accessToken");
-const Refresh_token = sessionStorage.getItem("accessToken");
-
 // Initial state
+const Access_token = sessionStorage.getItem("accessToken");
+
+// Initial state without refresh token
 const initialState: UserState = {
   token: Access_token || null,
-  refreshToken: Refresh_token || null,
-  isAuthenticated: !!Access_token || false,
+  isAuthenticated: !!Access_token,
   status: "idle",
   error: null,
 };
@@ -36,9 +34,8 @@ export const signIn = createAsyncThunk(
         "/account/login/",
         userCredentials
       );
-      return { data: response.data, status: 200 };
+      return response.data;
     } catch (error: any) {
-      // Use `rejectWithValue` to pass the error message and status
       return rejectWithValue({
         message: error.response?.data?.message || "Sign-in failed",
         status: error.response?.status || 500,
@@ -47,29 +44,13 @@ export const signIn = createAsyncThunk(
   }
 );
 
-// // Async action for refreshing tokens
-// export const refreshTokens = createAsyncThunk(
-//   "user/refreshTokens",
-//   async (refreshToken: string, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.post("/api/auth/refresh", { refreshToken });
-//       return response.data; // { token: '...', refreshToken: '...' }
-//     } catch (error: any) {
-//       return rejectWithValue(
-//         error.response.data.message || "Token refresh failed"
-//       );
-//     }
-//   }
-// );
-
-// Slice
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     signOut: (state) => {
+      sessionStorage.removeItem("accessToken");
       state.token = null;
-      state.refreshToken = null;
       state.isAuthenticated = false;
       state.status = "idle";
       state.error = null;
@@ -81,57 +62,31 @@ const userSlice = createSlice({
       .addCase(signIn.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        signIn.fulfilled,
-        (
-          state,
-          action: PayloadAction<{ token: string; refreshToken: string }>
-        ) => {
-          const access = sessionStorage.getItem("accessToken");
-          const refresh = sessionStorage.getItem("refreshToken");
-          sessionStorage.setItem(
-            "accessToken",
-            action.payload.data.tokens.access
-          );
-          sessionStorage.setItem(
-            "refreshToken",
-            action.payload.data.tokens.refresh
-          );
-          console.log(
-            access,
-            refresh,
-            action.payload.data.tokens.access,
-            action.payload.data.tokens.refresh,
-            action
-          );
+      .addCase(signIn.fulfilled, (state, action: PayloadAction<any>) => {
+        console.log("Response Payload:", action.payload);
 
-          state.token = action.payload.token;
-          state.refreshToken = action.payload.refreshToken;
-          state.isAuthenticated = true;
-          state.status = "succeeded";
-          state.error = null;
+        const access = action.payload.tokens?.access;
+        if (!access) {
+          console.error("Access token missing in payload");
         }
-      )
+
+        sessionStorage.setItem("accessToken", access);
+        state.token = access;
+        state.isAuthenticated = true;
+        state.status = "succeeded";
+        state.error = null;
+      })
       .addCase(signIn.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload;
       });
-    // Handle refreshTokens
-    //   .addCase(
-    //     refreshTokens.fulfilled,
-    //     (
-    //       state,
-    //       action: PayloadAction<{ token: string; refreshToken: string }>
-    //     ) => {
-    //       state.token = action.payload.token;
-    //       state.refreshToken = action.payload.refreshToken;
-    //     }
-    //   );
   },
 });
 
+// Action for signing out
 export const { signOut } = userSlice.actions;
 
+// Selectors
 export const selectIsAuthenticated = (state: RootState) =>
   state.users.isAuthenticated;
 export const selectToken = (state: RootState) => state.users.token;
