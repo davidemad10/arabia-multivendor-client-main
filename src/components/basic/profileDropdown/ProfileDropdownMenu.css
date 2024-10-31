@@ -38,6 +38,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+
   gap: 10px;
   transition: background-color 0.2s;
 }
@@ -48,4 +49,9 @@
 
 .menu-icon {
   font-size: 18px;
+}
+
+.hello {
+  margin-inline-start: 30px;
+  transform: scale(0.7, 0.7);
 }
