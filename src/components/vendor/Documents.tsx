@@ -81,7 +81,7 @@ const Documents: React.FC<StepComponentProps> = ({
   setUserData,
 }) => {
   return (
-    <div className="w-2/5 mobile:w-full shadow rounded mx-auto">
+    <div className="w-2/5 max-mobile:w-full shadow rounded mx-auto">
       <Formik
         initialValues={{
           idFront: null,
