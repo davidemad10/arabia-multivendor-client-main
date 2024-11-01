@@ -3,10 +3,12 @@ import { orange } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import { useState } from "react";
 import Profile from "./UserDashboardComponents/Profile";
 import Wishlist from "./UserDashboardComponents/Wishlist";
 import Orders from "./UserDashboardComponents/Orders";
+import Address from "./UserDashboardComponents/Address";
 
 const menuItems = [
   {
@@ -23,6 +25,13 @@ const menuItems = [
     title: "orders",
     icon: <ListAltIcon sx={{ color: orange[900] }}></ListAltIcon>,
     component: <Orders></Orders>,
+  },
+  {
+    title: "address",
+    icon: (
+      <PersonPinCircleIcon sx={{ color: orange[900] }}></PersonPinCircleIcon>
+    ),
+    component: <Address></Address>,
   },
 ];
 
