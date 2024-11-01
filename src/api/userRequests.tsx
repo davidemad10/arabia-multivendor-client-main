@@ -1,17 +1,5 @@
+import { passwords, registerUserData, userCredentials } from "../types";
 import axiosInstance from "./axiosInstance";
-
-interface registerUserData {
-  email: string;
-  full_name: string;
-  password1: string;
-  password2: string;
-  phone: string;
-}
-
-interface userCredentials {
-  email: string;
-  password: string;
-}
 
 export const registerUser = async (userData: registerUserData) => {
   try {
@@ -19,13 +7,11 @@ export const registerUser = async (userData: registerUserData) => {
       "/account/buyer/register/",
       userData
     );
-    console.log(response);
-
+    console.log("API response ( Register User ) : ", response);
     return response;
   } catch (error: any) {
-    return {
-      message: error || "An unexpected error occurred",
-    };
+    console.error("Register User Error : ", error);
+    return { error: error.response?.data || error.message };
   }
 };
 
@@ -48,11 +34,20 @@ export const login = async (userCredentials: userCredentials) => {
 
 export const forgotPassword = async (email: string) => {
   try {
-    const response = await axiosInstance.post("/account/passwordresetotp/", {
-      email,
-    });
-
-    console.log(response);
+    const response = await axiosInstance.post(
+      "/account/passwordresetotp/",
+      {
+        email,
+      },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("API response (Send OTP to the email) :", response);
     return response;
   } catch (error: any) {
     return {
@@ -62,10 +57,39 @@ export const forgotPassword = async (email: string) => {
 };
 
 export const verifyResetOTP = async (otp: number) => {
-  const response = await axiosInstance.post("/account/passwordresetotp/", {
-    email: "abanoub.medhat.seif@gmail.com",
-    otp,
-  });
-  console.log("API raw response:", response);
-  return response;
+  try {
+    const response = await axiosInstance.post(
+      "/account/passwordresetotpverfiy/",
+      { otp },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("API response (submit OTP):", response);
+    return response;
+  } catch (error: any) {
+    console.error("Verify OTP Error:", error);
+    return { error: error.response?.data || error.message };
+  }
+};
+
+export const updatePassword = async (passwords: passwords) => {
+  try {
+    const response = await axiosInstance.post(
+      "/account/passwordresetconfirm/",
+      { ...passwords },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("API response (update password):", response);
+    return { data: response.data, status: response.status };
+  } catch (error: any) {
+    console.error("Update Password Error:", error);
+    return { error: error.response?.data || error.message };
+  }
 };

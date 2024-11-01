@@ -71,7 +71,7 @@ const AddressData: React.FC<StepComponentProps> = ({
 
   return (
     <>
-      <div className="w-2/5 shadow rounded mx-auto">
+      <div className="w-2/5 max-mobile:w-full shadow rounded mx-auto">
         <form onSubmit={formik.handleSubmit}>
           <CssBaseline enableColorScheme />
           <SignUpContainer direction="column" justifyContent="space-between">

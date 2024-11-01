@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
+
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -18,15 +17,19 @@ import { useState } from "react";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
 import { t } from "i18next";
-import { login } from "../../../api/userRequests";
+import { signIn, selectUserStatus } from "../../../redux/slices/userSlice";
 import { useSnackbar } from "notistack";
 
 import {
   Card,
   SignUpContainer as SignInContainer,
 } from "../../../components/reusables/CustomMUIComponents";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { TransitionsModal } from "../../../components/reusables/PopUpModal";
+import FormDialog from "../../../components/reusables/dialogue";
 
 interface loginFormData {
   email: string;
@@ -36,8 +39,12 @@ interface loginFormData {
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [dialogueOpen, setDialogueOpen] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const status = useSelector(selectUserStatus);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,31 +62,63 @@ export default function SignIn() {
     try {
       const data = {
         ...values,
-        email: values.email.toLowerCase(),
+        email: values.email.toLowerCase(), // Normalize email to lowercase
       };
-      console.log(data);
-      const response = await login(data);
-      console.log(response);
-      enqueueSnackbar("Logged In successfully", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-      });
-      const token = response.data.tokens.access;
-      console.log(token);
 
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
-      //! i need to handle access and refresh tokens
+      console.log("Submitting data:", data);
 
-      navigate("/", { replace: true });
+      const response = await dispatch(signIn(data));
+      console.log("Response from signIn:", response);
+
+      if (signIn.fulfilled.match(response)) {
+        enqueueSnackbar("Logged In successfully", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        navigate("/", { replace: true });
+      } else if (signIn.rejected.match(response)) {
+        const status = response.payload?.status;
+
+        switch (status) {
+          case 401:
+            enqueueSnackbar(`${t("invalidCredentials")}`, {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+            break;
+          case 403:
+            handleInactiveAccount(response.payload.message);
+            break;
+          case 404:
+            enqueueSnackbar("User Not Found", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+            break;
+          default:
+            enqueueSnackbar("Unexpected error occurred", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+            });
+        }
+      }
     } catch (error: any) {
       enqueueSnackbar(
         `${
           error?.response?.data?.detail ||
-          "unexpected error occured, please try again in a few minutes"
+          "Unexpected error occurred, please try again in a few minutes."
         }`,
         {
           variant: "error",
@@ -89,6 +128,31 @@ export default function SignIn() {
           },
         }
       );
+    }
+  };
+
+  const handleInactiveAccount = (message: string) => {
+    if (
+      message ===
+      "Your vendor account is not verified yet. Please wait while we review your documents for verification."
+    ) {
+      enqueueSnackbar("Inactive vendor account", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      setModalOpen(true);
+    } else {
+      setDialogueOpen(true);
+      enqueueSnackbar("Inactive user account", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
     }
   };
 
@@ -112,7 +176,7 @@ export default function SignIn() {
   });
 
   return (
-    <div className="w-3/5 max-h-fit mx-auto rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
+    <div className="w-3/5 max-h-fit mx-auto mt-32 rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">
       <div className="w-5/6 desktop:w-1/2">
         <form onSubmit={formik.handleSubmit}>
           <SignInContainer
@@ -208,18 +272,30 @@ export default function SignIn() {
                   />
                 </FormControl>
 
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ background: "black", borderRadius: "10px" }}
-                >
-                  {t("login")}
-                </Button>
+                {status == "loading" ? (
+                  <LoadingButton
+                    loading
+                    loadingIndicator={t("pleaseWait")}
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      background: "black",
+                      borderRadius: "7px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    {t("login")}
+                  </LoadingButton>
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ background: "black", borderRadius: "10px" }}
+                  >
+                    {t("login")}
+                  </Button>
+                )}
               </Box>
               <Divider>
                 <Typography sx={{ color: "text.secondary" }}>or</Typography>
@@ -299,6 +375,12 @@ export default function SignIn() {
           </span>
         </Typography>
       </div>
+      <TransitionsModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        dialogueText={t("accountUnderReview")}
+      ></TransitionsModal>
+      <FormDialog open={dialogueOpen} setOpen={setDialogueOpen}></FormDialog>
     </div>
   );
 }

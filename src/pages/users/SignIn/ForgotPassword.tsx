@@ -9,6 +9,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { forgotPassword } from "../../../api/userRequests";
 import ConfirmResetOTP from "./confirmResetOtp";
 import { useSnackbar } from "notistack";
+import { t } from "i18next";
 
 interface ForgotPasswordProps {
   open: boolean;
@@ -20,24 +21,34 @@ export default function ForgotPassword({
   handleClose,
 }: ForgotPasswordProps) {
   const [otpOpen, setOtpOpen] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false); // Track loading state
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (email: string) => {
-    //! error handling needs some modifications
-
-    const response = await forgotPassword(email.toLowerCase());
-    console.log("this is from inside handle email sending");
-    console.log(response);
-    if (response) {
-      enqueueSnackbar("An OTP was sent to your email to verify it's you", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
+    setLoading(true); // Start loading
+    try {
+      const response = await forgotPassword(email.toLowerCase());
+      if (response.status === 200) {
+        localStorage.setItem("forgotEmail", email.toLowerCase());
+        enqueueSnackbar("An OTP was sent to your email to verify it's you.", {
+          variant: "success",
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+        });
+        setOtpOpen(true);
+        handleClose();
+      } else {
+        throw new Error(
+          response.error?.response?.data?.message || "Unexpected error"
+        );
+      }
+    } catch (error: any) {
+      enqueueSnackbar(error.message, {
+        variant: "error",
+        anchorOrigin: { vertical: "top", horizontal: "right" },
       });
+    } finally {
+      setLoading(false); // Stop loading
     }
-    setOtpOpen(true);
   };
 
   return (
@@ -51,15 +62,14 @@ export default function ForgotPassword({
             event.preventDefault();
             event.stopPropagation();
             const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries((formData as any).entries());
-            console.log(formJson);
-            console.log(formJson.email);
-            await handleSubmit(formJson.email);
-            handleClose();
+            const { email } = Object.fromEntries(formData.entries()) as {
+              email: string;
+            };
+            await handleSubmit(email);
           },
         }}
       >
-        <DialogTitle>Reset password</DialogTitle>
+        <DialogTitle>{t("resetPassword")}</DialogTitle>
         <DialogContent
           sx={{
             display: "flex",
@@ -68,30 +78,37 @@ export default function ForgotPassword({
             width: "100%",
           }}
         >
-          <DialogContentText>
-            Enter your account&apos;s email address, and we&apos;ll send you a
-            link to reset your password.
-          </DialogContentText>
+          <DialogContentText>{t("enterEmailToSendOTP")}</DialogContentText>
           <OutlinedInput
             autoFocus
             required
-            margin="dense"
             id="email"
             name="email"
-            label="Email address"
             placeholder="Email address"
             type="email"
             fullWidth
+            disabled={loading}
           />
         </DialogContent>
-        <DialogActions sx={{ pb: 3, px: 3 }}>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" type="submit">
-            Continue
+        <DialogActions sx={{ pb: 3, px: 3, gap: 3 }}>
+          <Button
+            onClick={handleClose}
+            disabled={loading}
+            sx={{ color: "black" }}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={loading}
+            sx={{ backgroundColor: "black" }}
+          >
+            {t("continue")}
           </Button>
         </DialogActions>
       </Dialog>
-      <ConfirmResetOTP open={otpOpen} setOpen={setOtpOpen}></ConfirmResetOTP>
+      <ConfirmResetOTP open={otpOpen} setOpen={setOtpOpen} />
     </>
   );
 }

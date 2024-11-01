@@ -11,6 +11,8 @@ import SignUp from "./pages/users/SignUp/SignUp";
 import VendorSignUp from "./pages/vendor/VendorSignUp";
 import CategoryPage from "./pages/common/CategoryPage";
 import BrandProducts from "./pages/common/BrandProducts";
+import UserProfile from "./layouts/UserProfile";
+import UserDashboard from "./pages/users/UserDashboard";
 
 function App() {
   return (
@@ -32,6 +34,9 @@ function App() {
 
           <Route path="/category/:category" element={<CategoryPage />} />
           <Route path="/brand/:slug" element={<BrandProducts />} />
+        </Route>
+        <Route path="/profile" element={<UserProfile></UserProfile>}>
+          <Route index element={<UserDashboard></UserDashboard>}></Route>
         </Route>
       </Routes>
       <ToastContainer></ToastContainer>

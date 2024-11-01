@@ -102,7 +102,7 @@ export default function Home() {
   ];
 
   return (
-    <div>
+    <div className="mt-32">
       <Helmet>
         <title>أربيا - متجر إلكتروني متعدد البائعين</title>
         <link rel="icon" type="image/svg+xml" href="/654651.png" />
