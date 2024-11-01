@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { headerLinks } from "../../constants";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { RiShoppingCart2Line, RiUserLine } from "react-icons/ri";
@@ -10,8 +10,12 @@ import { Trans, useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../../redux/slices/userSlice";
 import ProfileDropdownMenu from "./profileDropdown/ProfileDropdownMenu";
+import { Typography } from "@mui/material";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Profile from "../../pages/users/profile";
 
-export default function Header() {
+export default function ProfileHeader() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const { pathname } = useLocation();
@@ -20,32 +24,17 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowHeader(window.scrollY < lastScrollY);
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   return (
     <header className="flexCenter">
       <div
-        className={`flex fixed gap-2 p-4 ${
-          showHeader ? "top-0" : "-top-44"
-        } duration-200 bg-white z-10 flex-col w-full`}
+        className={`flex fixed gap-2 p-4 top-0 duration-200 bg-white z-10 flex-col w-full`}
       >
-        {/* 1st Header */}
         <div className={`flex flexCenter justify-center h-16 w-full`}>
           <div className={` flex z-10 p-0 h-16 w-full `}>
             <div className="container flexBetween flex desktop:justify-start">
-              <div className="w-2/12 ">
+              <div className="w-2/12 flexBetween">
                 <Link to="/">
                   <img
                     className="w-24"
@@ -53,9 +42,21 @@ export default function Header() {
                     alt="logo"
                   />
                 </Link>
+                <span className="h-6 bg-gray-300 rounded-full w-px mx-2"></span>
+                <Typography
+                  component="h4"
+                  variant="h4"
+                  sx={{
+                    width: "100%",
+                    fontSize: "clamp(1rem, 5vw, 1.15rem)",
+                    color: "grey",
+                  }}
+                >
+                  {t("account")}
+                </Typography>
               </div>
               {/* Search Bar */}
-              <div className="w-1/2 laptop:w-4/12 desktop:w-2/5 desktop:mr-20 mx-6 justify-center">
+              <div className="w-1/2 laptop:w-4/12 desktop:w-3/5 desktop:mr-20 mx-6 justify-center">
                 <div className="relative">
                   <input
                     placeholder={t("search")}
@@ -87,61 +88,15 @@ export default function Header() {
               >
                 <LanguageSelector />
 
-                {isAuthenticated ? (
-                  ""
-                ) : (
-                  <div className="flex flex-row gap-4">
-                    <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                    <div className="flex flexCenter cursor-pointer group">
-                      <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
-                        <Link to={"signin"}>
-                          <Trans i18nKey="login"></Trans>
-                        </Link>
-                      </span>
-                      <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
-                    </div>
-                    <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                    <div className="flex flexCenter cursor-pointer group">
-                      <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
-                        <Link to={"signup"}>
-                          <Trans i18nKey="register"></Trans>
-                        </Link>
-                      </span>
-                      <RiUserLine className="text-blackText text-2xl group-hover:text-Red" />
-                    </div>
-                  </div>
-                )}
-
-                {isAuthenticated && (
-                  <div>
-                    <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                    <div className="relative text-blackText text-2xl hover:text-Red cursor-pointer">
-                      <GrFavorite className="inline-block" />
-                      <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
-                        <span className="text-white text-sm">1</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                <button
-                  onClick={toggleCart}
-                  type="button"
-                  className="relative text-blackText text-2xl hover:text-Red cursor-pointer"
-                >
-                  <RiShoppingCart2Line className="inline-block" />
-                  <div className="absolute top-0 left-4 w-4 h-4 bg-Red rounded-full flex justify-center items-center">
-                    <span className="text-white text-sm">1</span>
-                  </div>
-                </button>
                 {/* avatar and profile */}
-                {isAuthenticated && (
-                  <>
-                    <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                    <ProfileDropdownMenu></ProfileDropdownMenu>
-                  </>
-                )}
+                <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                <Link to={"/"}>
+                  <HomeOutlinedIcon color="action" fontSize="medium" />
+                </Link>
+                <span className="h-8 bg-gray-300 rounded-full w-px"></span>
+                <Link to={"Profile"}>
+                  <ShoppingCartOutlinedIcon color="action" fontSize="medium" />
+                </Link>
               </div>
 
               {/* Mobile Navigation Menu */}
@@ -236,46 +191,6 @@ export default function Header() {
                   </ul>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
-        {/* 2nd Header */}
-        <div className={`justify-center h-16 w-full hidden laptop:flexCenter`}>
-          <div className={` flex p-0 h-16 w-full `}>
-            <div className="container flexBetween flex">
-              <div className=" w-11/12 gap-4 flex flexStart">
-                <div className="flex flexCenter gap-2 bg-Red px-6 py-2 ">
-                  <a className=" font-bold text-white" href="">
-                    جميل الفئات
-                  </a>
-                </div>
-                <ul className="flex gap-6">
-                  {headerLinks.map((link) => (
-                    <li key={link.label}>
-                      <NavLink
-                        className={`hover:text-Red pb-3 border-Red text-blackText ${
-                          pathname === link.route
-                            ? "text-Red border-b-2 font-extrabold"
-                            : "font-bold"
-                        }`}
-                        to={link.route}
-                      >
-                        {<Trans i18nKey={`${link.label}`}></Trans>}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  className={`flex flexCenter cursor-pointer group fixed ${
-                    i18n.dir() === "rtl" ? "left-4" : "right-4"
-                  }`}
-                >
-                  <span className=" text-blackText whitespace-nowrap group-hover:text-Red">
-                    <Link to={"vendorsignup"}>{t("sellWithArabia")}</Link>
-                  </span>
-                  <RiUserLine className="text-blackText text-2xl group-hover:text-Red mx-2" />
-                </div>
-              </div>
             </div>
           </div>
         </div>

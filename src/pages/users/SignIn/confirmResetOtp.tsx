@@ -6,29 +6,49 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { t } from "i18next";
+// import { t } from "i18next";
 import { verifyResetOTP } from "../../../api/userRequests";
 import { useSnackbar } from "notistack";
+import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
+import { confirmResetOTPparams } from "../../../types";
 
-export default function ConfirmResetOTP({ open, setOpen }) {
+export default function ConfirmResetOTP({
+  open,
+  setOpen,
+}: confirmResetOTPparams) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [resetPasswordDialogueOpen, setResetPasswordDialogueOpen] =
+    React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
+  const [loading, setLoading] = React.useState(false);
 
   async function handleSubmit(otp: number) {
     try {
+      setLoading(true);
       const response = await verifyResetOTP(otp);
       console.log(response);
-      enqueueSnackbar("OTP verified! password reset successfully.", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-      });
-      handleClose();
+      if (response.status == 200) {
+        enqueueSnackbar("OTP verified! password reset successfully.", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+        setResetPasswordDialogueOpen(true);
+        handleClose();
+      } else {
+        enqueueSnackbar("Couldn't do it sorry", {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        });
+      }
     } catch (error: any) {
       console.log(error);
       enqueueSnackbar(
@@ -42,6 +62,8 @@ export default function ConfirmResetOTP({ open, setOpen }) {
           },
         }
       );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -64,7 +86,7 @@ export default function ConfirmResetOTP({ open, setOpen }) {
         }}
       >
         <DialogTitle>Email Reset Confirmation</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ width: "30vw", padding: "20px" }}>
           <DialogContentText>Enter OTP to reset password</DialogContentText>
           <TextField
             autoFocus
@@ -78,11 +100,23 @@ export default function ConfirmResetOTP({ open, setOpen }) {
             variant="standard"
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Confirm OTP</Button>
+        <DialogActions className="gap-3">
+          <Button onClick={handleClose} sx={{ color: "black" }}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading}
+            sx={{ backgroundColor: "black", color: "white" }}
+          >
+            Confirm OTP
+          </Button>
         </DialogActions>
       </Dialog>
+      <NewPasswordDialogue
+        open={resetPasswordDialogueOpen}
+        setOpen={setResetPasswordDialogueOpen}
+      ></NewPasswordDialogue>
     </React.Fragment>
   );
 }
