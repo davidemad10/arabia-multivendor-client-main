@@ -55,5 +55,22 @@
   "address1": "Address 1",
   "address2": "Address 2",
   "addressInfo": "Address Info",
-  "accountUnderReview": "Your account is currently under review to ensure that all the submitted documents are valid. This process may take a couple of days. We appreciate your patience and will notify you as soon as the review is complete."
+  "accountUnderReview": "Your account is currently under review to ensure that all the submitted documents are valid. This process may take a couple of days. We appreciate your patience and will notify you as soon as the review is complete.",
+  "invalidCredentials": "Email or password is incorrect",
+  "sellWithArabia": "Sell On Arabia",
+  "rememberMe": "Remember Me",
+  "pleaseWait": "Please Wait ... ",
+  "resetYourPassword": "Please enter your new password to reset your account password. Make sure it is at least 8 characters long and contains a combination of letters, numbers, and special characters.",
+  "resetPasswordTitle": "Reset your password",
+  "enterEmailToSendOTP": "Enter your account's email address, and we'll send you an OTP to reset your password.",
+  "resetPassword": "Reset Password",
+  "cancel": "Cancel",
+  "continue": "Continue",
+  "yourProfile": "Your Profile",
+  "logout": "Log out",
+  "account": "Account",
+  "hala": "Hala !",
+  "wishlist": "Wishlist",
+  "profile": "Profile",
+  "orders": "Your Orders"
 }

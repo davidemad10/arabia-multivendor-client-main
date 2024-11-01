@@ -56,3 +56,26 @@ export interface TransitionsModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
+
+export interface registerUserData {
+  email: string;
+  full_name: string;
+  password1: string;
+  password2: string;
+  phone: string;
+}
+
+export interface userCredentials {
+  email: string;
+  password: string;
+}
+
+export interface passwords {
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface confirmResetOTPparams {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
