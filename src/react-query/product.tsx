@@ -22,3 +22,5 @@ export function useGetCategories(parent: string, featured: boolean) {
     refetchOnWindowFocus: false,
   });
 }
+
+// Get Products by category

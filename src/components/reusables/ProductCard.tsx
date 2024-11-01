@@ -1,75 +1,79 @@
-import { motion } from "framer-motion";
-import {
-  MdAddShoppingCart,
-  MdOutlineFavorite,
-  MdOutlineStar,
-} from "react-icons/md";
+import { MdOutlineFavorite, MdOutlineStar } from "react-icons/md";
+import { TiShoppingCart } from "react-icons/ti";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiDiscountPercentFill } from "react-icons/ri";
-import { TiShoppingCart } from "react-icons/ti";
+import { motion } from "framer-motion";
 
-export default function ProductCard() {
+interface ProductCardProps {
+  product: {
+    id: number;
+    name: string;
+    image: string;
+    price: string;
+    oldPrice?: string;
+    discount?: string;
+    rating?: number;
+    ratingCount?: string;
+    isBestSeller?: boolean;
+  };
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="flex bg-white  flex-col flexCenter p-4 border border-gray-200 rounded-xl shadow-lg w-56 h-[470px]">
+    <div className="flex bg-white flex-col flexCenter p-3 border border-gray-200 rounded-lg shadow-md w-48 h-[420px]">
       <div className="flex w-full relative">
-        <div className=" absolute -mt-3 w-full flex flexBetween">
-          <span className=" bg-stone-600 rounded-xl px-2 py-px text-white text-sm">
-            الأكثر مبيعا
-          </span>
-          <div className="flex flexCenter text-2xl bg-white shadow-2xl  p-2 rounded-lg cursor-pointer text-Red">
-            <MdOutlineFavorite></MdOutlineFavorite>
+        <div className="absolute -mt-3 w-full flex justify-between">
+          {product.isBestSeller && (
+            <span className="absolute top-2 start-2 bg-stone-600 rounded-lg px-2 py-1 text-white text-xs">
+              Best Seller
+            </span>
+          )}
+          <div className="absolute top-2 end-2 flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer text-red-500">
+            <MdOutlineFavorite />
           </div>
         </div>
-        <img
-          className="w-full"
-          src="https://media.istockphoto.com/id/1715008870/vector/mobile-phone-templates-similar-to-iphone-mockup.jpg?s=2048x2048&w=is&k=20&c=Cu7gh_R_TWT6E8Lga446rdj6jIKeB2mRvc4-Lc_UNWw="
-          alt=""
-        />
-        <div className=" bottom-0 mb-2 absolute w-full flex flexBetween">
-          <div className=" px-2 rounded-xl bg-white shadow-2xl flexCenter flex gap-2">
-            <div className="flex flexCenter">
-              <span>4.6</span>
-              <span>
-                {" "}
-                <MdOutlineStar className="text-Red"></MdOutlineStar>{" "}
-              </span>
+        <img className="w-full " src={product.image} alt={product.name} />
+        <div className="bottom-0 mb-1 absolute w-full flex justify-between">
+          <div className="px-1 rounded-lg bg-white shadow-lg flex items-center gap-1">
+            <div className="flex items-center">
+              <span className="text-sm">{product.rating}</span>
+              <MdOutlineStar className="text-red-500 text-sm" />
             </div>
-            <span className="text-gray-500 text-sm">(1.2K)</span>
+            <span className="text-gray-500 text-xs">
+              ({product.ratingCount})
+            </span>
           </div>
-          <div className="flex flexCenter text-2xl bg-white shadow-2xl  p-2 rounded-lg cursor-pointer text-blackText">
-            <TiShoppingCart></TiShoppingCart>
+          <div className="flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer text-black">
+            <TiShoppingCart />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col">
-        <h2 className="pb-2 text-blackText">
-          ابل ايوفن 15 بسعة 256 تيتانيوم طبيعي,4....
+      <div className="flex flex-col mt-2">
+        <h2 className="pb-1 text-sm font-semibold text-gray-800 truncate">
+          {product.name}
         </h2>
-        <h2 className=" text-blackText/50 text-sm font-bold ">apple</h2>
-        <div className="flex flexStart mt-1">
-          <div className="flex gap-1">
-            <div className="">
-              <span className="text-gray-500 text-sm">جنية</span>
-              <strong className="px-px text-xl font-extrabold text-blackText/90 ">
-                1000
-              </strong>
-            </div>
-            <div className="flex flexEnd gap-1">
-              <span className=" line-through text-sm pb-2 text-gray-500">
-                45465
+        <div className="flex items-center mt-1">
+          <strong className="text-lg font-bold text-gray-900">
+            {product.price}
+          </strong>
+          {product.oldPrice && (
+            <div className="flex items-end gap-1 ml-2">
+              <span className="line-through text-xs text-gray-500">
+                {product.oldPrice}
               </span>
-              <span className=" font-bold text-sm pb-2 text-green-600">
-                خصم 20%
+              <span className="font-semibold text-xs text-green-600">
+                {product.discount}
               </span>
             </div>
-          </div>
+          )}
         </div>
-        <div className=" mt-2 relative h-8 overflow-hidden flex flexCenter w-full ">
+
+        <div className="mt-1 relative h-6 overflow-hidden flex items-center w-full">
           <motion.div
             className="absolute gap-1 flex"
             animate={{
-              translateX: ["165px", "-165px"],
+              translateX: ["140px", "-140px"],
               transition: {
                 duration: 8,
                 repeat: Infinity,
@@ -78,14 +82,14 @@ export default function ProductCard() {
               },
             }}
           >
-            <TbTruckDelivery className="text-xl text-blue-500"></TbTruckDelivery>
-            <p className="text-sm text-gray-400">توصيل مجاني</p>
+            <TbTruckDelivery className="text-lg text-blue-500" />
+            <p className="text-xs text-gray-400">Free Delivery</p>
           </motion.div>
 
           <motion.div
             className="absolute gap-1 flex"
             animate={{
-              translateX: ["165px", "-165px"],
+              translateX: ["140px", "-140px"],
               transition: {
                 duration: 8,
                 repeat: Infinity,
@@ -95,14 +99,9 @@ export default function ProductCard() {
               },
             }}
           >
-            <RiDiscountPercentFill className="text-xl text-Red"></RiDiscountPercentFill>
-            <p className="text-sm text-gray-400">الحق الخصومات</p>
+            <RiDiscountPercentFill className="text-lg text-red-500" />
+            <p className="text-xs text-gray-400">Grab Discounts</p>
           </motion.div>
-        </div>
-        <div className="flex mt-2 flexStart">
-          <span className="w-fit font-extrabold text-white px-2 py-px bg-Red text-xs rounded-b-xl font-Reem rounded-tr-xl">
-            Arpia
-          </span>
         </div>
       </div>
     </div>

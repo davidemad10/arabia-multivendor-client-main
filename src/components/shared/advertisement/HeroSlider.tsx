@@ -23,7 +23,7 @@ export default function HeroSlider({ sliders, isPending }: HeroSliderProps) {
       loop
       pagination={true}
       autoplay={{ delay: 7000 }}
-      className=" container h-96 cursor-grab my-10"
+      className=" container h-fit cursor-grab my-10"
     >
       {isPending && !sliders ? (
         <div className='w-full relative flex flexCenter h-screen bg-[url("./panar")] bg-cover'>
@@ -34,7 +34,7 @@ export default function HeroSlider({ sliders, isPending }: HeroSliderProps) {
           {sliders.map((slider) => (
             <SwiperSlide key={slider.id}>
               <div
-                className="w-full flex flexCenter h-screen bg-contain bg-center bg-no-repeat"
+                className="w-full flex flexCenter h-80 bg-cover bg-center bg-no-repeat"
                 style={{
                   backgroundImage: `url(${slider.translations[lang].image})`,
                 }}

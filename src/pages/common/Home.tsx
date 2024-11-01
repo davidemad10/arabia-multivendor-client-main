@@ -1,14 +1,75 @@
+import React, { useEffect, useState } from "react";
 import HeroSlider from "../../components/shared/advertisement/HeroSlider";
 import CategoriesSlider from "../../components/shared/products/CategoriesSlider";
 import ProductsSlider from "../../components/shared/products/ProductsSlider";
 import { Helmet } from "react-helmet";
-import { useGetHeroSliders } from "../../react-query/advertisement";
-import { useTranslation } from "react-i18next";
-import { useGetCategories } from "../../react-query/product";
+// import { useTranslation } from "react-i18next";
+import BrandsSlider from "../../components/shared/products/BrandsSlider";
+import axiosInstance from "../../api/axiosInstance";
+import { Categories } from "../../types";
+import { Product } from "../../types";
 
 export default function Home() {
-  const { t } = useTranslation();
-  const sliders = useGetHeroSliders();
+  const [categories, setCategories] = useState<Categories[]>([]);
+  const [categoryProducts, setCategoryProducts] = useState<
+    Record<string, Product[]>
+  >({});
+  const [isPending, setIsPending] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setIsPending(true);
+      try {
+        const response = await axiosInstance.get("/products/category/");
+        setCategories(response.data);
+        console.log("................................", response.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        setIsPending(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      const productsData: Record<string, Product[]> = {};
+      for (const category of categories) {
+        try {
+          const response = await axiosInstance.get(`/products/bycategory`, {
+            params: { category: category.slug },
+          });
+          console.log("Products By category", response.data);
+          productsData[category.slug] = response.data.map((product: any) => ({
+            id: product.id,
+            name: product.translations.en.name,
+            image: product.images[0]?.image, // First image for simplicity
+            price: product.price_after_discount,
+            oldPrice: product.price_before_discount,
+            rating: product.total_views, // Adjust as needed if you have a rating system
+            isBestSeller: product.total_sold > 50, // Example condition
+            description: product.translations.en.description,
+            slug: product.slug,
+          }));
+        } catch (error) {
+          console.error(
+            `Failed to fetch products for category ${category.slug}:`,
+            error
+          );
+        }
+      }
+      setCategoryProducts(productsData);
+      console.log("Products", categoryProducts);
+      setIsPending(false);
+    };
+
+    if (categories.length > 0) {
+      fetchProductsByCategory();
+    }
+  }, [categories]);
+
   const slidersData = [
     {
       id: 1,
@@ -16,11 +77,11 @@ export default function Home() {
       translations: {
         en: {
           image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmmtd3mWeWVVigqi7yYl7K0uEzxHsXdH2-Rw&s",
+            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg",
         },
         ar: {
           image:
-            "https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=600",
+            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg",
         },
       },
     },
@@ -30,84 +91,15 @@ export default function Home() {
       translations: {
         en: {
           image:
-            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
+            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg",
         },
         ar: {
           image:
-            "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
+            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg",
         },
       },
     },
   ];
-
-  const categoriesData = [
-    {
-      id: 1,
-      image:
-        "https://static.vecteezy.com/system/resources/previews/006/687/367/original/sport-wear-community-logo-design-free-vector.jpg",
-      translations: {
-        en: {
-          name: "Category 1",
-        },
-        ar: {
-          name: "فئة 1",
-        },
-      },
-      slug: "category-1",
-      is_featured: false,
-      lft: 1,
-      rght: 2,
-      depth: 1,
-      parent_id: null,
-      tree_id: 1,
-      level: 1,
-      parent: 0,
-    },
-    {
-      id: 2,
-      image: "https://cdn-icons-png.flaticon.com/128/2278/2278984.png",
-      translations: {
-        en: {
-          name: "Category 2",
-        },
-        ar: {
-          name: "فئة 2",
-        },
-      },
-      slug: "category-2",
-      is_featured: false,
-      lft: 3,
-      rght: 4,
-      depth: 1,
-      parent_id: null,
-      tree_id: 1,
-      level: 1,
-      parent: 0,
-    },
-    {
-      id: 3,
-      image: "https://cdn-icons-png.flaticon.com/128/2954/2954918.png",
-      translations: {
-        en: {
-          name: "Category 3",
-        },
-        ar: {
-          name: "فئة 3",
-        },
-      },
-      slug: "category-3",
-      is_featured: false,
-      lft: 5,
-      rght: 6,
-      depth: 1,
-      parent_id: null,
-      tree_id: 1,
-      level: 1,
-      parent: 0,
-    },
-  ];
-
-  const categories = useGetCategories("", true);
 
   return (
     <div>
@@ -137,153 +129,31 @@ export default function Home() {
         <meta property="og:url" content="https://example.com/home" />
       </Helmet>
       <main>
-        <div className=" flexCenter flex-col">
-          <div className=" container flex justify-center flex-col">
-            <div className="pb-1 w-full">
-              <img src="/Banner-Egypt-1697117327.jpg" alt="" />
+        <div className="flexCenter flex-col">
+          <div className="container flex justify-center flex-col">
+            <HeroSlider sliders={slidersData} isPending={isPending} />
+            <CategoriesSlider categories={categories} isPending={isPending} />
+            <div className="w-full flexCenter">
+              <BrandsSlider />
             </div>
-            <div className="">
-              <HeroSlider
-                // sliders={sliders.data || []}
-                sliders={slidersData}
-                isPending={sliders.isPending}
+
+            {categories.map((category) => (
+              <ProductsSlider
+                key={category.id}
+                title={category.translations.en.name}
+                link={`/products/category/${category.slug}`}
+                products={categoryProducts[category.slug] || []}
+                isPending={isPending}
               />
-            </div>
-            <div className="">
-              <CategoriesSlider
-                categories={categories.data || categoriesData}
-                isPending={categories.isPending}
-              ></CategoriesSlider>
-            </div>
-            <div className="w-full flexCenter ">
-              <div className="w-1/5">
-                <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/24-b2s-gaming-monitors-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/23-b2s-smarthome-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/25-b2s-smart-watch-ar3.jpg" alt="" />
-              </div>
-              <div className="w-1/5">
-                <img src="/22-b2s-projectors-ar3.jpg" alt="" />
-              </div>
-            </div>
-
-            {/* <div className=' container  flexCenter py-10 flex-col'>
-              <h4 className=' text-blackText font-medium text-2xl '>مباشرة من نايكي</h4>
-              <h3 className=' text-blackText font-bold text-4xl py-10'>مجموعة جديدة</h3>
-              <div className=' flexCenter w-full md:h-[700px] mb-10  '>
-                <div className=' flexCenter  h-full w-1/2   flex-wrap gap-9   '>
-                  <div className='w-2/5 md:h-[47.5%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                  <div className='w-2/5 md:h-[47%] gap-14   rounded-lg  flexCenter flex-col bg-gray-100'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex flexAround w-full'>
-                      <h3 className='font-bold  text-black '>نايك اس بي زووم</h3>
-                      <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                    </div>
-                  </div>
-                </div>
-                <div className=' gap-36 flex-col flexCenter w-2/5 rounded-lg bg-gray-100 h-full'>
-                  <div className='flex flexAround gap-96 w-full'>
-                    <h3 className=' text-white bg-black rounded-2xl px-3 py-1'>بيع -50%</h3>
-                    <span className=' px-3 py-1 text-orange-500 font-bold bg-white rounded-xl text-sm'>999$</span>
-                  </div>
-                  <div className=' flexCenter w-full flex-col'>
-                    <img className='w-2/3 ' src="./5646.png" alt="" />
-                    <div className='flex w-full gap-5 flex-col items-start px-16 justify-center'>
-                      <h3 className='font-bold text-2xl text-black'>نايك اير فورس 1 شادو</h3>
-                      <p className='text-gray-400 text-sm'>العلامة التجارية: نايك</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button className='button1 px-6 h-14 w-52 font-bold'>اكتشف منتجات أخرى</button>
-            </div> */}
-
-            <div className="w-full flexCenter flex-col">
-              <div className=" block">
-                <img src="/c9b30476-e522-45b1-b0db-f0614b26896d.avif" alt="" />
-              </div>
-              <div className="flexCenter gap-4">
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img
-                    src="/c2e07874-0e43-49e3-b73a-c481dc63c818.avif"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img src="/879.avif" alt="" />
-                </div>
-                <div>
-                  <img
-                    src="/3b2804b6-956e-481d-8442-776edf7d2003.avif"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full block">
-              <img src="/00ceba07-888888745.avif" alt="" />
-            </div>
-            <div className="">
-              <ProductsSlider></ProductsSlider>
-            </div>
+            ))}
+            {/* Products Sliders */}
+            {/* <ProductsSlider title="Trending Now" link="/trending" />
+            <ProductsSlider title="Time-limited Offers" link="/offers" />
+            <ProductsSlider title="Women Collection" link="/women" />
+            <ProductsSlider title="Electronics" link="/electronics" /> */}
           </div>
         </div>
       </main>
     </div>
   );
-}
-
-{
-  /* <Helmet>
-  <title>Arbia - Multi-vendor Online Store</title>
-  <meta name="description" content="Arbia is a diverse online store offering a wide range of products from various vendors. Shop now and discover exclusive deals and featured products." />
-  <meta name="keywords" content="Arbia, online store, shop online, multi-vendor products, vendors, special offers, shopping" />
-  <meta property="og:title" content="Arbia - Multi-vendor Online Store" />
-  <meta property="og:description" content="Arbia is your go-to destination for online shopping. Browse a wide selection of products and deals from top vendors." />
-  <meta property="og:image" content="https://example.com/path/to/your/og-image.jpg" />
-  <meta property="og:url" content="https://example.com/home" />
-  <link rel="alternate" hreflang="en" href="https://example.com/home/en" />
-  <link rel="alternate" hreflang="ar" href="https://example.com/home/ar" />
-  </Helmet> */
-}
-{
-  /* <button className='button1 px-6 h-14 w-52 font-bold text-white'>ابدأ التسوق</button> */
 }
