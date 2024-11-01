@@ -9,7 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import SignIn from "./pages/users/SignIn/SignIn";
 import SignUp from "./pages/users/SignUp/SignUp";
 import VendorSignUp from "./pages/vendor/VendorSignUp";
-import Profile from "./pages/users/profile";
+import UserProfile from "./layouts/UserProfile";
+import UserDashboard from "./pages/users/UserDashboard";
 
 function App() {
   return (
@@ -20,7 +21,6 @@ function App() {
           <Route path="/:category" element={<Products></Products>}></Route>
           <Route path="/signin" element={<SignIn></SignIn>}></Route>
           <Route path="/signup" element={<SignUp></SignUp>}></Route>
-          <Route path="/profile" element={<Profile></Profile>}></Route>
           <Route
             path="/vendorsignup"
             element={<VendorSignUp></VendorSignUp>}
@@ -29,6 +29,9 @@ function App() {
             path="/products/:sku"
             element={<ProductDetails></ProductDetails>}
           ></Route>
+        </Route>
+        <Route path="/profile" element={<UserProfile></UserProfile>}>
+          <Route index element={<UserDashboard></UserDashboard>}></Route>
         </Route>
       </Routes>
       <ToastContainer></ToastContainer>

@@ -1,13 +1,7 @@
-import * as React from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -27,26 +21,15 @@ const openedMixin = (theme: Theme): CSSObject => ({
   overflowX: "hidden",
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
+
+const HEADER_HEIGHT = 180;
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -55,19 +38,24 @@ const Drawer = styled(MuiDrawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+  marginTop: HEADER_HEIGHT,
   variants: [
     {
       props: ({ open }) => open,
       style: {
         ...openedMixin(theme),
-        "& .MuiDrawer-paper": openedMixin(theme),
+        "& .MuiDrawer-paper": {
+          ...openedMixin(theme),
+          marginTop: HEADER_HEIGHT,
+        },
       },
     },
     {
       props: ({ open }) => !open,
       style: {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
+        "& .MuiDrawer-paper": {
+          marginTop: HEADER_HEIGHT,
+        },
       },
     },
   ],
@@ -75,91 +63,46 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer() {
   const { i18n } = useTranslation();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setOpen(!open);
-  };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <>
       <Drawer
         variant="permanent"
         anchor={i18n.dir() === "rtl" ? "right" : "left"}
-        open={open}
+        open={true}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerToggle}>
-            {i18n.dir() === "rtl" ? (
-              open ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )
-            ) : open ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
         <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
+                sx={{
+                  minHeight: 48,
+                  px: 2.5,
+                  justifyContent: "initial",
+                }}
               >
                 <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: "center",
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: "auto",
-                        },
-                  ]}
+                  sx={{
+                    minWidth: 0,
+                    justifyContent: "center",
+                    mr: 3,
+                  }}
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
+                <ListItemText primary={text} sx={{ opacity: 1 }} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, marginTop: HEADER_HEIGHT, overflowY: "auto" }}
+      >
         <DrawerHeader />
+        {/* Your main content */}
       </Box>
-    </Box>
+    </>
   );
 }
