@@ -4,7 +4,7 @@ import axiosInstance from "../../api/axiosInstance";
 import ProductsSlider from "../../components/shared/products/ProductsSlider";
 import { Product } from "../../types";
 import Filter from "../../components/shared/products/Filter";
-import AccordionUsage from "../../components/shared/products/AccordionUsage";
+// import AccordionUsage from "../../components/shared/products/AccordionUsage";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -41,7 +41,7 @@ export default function CategoryPage() {
         title={category || "Products"}
         link={`/category/${category}`}
       /> */}
-            <AccordionUsage></AccordionUsage>
+            {/* <AccordionUsage></AccordionUsage> */}
             <Filter></Filter>
           </div>
         </div>
