@@ -7,12 +7,13 @@ import { Helmet } from "react-helmet";
 import BrandsSlider from "../../components/shared/products/BrandsSlider";
 import axiosInstance from "../../api/axiosInstance";
 import { Categories } from "../../types";
-import { Trans, useTranslation } from "react-i18next";
+import { Product } from "../../types";
 
 export default function Home() {
-  const { i18n, t } = useTranslation();
-
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [categoryProducts, setCategoryProducts] = useState<
+    Record<string, Product[]>
+  >({});
   const [isPending, setIsPending] = useState<boolean>(true);
 
   useEffect(() => {
@@ -31,6 +32,43 @@ export default function Home() {
 
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      const productsData: Record<string, Product[]> = {};
+      for (const category of categories) {
+        try {
+          const response = await axiosInstance.get(`/products/bycategory`, {
+            params: { category: category.slug },
+          });
+          console.log("Products By category", response.data);
+          productsData[category.slug] = response.data.map((product: any) => ({
+            id: product.id,
+            name: product.translations.en.name,
+            image: product.images[0]?.image, // First image for simplicity
+            price: product.price_after_discount,
+            oldPrice: product.price_before_discount,
+            rating: product.total_views, // Adjust as needed if you have a rating system
+            isBestSeller: product.total_sold > 50, // Example condition
+            description: product.translations.en.description,
+            slug: product.slug,
+          }));
+        } catch (error) {
+          console.error(
+            `Failed to fetch products for category ${category.slug}:`,
+            error
+          );
+        }
+      }
+      setCategoryProducts(productsData);
+      console.log("Products", categoryProducts);
+      setIsPending(false);
+    };
+
+    if (categories.length > 0) {
+      fetchProductsByCategory();
+    }
+  }, [categories]);
 
   const slidersData = [
     {
@@ -99,11 +137,20 @@ export default function Home() {
               <BrandsSlider />
             </div>
 
+            {categories.map((category) => (
+              <ProductsSlider
+                key={category.id}
+                title={category.translations.en.name}
+                link={`/products/category/${category.slug}`}
+                products={categoryProducts[category.slug] || []}
+                isPending={isPending}
+              />
+            ))}
             {/* Products Sliders */}
-            <ProductsSlider title="Trending Now" link="/trending" />
+            {/* <ProductsSlider title="Trending Now" link="/trending" />
             <ProductsSlider title="Time-limited Offers" link="/offers" />
             <ProductsSlider title="Women Collection" link="/women" />
-            <ProductsSlider title="Electronics" link="/electronics" />
+            <ProductsSlider title="Electronics" link="/electronics" /> */}
           </div>
         </div>
       </main>
