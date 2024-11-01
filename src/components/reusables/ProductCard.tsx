@@ -3,6 +3,7 @@ import { TiShoppingCart } from "react-icons/ti";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { motion } from "framer-motion";
+import axiosInstance from "../../api/axiosInstance";
 
 interface ProductCardProps {
   product: {
@@ -19,6 +20,21 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const addToCart = async () => {
+    try {
+      const response = await axiosInstance.post(
+        "http://127.0.0.1:8000/en/api/order/addcart/",
+        {
+          product_id: product.id,
+          quantity: 1,
+        }
+      );
+      console.log("Product added to cart:", response.data);
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
+
   return (
     <div className="flex bg-white flex-col flexCenter p-3 border border-gray-200 rounded-lg shadow-md w-48 h-[420px]">
       <div className="flex w-full relative">
@@ -43,7 +59,10 @@ export default function ProductCard({ product }: ProductCardProps) {
               ({product.ratingCount})
             </span>
           </div>
-          <div className="flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer text-black">
+          <div
+            className="flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer text-black"
+            onClick={addToCart}
+          >
             <TiShoppingCart />
           </div>
         </div>

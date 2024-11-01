@@ -31,7 +31,7 @@ interface ProductsSliderProps {
 export default function ProductsSlider({
   title,
   link,
-  products, // Default to mock data for testing
+  products,
 }: ProductsSliderProps) {
   const { i18n, t } = useTranslation();
 
