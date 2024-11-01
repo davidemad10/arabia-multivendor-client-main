@@ -120,7 +120,7 @@ const VendorData: React.FC<StepComponentProps> = ({
 
   return (
     <>
-      <div className="w-2/5 max-mobile:w-full shadow rounded mx-auto">
+      <div className="w-2/5 mt-32 max-mobile:w-full shadow rounded mx-auto">
         <form onSubmit={formik.handleSubmit}>
           <CssBaseline enableColorScheme />
           <SignUpContainer direction="column" justifyContent="space-between">
