@@ -67,6 +67,10 @@
   "cancel": "الغاء",
   "continue": "استمرار",
   "yourProfile": "ملفك الشخصى",
-  "Logout": "تسجيل الخروج",
-  "account": "الحساب"
+  "logout": "تسجيل الخروج",
+  "account": "الحساب",
+  "hala": "أهلا !",
+  "wishlist": "المفضلة",
+  "profile": "حسابك",
+  "orders": "طلباتك"
 }
