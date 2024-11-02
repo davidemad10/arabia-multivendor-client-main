@@ -8,24 +8,27 @@ import Box from "@mui/material/Box";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Button, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 // Localization
 import { t } from "i18next";
 import { useState } from "react";
+import { getUser } from "../../../../public/utils/functions";
 export default function Profile() {
-  const [showPassword, setShowPassword] = useState(false);
   // const [requestLoading, setRequestLoading] = useState(false);
-  const initialInputActiveStatus = {
+  const token = sessionStorage.getItem("accessToken");
+  const user = getUser(token);
+  // console.log(user);
+
+  const initialInputStatus = {
     fullname: true,
     email: true,
     Password: true,
     phoneNumber: true,
   };
 
-  const [activeFields, setActiveFields] = useState(initialInputActiveStatus);
+  const [inActiveFields, setInActiveFields] = useState(initialInputStatus);
 
   const schema = z.object({
     fullname: z
@@ -36,36 +39,24 @@ export default function Profile() {
       .string()
       .email({ message: "Invalid email address" })
       .min(1, { message: "The Email address is required" }),
-    password: z
-      .string()
-      .min(8, { message: "Must be 8 or more characters long" })
-      .max(30, { message: "Must be 30 characters or less" }),
     phoneNumber: z
       .string()
       .min(6, { message: "Must be 6 or more characters long" })
       .max(15, { message: "Must be 15 characters or less" })
-      .regex(/^[0-9]+$/, {
+      .regex(/^\+?[0-9]+$/, {
         message: "Only numbers are allowed",
       }),
   });
 
   const formik = useFormik({
     initialValues: {
-      fullname: "Abanoub medhat",
-      email: "Abanpoub@adassd.componen",
-      password: "abanoub@123",
-      phoneNumber: "01207297358",
+      fullname: user.full_name,
+      email: "Abanoub@gmail.com",
+      phoneNumber: user.phone,
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: async (values) => {
-      const final = {
-        email: values.email,
-        full_name: values.fullname,
-        password1: values.password,
-        phone: values.phoneNumber.replace(/\s/g, ""),
-      };
-      console.log("Submitted");
-      console.log(final);
+      console.log(values);
     },
   });
 
@@ -79,7 +70,7 @@ export default function Profile() {
             <FormLabel htmlFor="fullname">{t("fullName")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
               <TextField
-                disabled={activeFields.fullname}
+                disabled={inActiveFields.fullname}
                 className="w-10/12"
                 autoComplete="fullname"
                 name="fullname"
@@ -96,7 +87,7 @@ export default function Profile() {
               />
               <span
                 onClick={() => {
-                  setActiveFields((state) => ({
+                  setInActiveFields((state) => ({
                     ...state,
                     fullname: !state.fullname,
                   }));
@@ -111,7 +102,7 @@ export default function Profile() {
             <FormLabel htmlFor="email">{t("email")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
               <TextField
-                disabled={activeFields.email}
+                disabled
                 className="w-10/12"
                 required
                 id="email"
@@ -127,55 +118,9 @@ export default function Profile() {
               />
               <span
                 onClick={() => {
-                  setActiveFields((state) => ({
+                  setInActiveFields((state) => ({
                     ...state,
                     email: !state.email,
-                  }));
-                }}
-              >
-                <EditIcon className="hover:cursor-pointer" color="action" />
-              </span>
-            </div>
-          </FormControl>
-
-          <FormControl className="w-5/12 flex">
-            <FormLabel htmlFor="password">{t("password")}</FormLabel>
-            <div className="w-full flex gap-4 items-center">
-              <TextField
-                disabled={activeFields.Password}
-                className="w-10/12"
-                required
-                name="password"
-                type={showPassword ? "text" : "password"}
-                id="password"
-                variant="outlined"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-                color={formik.errors.password ? "error" : "primary"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        onMouseDown={(event) => event.preventDefault()} // Prevent focus loss
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <span
-                onClick={() => {
-                  setActiveFields((state) => ({
-                    ...state,
-                    Password: !state.Password,
                   }));
                 }}
               >
@@ -188,7 +133,7 @@ export default function Profile() {
             <FormLabel htmlFor="phoneNumber">{t("phoneNumber")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
               <TextField
-                disabled={activeFields.phoneNumber}
+                disabled={inActiveFields.phoneNumber}
                 className="w-10/12"
                 required
                 name="phoneNumber"
@@ -209,9 +154,9 @@ export default function Profile() {
               />
               <span
                 onClick={() => {
-                  setActiveFields((state) => ({
+                  setInActiveFields((state) => ({
                     ...state,
-                    phoneNumber: !state.phoneNumber,
+                    phoneNumber: false,
                   }));
                 }}
               >
@@ -221,21 +166,20 @@ export default function Profile() {
           </FormControl>
           {/*
            */}
-
-          <Button
-            type="submit"
-            disabled
-            variant="contained"
-            className="w-1/5"
-            sx={{
-              background: "black",
-              borderRadius: "3px",
-              marginTop: "10px",
-            }}
-          >
-            <p className="font-semibold">{t("updateProfile")}</p>
-          </Button>
         </Box>
+        <Button
+          type="submit"
+          disabled={!formik.dirty && formik.isValid}
+          variant="contained"
+          className="w-1/5"
+          sx={{
+            background: "black",
+            borderRadius: "3px",
+            marginTop: "30px",
+          }}
+        >
+          <p className="font-semibold">{t("updateProfile")}</p>
+        </Button>
       </form>
     </div>
   );
