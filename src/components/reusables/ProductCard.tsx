@@ -4,6 +4,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import axiosInstance from "../../api/axiosInstance";
+const BASE_URL = "http://127.0.0.1:8000";
 
 interface ProductCardProps {
   product: {
@@ -48,7 +49,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             <MdOutlineFavorite />
           </div>
         </div>
-        <img className="w-full " src={product.image} alt={product.name} />
+        <img
+          className="w-full "
+          src={`${BASE_URL}${product.image}`}
+          alt={product.name}
+        />
         <div className="bottom-0 mb-1 absolute w-full flex justify-between">
           <div className="px-1 rounded-lg bg-white shadow-lg flex items-center gap-1">
             <div className="flex items-center">

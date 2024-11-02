@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import ProductsSlider from "../../components/shared/products/ProductsSlider";
 import { Product } from "../../types";
+import ProductCard from "../../components/reusables/ProductCard";
 import Filter from "../../components/shared/products/Filter";
-// import AccordionUsage from "../../components/shared/products/AccordionUsage";
+import { Accordion } from "@mui/material";
+import AccordionUsage from "../../components/shared/products/AccordionUsage";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -15,11 +17,24 @@ export default function CategoryPage() {
     const fetchProductsByCategory = async () => {
       setIsPending(true);
       try {
-        const response = await axiosInstance.get(
-          `/products/bycategory/category=${category}`
-        );
-        setProducts(response.data);
-        console.log("Fetched products:", response.data);
+        const response = await axiosInstance.get(`/products/bycategory`, {
+          params: { category: category },
+        });
+
+        const mappedProducts: Product[] = response.data.map((product: any) => ({
+          id: product.id,
+          name: product.translations.en.name,
+          image: product.images[0]?.image || "", // First image or fallback
+          price: product.price_after_discount,
+          oldPrice: product.price_before_discount,
+          rating: product.total_views,
+          isBestSeller: product.total_sold > 50,
+          description: product.translations.en.description,
+          slug: product.slug,
+        }));
+
+        setProducts(mappedProducts);
+        console.log("Mapped products:", mappedProducts);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -32,17 +47,24 @@ export default function CategoryPage() {
 
   return (
     <main>
-      <div className="flexCenter flex-col">
-        <div className="container flex justify-center flex-col">
-          <div className="container">
-            <h1 className="text-3xl font-bold my-6">{category}</h1>
-            {/* <ProductsSlider
-        products={products}
-        title={category || "Products"}
-        link={`/category/${category}`}
-      /> */}
-            {/* <AccordionUsage></AccordionUsage> */}
-            <Filter></Filter>
+      <div className="m-20 pt-5 flex flex-col bg-white">
+        <h1 className="text-3xl font-bold my-6">{category}</h1>
+        <br />
+        <div className="flex">
+          {/* left */}
+          <div className="left bg-gray-800 w-80 min-h-screen start-0 top-0 p-10 ps-16 max-laptop:hidden">
+            {/* Add filter or any additional components here */}
+            <AccordionUsage />
+          </div>
+          {/* right */}
+          <div className="right flex bg-gray-200 flex-1 p-10">
+            {isPending ? (
+              <p>Loading...</p>
+            ) : (
+              products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            )}
           </div>
         </div>
       </div>
