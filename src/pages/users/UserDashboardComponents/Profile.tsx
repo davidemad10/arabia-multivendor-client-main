@@ -1,34 +1,27 @@
-// External Libraries
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-
-// Material-UI Components
 import Box from "@mui/material/Box";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-
-// Localization
 import { t } from "i18next";
-import { useState } from "react";
 import { getUser } from "../../../../public/utils/functions";
+import { getUserInfo, updateUserInfo } from "../../../api/userRequests";
+import { useSnackbar } from "notistack";
+import { useQuery } from "@tanstack/react-query";
+
 export default function Profile() {
-  // const [requestLoading, setRequestLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
-  // console.log(user);
+  const id = user?.user_id;
 
-  const initialInputStatus = {
-    fullname: true,
-    email: true,
-    Password: true,
-    phoneNumber: true,
-  };
-
-  const [inActiveFields, setInActiveFields] = useState(initialInputStatus);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["account", "users", id],
+    queryFn: () => getUserInfo(id),
+  });
 
   const schema = z.object({
     fullname: z
@@ -50,27 +43,65 @@ export default function Profile() {
 
   const formik = useFormik({
     initialValues: {
-      fullname: user.full_name,
-      email: "Abanoub@gmail.com",
-      phoneNumber: user.phone,
+      fullname: data?.full_name || user.full_name || "",
+      email: data?.data.email,
+      phoneNumber: data?.phone || user.phone || "",
     },
+    enableReinitialize: true,
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: async (values) => {
-      console.log(values);
+      const info = { full_name: values.fullname, phone: values.phoneNumber };
+      try {
+        const response = await updateUserInfo(info, user.user_id);
+        if (response.status === 200) {
+          enqueueSnackbar("Your info updated successfully", {
+            variant: "success",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          });
+        } else {
+          enqueueSnackbar("Couldn't update your info", {
+            variant: "error",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar("An error occurred while updating your info", {
+          variant: "error",
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+        });
+      }
     },
   });
+
+  // useEffect(() => {
+  //   if (data) {
+  //     formik.setValues({
+  //       fullname: data.full_name || user.full_name,
+  //       email: data.data.email,
+  //       phoneNumber: data.phone || user.phone,
+  //     });
+  //   }
+  // }, [data, user, formik]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading user information.</div>;
+  }
 
   return (
     <div className="bg-white w-full mx-auto my-5 p-10">
       <p className="text-gray-700 font-semibold mb-5">{t("PersonalInfo")}</p>
       <form onSubmit={formik.handleSubmit}>
         <Box className="flex flex-wrap gap-9">
-          {/* full name */}
+          {/* Full Name */}
           <FormControl className="w-5/12">
             <FormLabel htmlFor="fullname">{t("fullName")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
               <TextField
-                disabled={inActiveFields.fullname}
                 className="w-10/12"
                 autoComplete="fullname"
                 name="fullname"
@@ -85,19 +116,10 @@ export default function Profile() {
                 helperText={formik.touched.fullname && formik.errors.fullname}
                 color={formik.errors.fullname ? "error" : "primary"}
               />
-              <span
-                onClick={() => {
-                  setInActiveFields((state) => ({
-                    ...state,
-                    fullname: !state.fullname,
-                  }));
-                }}
-              >
-                <EditIcon className="hover:cursor-pointer" color="action" />
-              </span>
             </div>
           </FormControl>
 
+          {/* Email */}
           <FormControl className="w-5/12">
             <FormLabel htmlFor="email">{t("email")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
@@ -116,24 +138,14 @@ export default function Profile() {
                 helperText={formik.touched.email && formik.errors.email}
                 color={formik.errors.email ? "error" : "primary"}
               />
-              <span
-                onClick={() => {
-                  setInActiveFields((state) => ({
-                    ...state,
-                    email: !state.email,
-                  }));
-                }}
-              >
-                <EditIcon className="hover:cursor-pointer" color="action" />
-              </span>
             </div>
           </FormControl>
 
+          {/* Phone Number */}
           <FormControl className="w-5/12 flex">
             <FormLabel htmlFor="phoneNumber">{t("phoneNumber")}</FormLabel>
             <div className="w-full flex gap-4 items-center">
               <TextField
-                disabled={inActiveFields.phoneNumber}
                 className="w-10/12"
                 required
                 name="phoneNumber"
@@ -152,31 +164,15 @@ export default function Profile() {
                 }
                 color={formik.errors.phoneNumber ? "error" : "primary"}
               />
-              <span
-                onClick={() => {
-                  setInActiveFields((state) => ({
-                    ...state,
-                    phoneNumber: false,
-                  }));
-                }}
-              >
-                <EditIcon className="hover:cursor-pointer" color="action" />
-              </span>
             </div>
           </FormControl>
-          {/*
-           */}
         </Box>
         <Button
           type="submit"
           disabled={!formik.dirty && formik.isValid}
           variant="contained"
           className="w-1/5"
-          sx={{
-            background: "black",
-            borderRadius: "3px",
-            marginTop: "30px",
-          }}
+          sx={{ background: "black", borderRadius: "3px", marginTop: "30px" }}
         >
           <p className="font-semibold">{t("updateProfile")}</p>
         </Button>

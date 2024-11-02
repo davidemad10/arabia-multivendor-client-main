@@ -93,3 +93,33 @@ export const updatePassword = async (passwords: passwords) => {
     return { error: error.response?.data || error.message };
   }
 };
+
+export const updateUserInfo = async (info: object, id: string) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/account/users/${id}/`,
+      { ...info },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("API response ( update user info ):", response);
+    return { data: response.data, status: response.status };
+  } catch (error: any) {
+    console.log("Update user info Error:", error);
+    return { error: error.response?.data || error.message };
+  }
+};
+
+export const getUserInfo = async (id: string) => {
+  try {
+    const response = await axiosInstance.get(`/account/users/${id}/`, {
+      withCredentials: true,
+    });
+    console.log("API response ( get user info ):", response);
+    return { data: response.data, status: response.status };
+  } catch (error: any) {
+    console.log("get user info Error:", error);
+    return { error: error.response?.data || error.message };
+  }
+};
