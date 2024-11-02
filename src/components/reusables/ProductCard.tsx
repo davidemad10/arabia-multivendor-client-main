@@ -4,6 +4,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import axiosInstance from "../../api/axiosInstance";
+import { toast } from "react-toastify";
 const BASE_URL = "http://127.0.0.1:8000";
 
 interface ProductCardProps {
@@ -28,9 +29,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         {
           product_id: product.id,
           quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
         }
       );
       console.log("Product added to cart:", response.data);
+      toast.success("Product added to cart successfully!");
     } catch (error) {
       console.error("Error adding product to cart:", error);
     }
@@ -50,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
         <img
-          className="w-full "
+          className="w-52 h-72 object-cover rounded-lg"
           src={`${BASE_URL}${product.image}`}
           alt={product.name}
         />
@@ -74,7 +81,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="flex flex-col mt-2">
-        <h2 className="pb-1 text-sm font-semibold text-gray-800 truncate">
+        <h2 className="pb-1 text-sm text-wrap font-semibold text-gray-800 truncate">
           {product.name}
         </h2>
         <div className="flex items-center mt-1">
@@ -93,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        <div className="mt-1 relative h-6 overflow-hidden flex items-center w-full">
+        {/* <div className="mt-1 relative h-6 overflow-hidden flex items-center w-full">
           <motion.div
             className="absolute gap-1 flex"
             animate={{
@@ -126,7 +133,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <RiDiscountPercentFill className="text-lg text-red-500" />
             <p className="text-xs text-gray-400">Grab Discounts</p>
           </motion.div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
