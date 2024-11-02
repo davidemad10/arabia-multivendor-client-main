@@ -41,7 +41,6 @@ import { registerUser } from "../../../api/userRequests";
 
 // Localization
 import { t } from "i18next";
-import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
