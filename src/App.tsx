@@ -13,6 +13,9 @@ import CategoryPage from "./pages/common/CategoryPage";
 import BrandProducts from "./pages/common/BrandProducts";
 import UserProfile from "./layouts/UserProfile";
 import UserDashboard from "./pages/users/UserDashboard";
+import VendorDashboard from "./components/VendorDashboard/VedorDashboard";
+import Dashboard from "./components/VendorDashboard/Pages/Dashboard/Dashboard";
+import AddProduct from "./components/VendorDashboard/Pages/Products/AddProduct";
 
 function App() {
   return (
@@ -38,6 +41,16 @@ function App() {
         <Route path="/profile" element={<UserProfile></UserProfile>}>
           <Route index element={<UserDashboard></UserDashboard>}></Route>
         </Route>
+
+        
+         {/* Vendor  dashboard Routes */}
+      
+        <Route element={<VendorDashboard />}>
+          <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
+          <Route index path="/AddProducts" element={<AddProduct />}></Route>
+
+        </Route>
+        
       </Routes>
       <ToastContainer></ToastContainer>
     </div>

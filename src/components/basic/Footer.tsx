@@ -78,6 +78,11 @@ const Footer = () => {
               {t("be a vendor")}{" "}
             </Link>
           </li>
+          <li>
+            <Link to={"VedorDashboard"} className="text-xs text-gray-600">
+              {t("Vendor dashboard")}{" "}
+            </Link>
+          </li>
         </ul>
       </div>
     </footer>
