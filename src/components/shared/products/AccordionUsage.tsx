@@ -8,16 +8,27 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
+interface SubCategory {
+  name: string;
+}
+
+interface Category {
+  name: string;
+  subCategories: SubCategory[];
+}
+
 interface AccordionUsageProps {
   setPriceRange: (value: number[]) => void;
   setSelectedBrands: (brands: string[]) => void;
   setSelectedRating: (rating: number | null) => void;
+  setSelectedCategories: (categories: string[]) => void;
 }
 
 export default function AccordionUsage({
   setPriceRange,
   setSelectedBrands,
   setSelectedRating,
+  setSelectedCategories,
 }: AccordionUsageProps) {
   const [localPriceRange, setLocalPriceRange] = React.useState<number[]>([
     0, 500,
@@ -28,10 +39,23 @@ export default function AccordionUsage({
   const [localSelectedRating, setLocalSelectedRating] = React.useState<
     number | null
   >(null);
+  const [localSelectedCategories, setLocalSelectedCategories] = React.useState<
+    string[]
+  >([]);
 
   const brands = ["Brand A", "Brand B", "Brand C", "Brand D"];
 
-  // Handle price range change
+  const categories: Category[] = [
+    {
+      name: "Home & Kitchen",
+      subCategories: [{ name: "Kitchen & Dining" }, { name: "Bath" }],
+    },
+    {
+      name: "Electronics",
+      subCategories: [{ name: "Mobile Phones" }, { name: "Laptops" }],
+    },
+  ];
+
   const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const minPrice = parseInt(event.target.value, 10) || 0;
     setLocalPriceRange([minPrice, localPriceRange[1]]);
@@ -44,7 +68,6 @@ export default function AccordionUsage({
     setPriceRange([localPriceRange[0], maxPrice]);
   };
 
-  // Handle brand change
   const handleBrandChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     const updatedBrands = localSelectedBrands.includes(value)
@@ -54,20 +77,45 @@ export default function AccordionUsage({
     setSelectedBrands(updatedBrands);
   };
 
-  // Handle rating change
   const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const rating = Number(event.target.value);
     setLocalSelectedRating(rating);
     setSelectedRating(rating);
   };
 
-  // Helper function to capitalize the first letter of a string
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    categoryName: string
+  ) => {
+    const { checked } = event.target;
+    const updatedSelectedCategories = checked
+      ? [...localSelectedCategories, categoryName]
+      : localSelectedCategories.filter((name) => name !== categoryName);
+
+    setLocalSelectedCategories(updatedSelectedCategories);
+    setSelectedCategories(updatedSelectedCategories);
+  };
+
+  const handleSubCategoryChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    subCategoryName: string
+  ) => {
+    const { checked } = event.target;
+    const updatedSelectedCategories = checked
+      ? [...localSelectedCategories, subCategoryName]
+      : localSelectedCategories.filter((name) => name !== subCategoryName);
+
+    setLocalSelectedCategories(updatedSelectedCategories);
+    setSelectedCategories(updatedSelectedCategories);
+  };
+
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
     <div className="space-y-4 pt-5 px-2">
+      {/* Price Filter */}
       <Accordion sx={{ boxShadow: "none" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -100,6 +148,7 @@ export default function AccordionUsage({
         </AccordionDetails>
       </Accordion>
 
+      {/* Brand Filter */}
       <Accordion sx={{ boxShadow: "none" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -127,6 +176,7 @@ export default function AccordionUsage({
         </AccordionDetails>
       </Accordion>
 
+      {/* Rating Filter */}
       <Accordion sx={{ boxShadow: "none" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -150,6 +200,53 @@ export default function AccordionUsage({
               }
               label={`${rating} Stars & Up`}
             />
+          ))}
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Category Filter */}
+      <Accordion sx={{ boxShadow: "none" }}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="category-filter-content"
+          id="category-filter-header"
+        >
+          <Typography sx={{ fontWeight: "bold" }}>
+            {capitalizeFirstLetter("category")}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {categories.map((category) => (
+            <div key={category.name}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value={category.name}
+                    checked={localSelectedCategories.includes(category.name)}
+                    onChange={(e) => handleCategoryChange(e, category.name)}
+                  />
+                }
+                label={category.name}
+              />
+              {category.subCategories.map((subCategory) => (
+                <div style={{ paddingLeft: "20px" }} key={subCategory.name}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={subCategory.name}
+                        checked={localSelectedCategories.includes(
+                          subCategory.name
+                        )}
+                        onChange={(e) =>
+                          handleSubCategoryChange(e, subCategory.name)
+                        }
+                      />
+                    }
+                    label={subCategory.name}
+                  />
+                </div>
+              ))}
+            </div>
           ))}
         </AccordionDetails>
       </Accordion>

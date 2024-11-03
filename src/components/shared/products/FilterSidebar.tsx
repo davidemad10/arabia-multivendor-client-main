@@ -1,8 +1,9 @@
 // FilterSidebar.tsx
 import React, { useState } from "react";
-import { Drawer, Button, List, ListItem, ListItemText } from "@mui/material";
+import { Drawer, IconButton } from "@mui/material";
 import AccordionUsage from "./AccordionUsage";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 
 const FilterSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,19 +12,24 @@ const FilterSidebar: React.FC = () => {
     setIsOpen(open);
   };
 
-  const menuItems = ["Home", "About", "Services", "Contact"];
-
   return (
     <>
       <span onClick={() => setIsOpen(true)}>
-        <MenuOutlinedIcon></MenuOutlinedIcon>
+        <MenuOutlinedIcon />
       </span>
-      <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
-        <div
-          role="presentation"
-          onClick={toggleDrawer(false)}
-          onKeyDown={toggleDrawer(false)}
-        >
+      <Drawer anchor="start" open={isOpen} onClose={toggleDrawer(false)}>
+        <div role="presentation" style={{ width: 250 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "8px",
+            }}
+          >
+            <IconButton onClick={toggleDrawer(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
           <AccordionUsage />
         </div>
       </Drawer>

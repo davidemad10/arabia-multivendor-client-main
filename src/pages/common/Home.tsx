@@ -146,7 +146,7 @@ export default function Home() {
               <ProductsSlider
                 key={category.id}
                 title={category.translations.en.name}
-                link={`/products/category/${category.slug}`}
+                link={`/category/${category.slug}`}
                 products={categoryProducts[category.slug] || []}
                 isLoading={isProductsLoading}
               />

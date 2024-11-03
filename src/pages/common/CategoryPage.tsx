@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
-import ProductsSlider from "../../components/shared/products/ProductsSlider";
 import { Product } from "../../types";
 import ProductCard from "../../components/reusables/ProductCard";
-import Filter from "../../components/shared/products/Filter";
-import { Accordion } from "@mui/material";
 import AccordionUsage from "../../components/shared/products/AccordionUsage";
-
-import { Drawer, Button, List, ListItem, ListItemText } from "@mui/material";
 import FilterSidebar from "../../components/shared/products/FilterSidebar";
 
 import Loader from "../../components/reusables/Loader";
+import Menu from "../../components/reusables/Menu";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -61,8 +57,11 @@ export default function CategoryPage() {
         {/* Flex container for the title and filter icon */}
         <div className="flex items-center justify-between px-5 my-6">
           <h1 className="text-3xl font-bold">{category}</h1>
-          <div className="laptop:hidden">
-            <FilterSidebar />
+          <div className="flex items-center gap-3">
+            <div className="laptop:hidden">
+              <FilterSidebar />
+            </div>
+            <Menu />
           </div>
         </div>
         <br />
@@ -76,10 +75,10 @@ export default function CategoryPage() {
             <FilterSidebar />
           </div> */}
           {/* right */}
-          <div className="right flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
+          <div className="flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
             {isPending ? (
-              <div className="flex items-center">
-                <Loader isLoading={isPending} size={50} color="#4CAF50" />
+              <div className="flex justify-center items-center">
+                <Loader isLoading={isPending} size={50} color="#0000FF" />
                 {!isPending && <div>Data loaded!</div>}
               </div>
             ) : (
@@ -91,6 +90,5 @@ export default function CategoryPage() {
         </div>
       </div>
     </main>
-    // <Filter products={products} category={category} />
   );
 }
