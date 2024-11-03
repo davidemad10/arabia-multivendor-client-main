@@ -55,8 +55,8 @@ export default function AccordionUsage({
   };
 
   return (
-    <div className="space-y-4">
-      <Accordion>
+    <div className="space-y-4 pt-5 px-2">
+      <Accordion className="">
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="price-filter-content"

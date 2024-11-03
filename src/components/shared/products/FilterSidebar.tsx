@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Drawer, Button, List, ListItem, ListItemText } from "@mui/material";
 import AccordionUsage from "./AccordionUsage";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 const FilterSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,9 +15,9 @@ const FilterSidebar: React.FC = () => {
 
   return (
     <>
-      <Button onClick={toggleDrawer(true)} variant="contained" color="primary">
-        Open FilterSidebar
-      </Button>
+      <span onClick={() => setIsOpen(true)}>
+        <MenuOutlinedIcon></MenuOutlinedIcon>
+      </span>
       <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
         <div
           role="presentation"

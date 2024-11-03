@@ -7,6 +7,7 @@ import ProductCard from "../../components/reusables/ProductCard";
 import Filter from "../../components/shared/products/Filter";
 import { Accordion } from "@mui/material";
 import AccordionUsage from "../../components/shared/products/AccordionUsage";
+
 import { Drawer, Button, List, ListItem, ListItemText } from "@mui/material";
 import FilterSidebar from "../../components/shared/products/FilterSidebar";
 
@@ -52,29 +53,32 @@ export default function CategoryPage() {
   }, [category]);
 
   return (
-    // <main>
-    //   <div className="mx-52 my-20 pt-5 flex flex-col bg-white">
-    //     {/* <h1 className="text-3xl font-bold my-6">{category}</h1> */}
-    //     {/* <br /> */}
-    //     <div className="flex">
-    //       {/* left */}
-    //       <div className="left bg-gray-800 w-80 min-h-screen start-0 top-0 p-10 ps-16 max-laptop:hidden">
-    //         {/* Add filter or any additional components here */}
-    //         <FilterSidebar />
-    //       </div>
-    //       {/* right */}
-    //       <div className="right flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
-    //         {isPending ? (
-    //           <p>Loading...</p>
-    //         ) : (
-    //           products.map((product) => (
-    //             <ProductCard key={product.id} product={product} />
-    //           ))
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </main>
-    <Filter products={products} category={category} />
+    <main>
+      <div className="my-20 pt-5 flex flex-col bg-white">
+        <h1 className="ps-5 text-3xl font-bold my-6">{category}</h1>
+        <br />
+        <div className="flex">
+          {/* left */}
+          <div className="w-80 min-h-screen start-0 top-0 max-laptop:hidden">
+            {/* Add filter or any additional components here */}
+            <AccordionUsage />
+          </div>
+          <div className="start-0 laptop:hidden">
+            <FilterSidebar />
+          </div>
+          {/* right */}
+          <div className="right flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
+            {isPending ? (
+              <p>Loading...</p>
+            ) : (
+              products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </main>
+    // <Filter products={products} category={category} />
   );
 }
