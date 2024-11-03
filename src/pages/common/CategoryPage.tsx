@@ -11,6 +11,8 @@ import AccordionUsage from "../../components/shared/products/AccordionUsage";
 import { Drawer, Button, List, ListItem, ListItemText } from "@mui/material";
 import FilterSidebar from "../../components/shared/products/FilterSidebar";
 
+import Loader from "../../components/reusables/Loader";
+
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
   const [products, setProducts] = useState<Product[]>([]);
@@ -55,7 +57,14 @@ export default function CategoryPage() {
   return (
     <main>
       <div className="my-20 pt-5 flex flex-col bg-white">
-        <h1 className="ps-5 text-3xl font-bold my-6">{category}</h1>
+        {/* <h1 className="ps-5 text-3xl font-bold my-6">{category}</h1> */}
+        {/* Flex container for the title and filter icon */}
+        <div className="flex items-center justify-between px-5 my-6">
+          <h1 className="text-3xl font-bold">{category}</h1>
+          <div className="laptop:hidden">
+            <FilterSidebar />
+          </div>
+        </div>
         <br />
         <div className="flex">
           {/* left */}
@@ -63,13 +72,16 @@ export default function CategoryPage() {
             {/* Add filter or any additional components here */}
             <AccordionUsage />
           </div>
-          <div className="start-0 laptop:hidden">
+          {/* <div className="start-0 size-fit absolute laptop:hidden">
             <FilterSidebar />
-          </div>
+          </div> */}
           {/* right */}
           <div className="right flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
             {isPending ? (
-              <p>Loading...</p>
+              <div className="flex items-center">
+                <Loader isLoading={isPending} size={50} color="#4CAF50" />
+                {!isPending && <div>Data loaded!</div>}
+              </div>
             ) : (
               products.map((product) => (
                 <ProductCard key={product.id} product={product} />

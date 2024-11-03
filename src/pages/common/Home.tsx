@@ -14,19 +14,21 @@ export default function Home() {
   const [categoryProducts, setCategoryProducts] = useState<
     Record<string, Product[]>
   >({});
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState<boolean>(true);
+  const [isProductsLoading, setIsProductsLoading] = useState<boolean>(true);
+
   const [isPending, setIsPending] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      setIsPending(true);
+      setIsCategoriesLoading(true);
       try {
         const response = await axiosInstance.get("/products/category/");
         setCategories(response.data);
-        console.log("................................", response.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       } finally {
-        setIsPending(false);
+        setIsCategoriesLoading(false);
       }
     };
 
@@ -35,34 +37,34 @@ export default function Home() {
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
+      setIsProductsLoading(true);
       const productsData: Record<string, Product[]> = {};
-      for (const category of categories) {
-        try {
+
+      try {
+        const productPromises = categories.map(async (category) => {
           const response = await axiosInstance.get(`/products/bycategory`, {
             params: { category: category.slug },
           });
-          console.log("Products By category", response.data);
           productsData[category.slug] = response.data.map((product: any) => ({
             id: product.id,
             name: product.translations.en.name,
-            image: product.images[0]?.image, // First image for simplicity
+            image: product.images[0]?.image,
             price: product.price_after_discount,
             oldPrice: product.price_before_discount,
-            rating: product.total_views, // Adjust as needed if you have a rating system
-            isBestSeller: product.total_sold > 50, // Example condition
+            rating: product.total_views,
+            isBestSeller: product.total_sold > 50,
             description: product.translations.en.description,
             slug: product.slug,
           }));
-        } catch (error) {
-          console.error(
-            `Failed to fetch products for category ${category.slug}:`,
-            error
-          );
-        }
+        });
+
+        await Promise.all(productPromises);
+        setCategoryProducts(productsData);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setIsProductsLoading(false);
       }
-      setCategoryProducts(productsData);
-      console.log("Products", categoryProducts);
-      setIsPending(false);
     };
 
     if (categories.length > 0) {
@@ -132,7 +134,10 @@ export default function Home() {
         <div className="flexCenter flex-col">
           <div className="container flex justify-center flex-col">
             <HeroSlider sliders={slidersData} isPending={isPending} />
-            <CategoriesSlider categories={categories} isPending={isPending} />
+            <CategoriesSlider
+              categories={categories}
+              isPending={isCategoriesLoading}
+            />
             <div className="w-full flexCenter">
               <BrandsSlider />
             </div>
@@ -143,14 +148,9 @@ export default function Home() {
                 title={category.translations.en.name}
                 link={`/products/category/${category.slug}`}
                 products={categoryProducts[category.slug] || []}
-                isPending={isPending}
+                isLoading={isProductsLoading}
               />
             ))}
-            {/* Products Sliders */}
-            {/* <ProductsSlider title="Trending Now" link="/trending" />
-            <ProductsSlider title="Time-limited Offers" link="/offers" />
-            <ProductsSlider title="Women Collection" link="/women" />
-            <ProductsSlider title="Electronics" link="/electronics" /> */}
           </div>
         </div>
       </main>
