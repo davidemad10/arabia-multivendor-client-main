@@ -11,8 +11,11 @@ import { getUser } from "../../../../public/utils/functions";
 import { getUserInfo, updateUserInfo } from "../../../api/userRequests";
 import { useSnackbar } from "notistack";
 import { useQuery } from "@tanstack/react-query";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useState } from "react";
 
 export default function Profile() {
+  const [requestLoading, setRequestLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
@@ -52,6 +55,7 @@ export default function Profile() {
     onSubmit: async (values) => {
       const info = { full_name: values.fullname, phone: values.phoneNumber };
       try {
+        setRequestLoading(true);
         const response = await updateUserInfo(info, user.user_id);
         if (response.status === 200) {
           enqueueSnackbar("Your info updated successfully", {
@@ -71,6 +75,8 @@ export default function Profile() {
           variant: "error",
           anchorOrigin: { vertical: "top", horizontal: "right" },
         });
+      } finally {
+        setRequestLoading(false);
       }
     },
   });
@@ -158,15 +164,27 @@ export default function Profile() {
             </div>
           </FormControl>
         </Box>
-        <Button
-          type="submit"
-          disabled={!formik.dirty && formik.isValid}
-          variant="contained"
-          className="w-1/5"
-          sx={{ background: "black", borderRadius: "3px", marginTop: "30px" }}
-        >
-          <p className="font-semibold">{t("updateProfile")}</p>
-        </Button>
+        {requestLoading ? (
+          <LoadingButton
+            loading
+            loadingIndicator={t("loading")}
+            variant="contained"
+            className="w-1/5"
+            sx={{ background: "black", borderRadius: "3px", marginTop: "30px" }}
+          >
+            {t("submit")}
+          </LoadingButton>
+        ) : (
+          <Button
+            type="submit"
+            disabled={!formik.dirty && formik.isValid}
+            variant="contained"
+            className="w-1/5"
+            sx={{ background: "black", borderRadius: "3px", marginTop: "30px" }}
+          >
+            <p className="font-semibold">{t("updateProfile")}</p>
+          </Button>
+        )}
       </form>
     </div>
   );

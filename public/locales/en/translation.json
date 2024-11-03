@@ -90,5 +90,6 @@
   "readyToMakeAWish": "Ready to make a wish ?",
   "addToWishlistMessage": "Start adding items you love to your wishlist by tapping on the heart icon",
   "noPreviousOrders": "You have no previous orders",
-  "startOrdering": "We have thousands of items available across our wide range of sellers. Start ordering today!"
+  "startOrdering": "We have thousands of items available across our wide range of sellers. Start ordering today!",
+  "loading": "Loading ... "
 }
