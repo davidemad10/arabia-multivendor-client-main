@@ -18,7 +18,7 @@ export default function Profile() {
   const user = getUser(token);
   const id = user?.user_id;
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["account", "users", id],
     queryFn: () => getUserInfo(id),
   });
@@ -43,9 +43,9 @@ export default function Profile() {
 
   const formik = useFormik({
     initialValues: {
-      fullname: data?.full_name || user.full_name || "",
-      email: data?.data.email,
-      phoneNumber: data?.phone || user.phone || "",
+      fullname: data?.data.full_name || "",
+      email: data?.data.email || "",
+      phoneNumber: data?.data.phone || "",
     },
     enableReinitialize: true,
     validationSchema: toFormikValidationSchema(schema),
@@ -58,6 +58,7 @@ export default function Profile() {
             variant: "success",
             anchorOrigin: { vertical: "top", horizontal: "right" },
           });
+          refetch();
         } else {
           enqueueSnackbar("Couldn't update your info", {
             variant: "error",
@@ -73,16 +74,6 @@ export default function Profile() {
       }
     },
   });
-
-  // useEffect(() => {
-  //   if (data) {
-  //     formik.setValues({
-  //       fullname: data.full_name || user.full_name,
-  //       email: data.data.email,
-  //       phoneNumber: data.phone || user.phone,
-  //     });
-  //   }
-  // }, [data, user, formik]);
 
   if (isLoading) {
     return <div>Loading...</div>;
