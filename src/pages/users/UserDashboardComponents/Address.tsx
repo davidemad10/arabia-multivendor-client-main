@@ -229,7 +229,7 @@ const AddressData = () => {
                 marginTop: "30px",
               }}
             >
-              <p className="font-semibold">{t("updateProfile")}</p>
+              <p className="font-semibold">{t("updateAddress")}</p>
             </Button>
           )}
         </form>
