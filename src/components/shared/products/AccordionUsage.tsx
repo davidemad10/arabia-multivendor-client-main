@@ -16,16 +16,27 @@ interface Category {
   children?: Category[];
 }
 
+interface Brand {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export default function AccordionUsage({
   setSelectedCategories,
+  setSelectedBrands,
 }: {
   setSelectedCategories: (categories: string[]) => void;
+  setSelectedBrands: (brands: string[]) => void;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedCategories, setLocalSelectedCategories] = useState<string[]>(
     []
   );
+  const [selectedBrands, setLocalSelectedBrands] = useState<string[]>([]);
 
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -42,6 +53,24 @@ export default function AccordionUsage({
       }
     };
     fetchCategories();
+  }, []);
+
+  // Fetch brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axiosInstance.get("/products/brand/");
+        const formattedBrands = response.data.map((brand: any) => ({
+          id: brand.id,
+          name: brand.translations.en.name,
+          slug: brand.slug,
+        }));
+        setBrands(formattedBrands);
+      } catch (error) {
+        console.error("Failed to fetch brands:", error);
+      }
+    };
+    fetchBrands();
   }, []);
 
   const buildCategoryHierarchy = (categories: Category[]) => {
@@ -71,6 +100,18 @@ export default function AccordionUsage({
     setSelectedCategories(updatedCategories);
   };
 
+  const handleBrandChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    brandName: string
+  ) => {
+    const { checked } = event.target;
+    const updatedBrands = checked
+      ? [...selectedBrands, brandName]
+      : selectedBrands.filter((name) => name !== brandName);
+    setLocalSelectedBrands(updatedBrands);
+    setSelectedBrands(updatedBrands);
+  };
+
   const renderCategory = (category: Category) => (
     <div key={category.id}>
       <FormControlLabel
@@ -92,13 +133,38 @@ export default function AccordionUsage({
   );
 
   return (
-    <Accordion sx={{ boxShadow: "none" }}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography sx={{ fontWeight: "bold" }}>Category</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        {categories.map((cat) => renderCategory(cat))}
-      </AccordionDetails>
-    </Accordion>
+    <div>
+      {/* Category Filter */}
+      <Accordion sx={{ boxShadow: "none" }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: "bold" }}>Category</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {categories.map((cat) => renderCategory(cat))}
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Brand Filter */}
+      <Accordion sx={{ boxShadow: "none" }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: "bold" }}>Brand</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {brands.map((brand) => (
+            <FormControlLabel
+              key={brand.id}
+              control={
+                <Checkbox
+                  value={brand.name}
+                  checked={selectedBrands.includes(brand.name)}
+                  onChange={(e) => handleBrandChange(e, brand.name)}
+                />
+              }
+              label={brand.name}
+            />
+          ))}
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 }
