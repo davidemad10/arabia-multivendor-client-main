@@ -95,25 +95,25 @@ const secondSection = [
   {
     text: "Orders",
     icon: <ShoppingCartOutlinedIcon />,
-    path: "/orders",
+    path: "/Orders",
   },
 ];
 
 const thirdSection = [
   {
-    text: "Payment Request",
+    text: "Wallet",
     icon: <AddCardOutlinedIcon />,
-    path: "/paymentRequest",
+    path: "/Wallet",
   },
   {
     text: "Earnings",
     icon: <AttachMoneyOutlinedIcon />,
-    path: "/updateProduct",
+    path: "/Earnings",
   },
   {
     text: "Promos and Discount",
     icon: <SellOutlinedIcon />,
-    path: "/discounts",
+    path: "/Discount",
   },
 ];
 

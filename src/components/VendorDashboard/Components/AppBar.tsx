@@ -5,14 +5,14 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
-import { Box, Stack, useTheme } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import NightlightOutlinedIcon from "@mui/icons-material/NightlightOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface AppBarProps extends MuiAppBarProps {
   open: boolean;
@@ -42,6 +42,8 @@ const StyledAppBar = styled(MuiAppBar, {
 
 const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -50,6 +52,19 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
     setAnchorEl(event.currentTarget);
   };
 
+
+  const handleProfileClick = () => {
+    navigate('/VendorProfile', {
+      state: {
+        avatarUrl: '',
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        description: '',
+      },
+    });
+  };
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -84,9 +99,9 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
           </Link>
         )}
 
-        {/* <Typography variant="h6" noWrap component="div">
-          Vendor Dashboard
-        </Typography> */}
+        <Typography variant="h6" noWrap component="div" sx={{color:"inherit", fontSize:30 , fontWeight:"bold"}}>
+          <span style={{color: "red"}}>A</span>rabia <span style={{color: "red"}}>V</span>endor
+        </Typography>
 
         <Box flexGrow={1} />
 
@@ -138,8 +153,7 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
           </Menu>
         </Stack>
