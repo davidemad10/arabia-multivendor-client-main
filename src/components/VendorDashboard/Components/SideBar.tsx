@@ -151,6 +151,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
       </DrawerHeader>
       <Divider />
 
+      <Link to={"/VendorProfile"}>
       <Avatar
         sx={{
           mx: "auto",
@@ -163,26 +164,26 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
         alt="User Image"
         src="/static/images/avatar/2.jpg"
       />
-      <Typography
-        align="center"
-        variant="body1"
-        sx={{ fontSize: open ? 17 : 0, transition: "0.75s" }}
-      >
-        Name
-      </Typography>
-      <Typography
-        align="center"
-        color="gray"
-        variant="body2"
-        sx={{
-          fontSize: open ? 12 : 0,
-          transition: "0.75s",
-          color: theme.palette.error.main,
-        }}
-      >
-        Vendor
-      </Typography>
-
+        <Typography
+          align="center"
+          variant="body1"
+          sx={{ fontSize: open ? 17 : 0, transition: "0.75s" }}
+        >
+          Name
+        </Typography>
+        <Typography
+          align="center"
+          color="gray"
+          variant="body2"
+          sx={{
+            fontSize: open ? 12 : 0,
+            transition: "0.75s",
+            color: theme.palette.error.main,
+          }}
+        >
+          Vendor
+        </Typography>
+      </Link>
       <Divider />
 
       <List>
