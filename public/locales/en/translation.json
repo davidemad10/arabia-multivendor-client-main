@@ -92,5 +92,6 @@
   "noPreviousOrders": "You have no previous orders",
   "startOrdering": "We have thousands of items available across our wide range of sellers. Start ordering today!",
   "loading": "Loading ... ",
-  "updateAddress": "Update Address"
+  "updateAddress": "Update Address",
+  "updatePassword": "Update Password"
 }
