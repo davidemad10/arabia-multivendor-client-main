@@ -1,7 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 
 import AppBar from "./Components/AppBar";
@@ -25,7 +24,7 @@ export default function VendorDashboard() {
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} >
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar open={open} onDrawerOpen={handleDrawerOpen} setMode={setMode} />

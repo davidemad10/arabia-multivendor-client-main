@@ -16,6 +16,7 @@ import UserDashboard from "./pages/users/UserDashboard";
 import VendorDashboard from "./components/VendorDashboard/VedorDashboard";
 import Dashboard from "./components/VendorDashboard/Pages/Dashboard/Dashboard";
 import AddProduct from "./components/VendorDashboard/Pages/Products/AddProduct";
+import UpdateProduct from "./components/VendorDashboard/Pages/Products/UpdateProduct";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route element={<VendorDashboard />}>
           <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
           <Route index path="/AddProducts" element={<AddProduct />}></Route>
+          <Route index path="/UpdateProduct" element={<UpdateProduct/>}></Route>
 
         </Route>
         

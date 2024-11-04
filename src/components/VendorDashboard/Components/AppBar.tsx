@@ -9,8 +9,7 @@ import { Box, Stack, useTheme } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import NightlightOutlinedIcon from "@mui/icons-material/NightlightOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -116,13 +115,17 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
             </IconButton>
           )}
 
+          <IconButton color="inherit" style={{ marginInline:15 }}>
+            <TranslateIcon />
+          </IconButton>
+
           <IconButton
             color="inherit"
             aria-controls={isMenuOpen ? "basic-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={isMenuOpen ? "true" : undefined}
             onClick={handleMenuOpen}
-            style={{ marginInline: " 20px" }}
+            style={{ marginInline: 5 }}
           >
             <PersonOutlineOutlinedIcon />
           </IconButton>

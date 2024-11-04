@@ -10,7 +10,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar, Box, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SpeedOutlinedIcon from "@mui/icons-material/SpeedOutlined";
 import CreateNewFolderOutlinedIcon from "@mui/icons-material/CreateNewFolderOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
@@ -19,6 +19,7 @@ import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import { useTheme } from "@emotion/react";
+import { grey } from "@mui/material/colors";
 
 const drawerWidth = 240;
 
@@ -89,7 +90,7 @@ const secondSection = [
   {
     text: "Update Product",
     icon: <EditNoteOutlinedIcon />,
-    path: "/updateProduct",
+    path: "/UpdateProduct",
   },
   {
     text: "Orders",
@@ -117,6 +118,8 @@ const thirdSection = [
 ];
 
 const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
+  let location = useLocation();
+
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -193,6 +196,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                bgcolor:
+                  location.pathname === item.path
+                    ? theme.palette.mode === "light"
+                      ? grey[300]
+                      : grey[800]
+                    : null,
               }}
             >
               <ListItemIcon
@@ -224,6 +233,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                bgcolor:
+                  location.pathname === item.path
+                    ? theme.palette.mode === "light"
+                      ? grey[300]
+                      : grey[800]
+                    : null,
               }}
             >
               <ListItemIcon
@@ -255,6 +270,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                bgcolor:
+                  location.pathname === item.path
+                    ? theme.palette.mode === "light"
+                      ? grey[300]
+                      : grey[800]
+                    : null,
               }}
             >
               <ListItemIcon
