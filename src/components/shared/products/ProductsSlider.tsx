@@ -1,3 +1,4 @@
+import React from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -5,8 +6,8 @@ import { Navigation } from "swiper/modules";
 import ProductCard from "../../reusables/ProductCard";
 import { Link } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
+import Loader from "../../reusables/Loader";
 
-// Define the structure for the product
 interface Product {
   id: number;
   name: string;
@@ -19,19 +20,18 @@ interface Product {
   isBestSeller?: boolean;
 }
 
-// Define the props for the ProductsSlider component
 interface ProductsSliderProps {
   title: string;
   link: string;
-  products?: Product[]; // Optional, with default mock data provided
+  products?: Product[];
+  isLoading: boolean;
 }
-
-// Static data for testing purposes
 
 export default function ProductsSlider({
   title,
   link,
-  products, // Default to mock data for testing
+  products = [],
+  isLoading,
 }: ProductsSliderProps) {
   const { i18n, t } = useTranslation();
 
@@ -48,27 +48,39 @@ export default function ProductsSlider({
           <Trans i18nKey="view all"></Trans>
         </Link>
       </div>
-      <Swiper
-        modules={[Navigation]}
-        slidesPerView={6}
-        slidesPerGroup={6}
-        spaceBetween={10}
-        navigation
-        breakpoints={{
-          270: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 8 },
-          570: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
-          900: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 12 },
-          1280: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 10 },
-          1500: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 10 },
-        }}
-        className="rounded-xl"
-      >
-        {products.map((product) => (
-          <SwiperSlide key={product.id}>
-            <ProductCard product={product} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+
+      {isLoading ? (
+        <div className="flex justify-center items-center h-32">
+          {/* <span>Loading products...</span> */}
+          {/* You could also add a spinner here */}
+          <div>
+            <Loader isLoading={isLoading} size={50} color="#4CAF50" />
+            {!isLoading && <div>Data loaded!</div>}
+          </div>
+        </div>
+      ) : (
+        <Swiper
+          modules={[Navigation]}
+          slidesPerView={6}
+          slidesPerGroup={6}
+          spaceBetween={10}
+          navigation
+          breakpoints={{
+            270: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 8 },
+            570: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
+            900: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 12 },
+            1280: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 10 },
+            1500: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 10 },
+          }}
+          className="rounded-xl"
+        >
+          {products.map((product) => (
+            <SwiperSlide key={product.id}>
+              <ProductCard product={product} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 }
