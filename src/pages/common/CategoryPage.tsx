@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { Product } from "../../types";
@@ -11,8 +11,18 @@ import Menu from "../../components/reusables/Menu";
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isPending, setIsPending] = useState<boolean>(true);
   const [sortOption, setSortOption] = useState<string>("");
+
+  // States for filters
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<{
+    from: number;
+    to: number;
+  } | null>(null);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([1, 5]);
 
   const fetchProductsByCategory = async () => {
     setIsPending(true);
@@ -38,6 +48,7 @@ export default function CategoryPage() {
       }));
 
       setProducts(mappedProducts);
+      setFilteredProducts(mappedProducts);
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {
@@ -46,20 +57,57 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     fetchProductsByCategory();
   }, [category]);
 
-  // Sort products based on the selected option
-  const sortedProducts = [...products].sort((a, b) => {
-    if (sortOption === "Price: High to Low") return b.price - a.price;
-    if (sortOption === "Price: Low to High") return a.price - b.price;
-    if (sortOption === "Best Rated") return b.rating - a.rating;
-    return 0;
-  });
+  useEffect(() => {
+    // Apply filters and sorting to the in-memory `products` list
+    let updatedProducts = [...products];
+
+    if (selectedCategories.length) {
+      updatedProducts = updatedProducts.filter((product) =>
+        selectedCategories.includes(product.category)
+      );
+    }
+
+    if (selectedBrands.length) {
+      updatedProducts = updatedProducts.filter((product) =>
+        selectedBrands.includes(product.brand)
+      );
+    }
+
+    if (priceRange) {
+      updatedProducts = updatedProducts.filter(
+        (product) =>
+          product.price >= priceRange.from && product.price <= priceRange.to
+      );
+    }
+
+    // if (selectedRatings.length === 2) {
+    //   updatedProducts = updatedProducts.filter(
+    //     (product) =>
+    //       product.rating >= selectedRatings[0] &&
+    //       product.rating <= selectedRatings[1]
+    //   );
+
+    if (sortOption) {
+      updatedProducts = updatedProducts.sort((a, b) => {
+        if (sortOption === "Price: High to Low") return b.price - a.price;
+        if (sortOption === "Price: Low to High") return a.price - b.price;
+        if (sortOption === "Best Rated") return b.rating - a.rating;
+        return 0;
+      });
+    }
+
+    setFilteredProducts(updatedProducts);
+  }, [
+    selectedCategories,
+    selectedBrands,
+    priceRange,
+    selectedRatings,
+    sortOption,
+    products,
+  ]);
 
   return (
     <main>
@@ -75,7 +123,12 @@ export default function CategoryPage() {
         </div>
         <div className="flex">
           <div className="w-80 min-h-screen start-0 top-0 max-laptop:hidden">
-            <AccordionUsage />
+            <AccordionUsage
+              setSelectedCategories={setSelectedCategories}
+              setSelectedBrands={setSelectedBrands}
+              setPriceRange={setPriceRange}
+              setSelectedRatings={setSelectedRatings}
+            />
           </div>
           <div className="flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
             {isPending ? (
@@ -83,7 +136,7 @@ export default function CategoryPage() {
                 <Loader isLoading={isPending} size={50} color="#0000FF" />
               </div>
             ) : (
-              sortedProducts.map((product) => (
+              filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))
             )}

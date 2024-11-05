@@ -7,6 +7,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Slider from "@mui/material/Slider";
 
 interface Category {
   id: number;
@@ -25,9 +28,13 @@ interface Brand {
 export default function AccordionUsage({
   setSelectedCategories,
   setSelectedBrands,
+  setPriceRange,
+  setSelectedRatings,
 }: {
   setSelectedCategories: (categories: string[]) => void;
   setSelectedBrands: (brands: string[]) => void;
+  setPriceRange: (range: { from: number; to: number }) => void;
+  setSelectedRatings: (ratings: number[]) => void;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -35,8 +42,11 @@ export default function AccordionUsage({
     []
   );
   const [selectedBrands, setLocalSelectedBrands] = useState<string[]>([]);
+  const [fromPrice, setFromPrice] = useState<string>("");
+  const [toPrice, setToPrice] = useState<string>("");
+  const [priceError, setPriceError] = useState<string | null>(null);
+  const [ratingRange, setRatingRange] = useState<number[]>([1, 5]);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -55,7 +65,6 @@ export default function AccordionUsage({
     fetchCategories();
   }, []);
 
-  // Fetch brands
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -112,9 +121,59 @@ export default function AccordionUsage({
     setSelectedBrands(updatedBrands);
   };
 
-  const renderCategory = (category: Category) => (
-    <div key={category.id}>
+  const handlePriceChange = () => {
+    const from = parseFloat(fromPrice);
+    const to = parseFloat(toPrice);
+
+    if (isNaN(from) || isNaN(to)) {
+      setPriceError("Please enter valid numbers for both prices.");
+      return;
+    }
+    if (from < 0 || to < 0) {
+      setPriceError("Prices must be positive numbers.");
+      return;
+    }
+    if (from > to) {
+      setPriceError(
+        "The 'From' price must be less than or equal to the 'To' price."
+      );
+      return;
+    }
+
+    setPriceError(null);
+    setPriceRange({ from, to });
+  };
+
+  const handleRatingRangeChange = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
+    const ratingRange = newValue as number[];
+    setRatingRange(ratingRange);
+    setSelectedRatings(ratingRange);
+  };
+
+  const renderCategory = (category: Category) => {
+    if (category.children && category.children.length > 0) {
+      return (
+        <Accordion
+          key={category.id}
+          sx={{ boxShadow: "none", marginLeft: `${category.level * 10}px` }}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{category.name}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {category.children.map((subCategory) =>
+              renderCategory(subCategory)
+            )}
+          </AccordionDetails>
+        </Accordion>
+      );
+    }
+    return (
       <FormControlLabel
+        key={category.id}
         control={
           <Checkbox
             value={category.name}
@@ -123,14 +182,10 @@ export default function AccordionUsage({
           />
         }
         label={category.name}
+        sx={{ marginLeft: `${category.level * 10}px` }}
       />
-      {category.children && (
-        <div style={{ paddingLeft: "20px" }}>
-          {category.children.map((subCategory) => renderCategory(subCategory))}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   return (
     <div>
@@ -163,6 +218,59 @@ export default function AccordionUsage({
               label={brand.name}
             />
           ))}
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Price Filter */}
+      <Accordion sx={{ boxShadow: "none" }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: "bold" }}>Price</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <TextField
+            label="From"
+            variant="outlined"
+            size="small"
+            value={fromPrice}
+            onChange={(e) => setFromPrice(e.target.value)}
+            type="number"
+            sx={{ marginRight: "8px" }}
+          />
+          <TextField
+            label="To"
+            variant="outlined"
+            size="small"
+            value={toPrice}
+            onChange={(e) => setToPrice(e.target.value)}
+            type="number"
+            sx={{ marginRight: "8px" }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePriceChange}
+          >
+            Go
+          </Button>
+          {priceError && <Typography color="error">{priceError}</Typography>}
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Rating Filter */}
+      <Accordion sx={{ boxShadow: "none" }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: "bold" }}>Rating</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Slider
+            value={ratingRange}
+            onChange={handleRatingRangeChange}
+            valueLabelDisplay="auto"
+            min={1}
+            max={5}
+            marks
+          />
+          <Typography>{`Rating: ${ratingRange[0]} - ${ratingRange[1]} Stars`}</Typography>
         </AccordionDetails>
       </Accordion>
     </div>
