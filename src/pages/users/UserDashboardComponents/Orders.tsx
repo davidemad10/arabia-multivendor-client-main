@@ -156,11 +156,12 @@ export default function Orders() {
   });
   console.log(data);
 
-  {
-    isLoading && <div>Loading ...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-  {
-    error && <div>Error ..</div>;
+
+  if (error) {
+    return <div>Error loading user information.</div>;
   }
   return (
     <div className="bg-white w-full mx-auto my-5 p-10">
