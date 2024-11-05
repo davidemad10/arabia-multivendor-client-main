@@ -66,7 +66,7 @@ const ProfileDropdownMenu = () => {
                   : "justify-end"
               }
             >
-              {t("Logout")}
+              {t("logout")}
               <FaSignOutAlt className="menu-icon" />
             </li>
           </ul>

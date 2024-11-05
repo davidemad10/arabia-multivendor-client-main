@@ -1,5 +1,5 @@
 // External Libraries
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -41,7 +41,6 @@ import { registerUser } from "../../../api/userRequests";
 
 // Localization
 import { t } from "i18next";
-import NewPasswordDialogue from "../../../components/reusables/newPasswordDialogue";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -159,6 +158,10 @@ export default function SignUp() {
       }
     },
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

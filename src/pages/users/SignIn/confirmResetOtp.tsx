@@ -41,7 +41,7 @@ export default function ConfirmResetOTP({
         setResetPasswordDialogueOpen(true);
         handleClose();
       } else {
-        enqueueSnackbar("Couldn't do it sorry", {
+        enqueueSnackbar("Invalid OTP", {
           variant: "error",
           anchorOrigin: {
             vertical: "top",

@@ -1,5 +1,8 @@
 import { t } from "i18next";
 import { ReactNode } from "react";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 interface MenuItem {
   title: string;
@@ -16,6 +19,15 @@ export default function SidePanel({
   menuItems,
   setActivePanel,
 }: SidePanelProps) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(signOut());
+    navigate("/");
+    console.log("User logged out");
+  };
+
   return (
     <div className="bg-white w-80 min-h-screen start-0 top-0 p-10 ps-16 max-laptop:hidden">
       <div className="border-b-2 border-gray-200 pb-6">
@@ -39,7 +51,10 @@ export default function SidePanel({
         ))}
       </div>
       <div>
-        <button className="py-5 text-gray-400 hover:text-gray-500">
+        <button
+          className="py-5 text-gray-400 hover:text-gray-500"
+          onClick={handleLogout}
+        >
           {t("logout")}
         </button>
       </div>

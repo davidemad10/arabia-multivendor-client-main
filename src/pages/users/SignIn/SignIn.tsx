@@ -13,7 +13,7 @@ import { GoogleIcon, FacebookIcon } from "../CustomIcons";
 import { z } from "zod";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment } from "@mui/material";
@@ -174,6 +174,10 @@ export default function SignIn() {
       handleSubmit(values);
     },
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="w-3/5 max-h-fit mx-auto mt-32 rounded-md overflow-hidden desktop:shadow-[0_0_10px_rgba(0,0,0,0.5)] desktop:bg-mainColor flex justify-center align-middle desktop:justify-between">

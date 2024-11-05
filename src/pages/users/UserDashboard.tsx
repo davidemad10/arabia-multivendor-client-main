@@ -8,7 +8,9 @@ import Profile from "./UserDashboardComponents/Profile";
 import Wishlist from "./UserDashboardComponents/Wishlist";
 import Orders from "./UserDashboardComponents/Orders";
 import Address from "./UserDashboardComponents/Address";
+import PasswordIcon from "@mui/icons-material/Password";
 import SidePanel from "../../components/user/SidePanel";
+import Password from "./UserDashboardComponents/Password";
 
 const menuItems = [
   {
@@ -32,6 +34,11 @@ const menuItems = [
       <PersonPinCircleIcon sx={{ color: orange[900] }}></PersonPinCircleIcon>
     ),
     component: <Address></Address>,
+  },
+  {
+    title: "password",
+    icon: <PasswordIcon sx={{ color: orange[900] }}></PasswordIcon>,
+    component: <Password></Password>,
   },
 ];
 
