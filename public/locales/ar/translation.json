@@ -93,5 +93,13 @@
   "startOrdering": "لدينا الآلاف من المنتجات المتاحة من مختلف البائعين. ابدأ الطلب الآن!",
   "loading": "جارى التحميل ...",
   "updateAddress": "تغيير العنوان",
-  "updatePassword": "تغيير كلمة المرور"
+  "updatePassword": "تغيير كلمة المرور",
+  "shoppingCart": "عربة التسوق",
+  "remove": "ازالة",
+  "Quantity": "الكمية",
+  "Shipping and taxes calculated at checkout": "يتم حساب الشحن والضرائب عند إتمام الشراء",
+  "subtotal": "الإجمالي الفرعي",
+  "Continue Shopping": "استمر بالتسوق",
+  "or": "أو",
+  "reviewYourOrder": "راجع طلبك"
 }
