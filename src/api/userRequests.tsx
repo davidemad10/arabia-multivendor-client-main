@@ -123,3 +123,20 @@ export const getUserInfo = async (id: string) => {
     return { error: error.response?.data || error.message };
   }
 };
+
+export const getUserOrders = async () => {
+  try {
+    const token = sessionStorage.getItem("accessToken");
+    const response = await axiosInstance.get(`/order/orders/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+    console.log("API response (get user orders):", response);
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    console.log("get user orders Error:", error);
+    return { error: error.response?.data || error.message };
+  }
+};
