@@ -7,6 +7,7 @@ import AccordionUsage from "../../components/shared/products/AccordionUsage";
 import FilterSidebar from "../../components/shared/products/FilterSidebar";
 import Loader from "../../components/reusables/Loader";
 import Menu from "../../components/reusables/Menu";
+import { Button } from "@headlessui/react";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -15,7 +16,6 @@ export default function CategoryPage() {
   const [isPending, setIsPending] = useState<boolean>(true);
   const [sortOption, setSortOption] = useState<string>("");
 
-  // States for filters
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<{
@@ -30,7 +30,6 @@ export default function CategoryPage() {
       const response = await axiosInstance.get(`/products/bycategory`, {
         params: { category: category },
       });
-
       const mappedProducts: Product[] = response.data.map((product: any) => ({
         id: product.id,
         name: product.translations.en.name,
@@ -61,7 +60,6 @@ export default function CategoryPage() {
   }, [category]);
 
   useEffect(() => {
-    // Apply filters and sorting to the in-memory `products` list
     let updatedProducts = [...products];
 
     if (selectedCategories.length) {
@@ -82,7 +80,6 @@ export default function CategoryPage() {
           product.price >= priceRange.from && product.price <= priceRange.to
       );
     }
-
     // if (selectedRatings.length === 2) {
     //   updatedProducts = updatedProducts.filter(
     //     (product) =>
@@ -109,12 +106,28 @@ export default function CategoryPage() {
     products,
   ]);
 
+  const [resetTrigger, setResetTrigger] = useState(false);
+
+  const clearFilters = () => {
+    setSelectedCategories([]);
+    setSelectedBrands([]);
+    setPriceRange(null);
+    setSelectedRatings([1, 5]);
+    setSortOption("");
+    setFilteredProducts(products); // Reset to original list of products
+
+    setResetTrigger((prev) => !prev); // Toggle resetTrigger to notify AccordionUsage
+  };
+
   return (
     <main>
       <div className="my-20 pt-5 flex flex-col bg-white">
         <div className="flex items-center justify-between px-5 my-6">
           <h1 className="text-3xl font-bold">{category}</h1>
           <div className="flex items-center gap-3">
+            <Button variant="outlined" color="primary" onClick={clearFilters}>
+              Clear Filters
+            </Button>
             <div className="laptop:hidden">
               <FilterSidebar />
             </div>
@@ -128,6 +141,7 @@ export default function CategoryPage() {
               setSelectedBrands={setSelectedBrands}
               setPriceRange={setPriceRange}
               setSelectedRatings={setSelectedRatings}
+              resetTrigger={resetTrigger}
             />
           </div>
           <div className="flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
