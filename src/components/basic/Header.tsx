@@ -246,7 +246,7 @@ export default function Header() {
               <div className=" w-11/12 gap-4 flex flexStart">
                 <div className="flex flexCenter gap-2 bg-Red px-6 py-2 ">
                   <a className=" font-bold text-white" href="">
-                    جميل الفئات
+                    جميع الفئات
                   </a>
                 </div>
                 <ul className="flex gap-6">
