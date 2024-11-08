@@ -5,6 +5,7 @@ import { RiDiscountPercentFill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import axiosInstance from "../../api/axiosInstance";
 import { toast } from "react-toastify";
+import useFavorite from "../../Hooks/useFavorite";
 const BASE_URL = "http://127.0.0.1:8000";
 
 interface ProductCardProps {
@@ -22,6 +23,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { isFavorite, loading, toggleFavorite } = useFavorite(product.id);
+
   const addToCart = async () => {
     try {
       const response = await axiosInstance.post(
@@ -52,9 +55,30 @@ export default function ProductCard({ product }: ProductCardProps) {
               Best Seller
             </span>
           )}
-          <div className="absolute top-2 end-2 flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer text-red-500">
+          <div
+            className={`absolute top-2 end-2 flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer ${
+              isFavorite ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={toggleFavorite}
+          >
             <MdOutlineFavorite />
           </div>
+          {/* <div
+            className={`absolute top-2 end-2 flex items-center text-xl bg-white shadow-lg p-1 rounded-md cursor-pointer ${
+              isFavorite ? "text-red-500" : "text-gray-500"
+            }`}
+            onClick={toggleFavorite}
+          >
+            {loading ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              <MdOutlineFavorite />
+            )}
+          </div> */}
         </div>
         <img
           className="w-52 h-72 object-cover rounded-lg"

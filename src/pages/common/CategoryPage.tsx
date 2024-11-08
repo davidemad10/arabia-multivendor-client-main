@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { Product } from "../../types";
@@ -8,6 +8,8 @@ import FilterSidebar from "../../components/shared/products/FilterSidebar";
 import Loader from "../../components/reusables/Loader";
 import Menu from "../../components/reusables/Menu";
 import { Button } from "@headlessui/react";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -15,6 +17,8 @@ export default function CategoryPage() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isPending, setIsPending] = useState<boolean>(true);
   const [sortOption, setSortOption] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const productsPerPage = 2; // Limit of products per page
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -24,27 +28,35 @@ export default function CategoryPage() {
   } | null>(null);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([1, 5]);
 
-  const fetchProductsByCategory = async () => {
+  const fetchProductsByCategory = async (page: number) => {
     setIsPending(true);
     try {
       const response = await axiosInstance.get(`/products/bycategory`, {
-        params: { category: category },
+        params: {
+          category: category,
+          l: productsPerPage,
+          p: page,
+        },
       });
-      const mappedProducts: Product[] = response.data.map((product: any) => ({
-        id: product.id,
-        name: product.translations.en.name,
-        image: product.images[0]?.image || "",
-        price: product.price_after_discount,
-        oldPrice: product.price_before_discount,
-        rating: product.total_views,
-        isBestSeller: product.total_sold > 50,
-        description: product.translations.en.description,
-        slug: product.slug,
-        category: product.category.translations.en.name,
-        brand: product.brand.translations.en.name,
-        size: product.size.name,
-        color: product.color.name,
-      }));
+      console.log("API response:", response);
+
+      const mappedProducts: Product[] = response.data.results.map(
+        (product: any) => ({
+          id: product.id,
+          name: product.translations.en.name,
+          image: product.images[0]?.image || "",
+          price: product.price_after_discount,
+          oldPrice: product.price_before_discount,
+          rating: product.total_views,
+          isBestSeller: product.total_sold > 50,
+          description: product.translations.en.description,
+          slug: product.slug,
+          category: product.category.translations.en.name,
+          brand: product.brand.translations.en.name,
+          size: product.size.name,
+          color: product.color.name,
+        })
+      );
 
       setProducts(mappedProducts);
       setFilteredProducts(mappedProducts);
@@ -56,8 +68,16 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    fetchProductsByCategory();
-  }, [category]);
+    fetchProductsByCategory(currentPage);
+  }, [
+    category,
+    currentPage,
+    selectedCategories,
+    selectedBrands,
+    priceRange,
+    selectedRatings,
+    sortOption,
+  ]);
 
   useEffect(() => {
     let updatedProducts = [...products];
@@ -80,12 +100,6 @@ export default function CategoryPage() {
           product.price >= priceRange.from && product.price <= priceRange.to
       );
     }
-    // if (selectedRatings.length === 2) {
-    //   updatedProducts = updatedProducts.filter(
-    //     (product) =>
-    //       product.rating >= selectedRatings[0] &&
-    //       product.rating <= selectedRatings[1]
-    //   );
 
     if (sortOption) {
       updatedProducts = updatedProducts.sort((a, b) => {
@@ -106,7 +120,10 @@ export default function CategoryPage() {
     products,
   ]);
 
-  const [resetTrigger, setResetTrigger] = useState(false);
+  const handleNextPage = () => setCurrentPage((prev) => prev + 1);
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
   const clearFilters = () => {
     setSelectedCategories([]);
@@ -114,9 +131,7 @@ export default function CategoryPage() {
     setPriceRange(null);
     setSelectedRatings([1, 5]);
     setSortOption("");
-    setFilteredProducts(products); // Reset to original list of products
-
-    setResetTrigger((prev) => !prev); // Toggle resetTrigger to notify AccordionUsage
+    setFilteredProducts(products);
   };
 
   return (
@@ -141,7 +156,6 @@ export default function CategoryPage() {
               setSelectedBrands={setSelectedBrands}
               setPriceRange={setPriceRange}
               setSelectedRatings={setSelectedRatings}
-              resetTrigger={resetTrigger}
             />
           </div>
           <div className="flex flex-wrap gap-4 bg-gray-200 flex-1 p-4 pt-10">
@@ -155,6 +169,18 @@ export default function CategoryPage() {
               ))
             )}
           </div>
+        </div>
+        <div className="pagination flex justify-center my-4">
+          <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+            <NavigateBeforeIcon />
+          </Button>
+          <span className="px-4 mx-4 border-2">{currentPage}</span>
+          <Button
+            onClick={handleNextPage}
+            disabled={filteredProducts.length < productsPerPage}
+          >
+            <NavigateNextIcon />
+          </Button>
         </div>
       </div>
     </main>
