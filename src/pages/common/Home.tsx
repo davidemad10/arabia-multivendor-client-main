@@ -43,17 +43,19 @@ export default function Home() {
             const response = await axiosInstance.get(`/products/bycategory`, {
               params: { category: category.slug },
             });
-            productsData[category.slug] = response.data.map((product: any) => ({
-              id: product.id,
-              name: product.translations.en.name,
-              image: product.images[0]?.image,
-              price: product.price_after_discount,
-              oldPrice: product.price_before_discount,
-              rating: product.total_views,
-              isBestSeller: product.total_sold > 50,
-              description: product.translations.en.description,
-              slug: product.slug,
-            }));
+            productsData[category.slug] = response.data.results.map(
+              (product: any) => ({
+                id: product.id,
+                name: product.translations.en.name,
+                image: product.images[0]?.image,
+                price: product.price_after_discount,
+                oldPrice: product.price_before_discount,
+                rating: product.total_views,
+                isBestSeller: product.total_sold > 50,
+                description: product.translations.en.description,
+                slug: product.slug,
+              })
+            );
           })
         );
         setCategoryProducts(productsData);

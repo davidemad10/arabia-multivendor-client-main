@@ -10,6 +10,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../../redux/slices/userSlice";
 import ProfileDropdownMenu from "./profileDropdown/ProfileDropdownMenu";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -55,7 +56,7 @@ export default function Header() {
                 </Link>
               </div>
               {/* Search Bar */}
-              <div className="w-1/2 laptop:w-4/12 desktop:w-2/5 desktop:mr-20 mx-6 justify-center">
+              {/* <div className="w-1/2 laptop:w-4/12 desktop:w-2/5 desktop:mr-20 mx-6 justify-center">
                 <div className="relative">
                   <input
                     placeholder={t("search")}
@@ -66,7 +67,8 @@ export default function Header() {
                     <FiSearch />
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <SearchBar />
 
               {/* Mobile Menu Button */}
               <div className="flex desktop:hidden">

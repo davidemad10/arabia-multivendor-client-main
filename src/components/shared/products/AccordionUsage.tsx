@@ -30,11 +30,13 @@ export default function AccordionUsage({
   setSelectedBrands,
   setPriceRange,
   setSelectedRatings,
+  resetTrigger, // Add resetTrigger prop
 }: {
   setSelectedCategories: (categories: string[]) => void;
   setSelectedBrands: (brands: string[]) => void;
   setPriceRange: (range: { from: number; to: number }) => void;
   setSelectedRatings: (ratings: number[]) => void;
+  resetTrigger: boolean;
 }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -81,6 +83,21 @@ export default function AccordionUsage({
     };
     fetchBrands();
   }, []);
+
+  useEffect(() => {
+    // Reset all local states on clear
+    setLocalSelectedCategories([]);
+    setLocalSelectedBrands([]);
+    setFromPrice("");
+    setToPrice("");
+    setRatingRange([1, 5]);
+
+    // Update parent states
+    setSelectedCategories([]);
+    setSelectedBrands([]);
+    setPriceRange(null);
+    setSelectedRatings([1, 5]);
+  }, [resetTrigger]);
 
   const buildCategoryHierarchy = (categories: Category[]) => {
     const map = new Map(

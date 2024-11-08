@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { Product } from "../../types";
@@ -7,6 +7,9 @@ import AccordionUsage from "../../components/shared/products/AccordionUsage";
 import FilterSidebar from "../../components/shared/products/FilterSidebar";
 import Loader from "../../components/reusables/Loader";
 import Menu from "../../components/reusables/Menu";
+import { Button } from "@headlessui/react";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -14,8 +17,9 @@ export default function CategoryPage() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isPending, setIsPending] = useState<boolean>(true);
   const [sortOption, setSortOption] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const productsPerPage = 2; // Limit of products per page
 
-  // States for filters
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<{
@@ -24,28 +28,35 @@ export default function CategoryPage() {
   } | null>(null);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([1, 5]);
 
-  const fetchProductsByCategory = async () => {
+  const fetchProductsByCategory = async (page: number) => {
     setIsPending(true);
     try {
       const response = await axiosInstance.get(`/products/bycategory`, {
-        params: { category: category },
+        params: {
+          category: category,
+          l: productsPerPage,
+          p: page,
+        },
       });
+      console.log("API response:", response);
 
-      const mappedProducts: Product[] = response.data.map((product: any) => ({
-        id: product.id,
-        name: product.translations.en.name,
-        image: product.images[0]?.image || "",
-        price: product.price_after_discount,
-        oldPrice: product.price_before_discount,
-        rating: product.total_views,
-        isBestSeller: product.total_sold > 50,
-        description: product.translations.en.description,
-        slug: product.slug,
-        category: product.category.translations.en.name,
-        brand: product.brand.translations.en.name,
-        size: product.size.name,
-        color: product.color.name,
-      }));
+      const mappedProducts: Product[] = response.data.results.map(
+        (product: any) => ({
+          id: product.id,
+          name: product.translations.en.name,
+          image: product.images[0]?.image || "",
+          price: product.price_after_discount,
+          oldPrice: product.price_before_discount,
+          rating: product.total_views,
+          isBestSeller: product.total_sold > 50,
+          description: product.translations.en.description,
+          slug: product.slug,
+          category: product.category.translations.en.name,
+          brand: product.brand.translations.en.name,
+          size: product.size.name,
+          color: product.color.name,
+        })
+      );
 
       setProducts(mappedProducts);
       setFilteredProducts(mappedProducts);
@@ -57,11 +68,18 @@ export default function CategoryPage() {
   };
 
   useEffect(() => {
-    fetchProductsByCategory();
-  }, [category]);
+    fetchProductsByCategory(currentPage);
+  }, [
+    category,
+    currentPage,
+    selectedCategories,
+    selectedBrands,
+    priceRange,
+    selectedRatings,
+    sortOption,
+  ]);
 
   useEffect(() => {
-    // Apply filters and sorting to the in-memory `products` list
     let updatedProducts = [...products];
 
     if (selectedCategories.length) {
@@ -83,13 +101,6 @@ export default function CategoryPage() {
       );
     }
 
-    // if (selectedRatings.length === 2) {
-    //   updatedProducts = updatedProducts.filter(
-    //     (product) =>
-    //       product.rating >= selectedRatings[0] &&
-    //       product.rating <= selectedRatings[1]
-    //   );
-
     if (sortOption) {
       updatedProducts = updatedProducts.sort((a, b) => {
         if (sortOption === "Price: High to Low") return b.price - a.price;
@@ -109,12 +120,29 @@ export default function CategoryPage() {
     products,
   ]);
 
+  const handleNextPage = () => setCurrentPage((prev) => prev + 1);
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
+  const clearFilters = () => {
+    setSelectedCategories([]);
+    setSelectedBrands([]);
+    setPriceRange(null);
+    setSelectedRatings([1, 5]);
+    setSortOption("");
+    setFilteredProducts(products);
+  };
+
   return (
     <main>
       <div className="my-20 pt-5 flex flex-col bg-white">
         <div className="flex items-center justify-between px-5 my-6">
           <h1 className="text-3xl font-bold">{category}</h1>
           <div className="flex items-center gap-3">
+            <Button variant="outlined" color="primary" onClick={clearFilters}>
+              Clear Filters
+            </Button>
             <div className="laptop:hidden">
               <FilterSidebar />
             </div>
@@ -141,6 +169,18 @@ export default function CategoryPage() {
               ))
             )}
           </div>
+        </div>
+        <div className="pagination flex justify-center my-4">
+          <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+            <NavigateBeforeIcon />
+          </Button>
+          <span className="px-4 mx-4 border-2">{currentPage}</span>
+          <Button
+            onClick={handleNextPage}
+            disabled={filteredProducts.length < productsPerPage}
+          >
+            <NavigateNextIcon />
+          </Button>
         </div>
       </div>
     </main>
