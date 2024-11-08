@@ -13,6 +13,7 @@ import CategoryPage from "./pages/common/CategoryPage";
 import BrandProducts from "./pages/common/BrandProducts";
 import UserProfile from "./layouts/UserProfile";
 import UserDashboard from "./pages/users/UserDashboard";
+import CartPage from "./pages/users/Cart";
 
 function App() {
   return (
@@ -20,7 +21,6 @@ function App() {
       <Routes>
         <Route element={<RootLayout></RootLayout>}>
           <Route index element={<Home></Home>}></Route>
-          <Route path="/:category" element={<Products></Products>}></Route>
           <Route path="/signin" element={<SignIn></SignIn>}></Route>
           <Route path="/signup" element={<SignUp></SignUp>}></Route>
           <Route
@@ -37,6 +37,7 @@ function App() {
         </Route>
         <Route path="/profile" element={<UserProfile></UserProfile>}>
           <Route index element={<UserDashboard></UserDashboard>}></Route>
+          <Route path="cart" element={<CartPage></CartPage>}></Route>
         </Route>
       </Routes>
       <ToastContainer></ToastContainer>

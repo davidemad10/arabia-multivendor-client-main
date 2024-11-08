@@ -13,7 +13,6 @@ import ProfileDropdownMenu from "./profileDropdown/ProfileDropdownMenu";
 import { Typography } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Profile from "../../pages/users/profile";
 
 export default function ProfileHeader() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -94,7 +93,7 @@ export default function ProfileHeader() {
                   <HomeOutlinedIcon color="action" fontSize="medium" />
                 </Link>
                 <span className="h-8 bg-gray-300 rounded-full w-px"></span>
-                <Link to={"Profile"}>
+                <Link to={"/profile/cart"}>
                   <ShoppingCartOutlinedIcon color="action" fontSize="medium" />
                 </Link>
               </div>

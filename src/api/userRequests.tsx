@@ -140,3 +140,60 @@ export const getUserOrders = async () => {
     return { error: error.response?.data || error.message };
   }
 };
+
+export const deleteOrderItem = async (id: string) => {
+  try {
+    const token = sessionStorage.getItem("accessToken");
+    const response = await axiosInstance.delete(`/order/deletecartitem/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+    console.log("API response (delete item from order):", response);
+    return response;
+  } catch (error) {
+    console.log("API response (Delete item from order Error):", error);
+    return { error: error.response?.data || error.message };
+  }
+};
+
+export const getUserCart = async (id: string) => {
+  try {
+    const token = sessionStorage.getItem("accessToken");
+    const response = await axiosInstance.delete(`/order/updatecart/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        quantity: quantity,
+      },
+      withCredentials: true,
+    });
+    console.log("API response (update item quantity):", response);
+    return response;
+  } catch (error) {
+    console.log("API response (update item quantity Error):", error);
+    return { error: error.response?.data || error.message };
+  }
+};
+
+export const updateOrderItem = async (id: string, quantity: number) => {
+  try {
+    const token = sessionStorage.getItem("accessToken");
+    const response = await axiosInstance.delete(`/order/updatecart/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        quantity: quantity,
+      },
+      withCredentials: true,
+    });
+    console.log("API response (update item quantity):", response);
+    return response;
+  } catch (error) {
+    console.log("API response (update item quantity Error):", error);
+    return { error: error.response?.data || error.message };
+  }
+};
