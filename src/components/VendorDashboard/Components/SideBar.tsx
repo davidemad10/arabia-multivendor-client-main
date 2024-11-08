@@ -135,7 +135,15 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
           />
         </Link>
         <Typography
-          sx={{ fontSize: "20px", marginRight: "auto" }}
+          sx={{
+            fontSize: 20,
+            fontWeight:"300",
+            fontFamily: "'Poppins', sans-serif",
+            letterSpacing: 1,
+            textTransform: "uppercase",
+            marginRight: "auto",
+            marginTop: "5px",
+          }}
           noWrap
           component="div"
         >
@@ -152,18 +160,18 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
       <Divider />
 
       <Link to={"/VendorProfile"}>
-      <Avatar
-        sx={{
-          mx: "auto",
-          my: 1,
-          width: open ? "70px" : "55px",
-          height: open ? "70px" : "55px",
-          border: "2px solid gray",
-          transition: "0.5s",
-        }}
-        alt="User Image"
-        src="/static/images/avatar/2.jpg"
-      />
+        <Avatar
+          sx={{
+            mx: "auto",
+            my: 1,
+            width: open ? "70px" : "55px",
+            height: open ? "70px" : "55px",
+            border: "2px solid gray",
+            transition: "0.5s",
+          }}
+          alt="User Image"
+          src="/static/images/avatar/2.jpg"
+        />
         <Typography
           align="center"
           variant="body1"

@@ -11,6 +11,7 @@ const OrdersDashboard = () => {
       orderNumber: "1001",
       customer: "John Doe",
       total: 150,
+      status: "in progress",
       date: "2024-10-01",
     },
     {
@@ -18,6 +19,7 @@ const OrdersDashboard = () => {
       orderNumber: "1002",
       customer: "Jane Smith",
       total: 200,
+      status: "penndimg",
       date: "2024-10-03",
     },
     {
@@ -25,6 +27,7 @@ const OrdersDashboard = () => {
       orderNumber: "1003",
       customer: "Alice Brown",
       total: 300,
+      status: "approved",
       date: "2024-10-05",
     },
     // Add more orders as needed
@@ -34,10 +37,26 @@ const OrdersDashboard = () => {
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
 
   const columns = [
-    { field: "orderNumber", headerName: "Order #", flex: 1 },
-    { field: "customer", headerName: "Customer", flex: 1 },
-    { field: "total", headerName: "Total Amount ($)", flex: 1 },
-    { field: "date", headerName: "Date", flex: 1 },
+    {
+      field: "orderNumber",
+      headerName: "Order #",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "customer",
+      headerName: "Customer",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "total",
+      headerName: "Total Amount ($)",
+      flex: 0.5,
+      headerAlign: "center",
+    },
+    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
+    { field: "date", headerName: "Date", flex: 1, headerAlign: "center" },
   ];
 
   return (
@@ -85,10 +104,12 @@ const OrdersDashboard = () => {
           sx={{
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: "#f5f5f5",
-              fontWeight: 700,
+              fontWeight: "bold",
+              textAlign: "center",
             },
             "& .MuiDataGrid-cell": {
               padding: 1,
+              textAlign: "center",
             },
           }}
         />
