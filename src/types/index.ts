@@ -68,7 +68,7 @@ export interface Product {
     };
   };
   image: string;
-
+}
 export interface registerUserData {
   email: string;
   full_name: string;

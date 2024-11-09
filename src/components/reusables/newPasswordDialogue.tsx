@@ -17,7 +17,7 @@ import {
 import { z } from "zod";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { SensorsSharp, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { updatePassword } from "../../api/userRequests";
 import { enqueueSnackbar } from "notistack";
@@ -29,6 +29,7 @@ export default function NewPasswordDialogue({ open, setOpen }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("accessToken");
 
   const handleClose = () => {
     setOpen(false);
@@ -84,7 +85,9 @@ export default function NewPasswordDialogue({ open, setOpen }) {
           },
         });
         console.log("Password updated successfully:", response);
-        navigate("/signin");
+        if (!token) {
+          navigate("/signin");
+        }
         handleClose();
       } catch (error: any) {
         console.error(error);

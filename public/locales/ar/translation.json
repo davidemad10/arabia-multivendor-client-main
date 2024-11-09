@@ -84,5 +84,22 @@
   "hala": "أهلا !",
   "wishlist": "المفضلة",
   "profile": "حسابك",
-  "orders": "طلباتك"
+  "orders": "طلباتك",
+  "updateProfile": "تحديث حسابك",
+  "address": "العنوان",
+  "readyToMakeAWish": "هل أنت مستعد لتمنى أمنية؟",
+  "addToWishlistMessage": "ابدأ بإضافة العناصر التي تحبها إلى قائمة الأمنيات عن طريق النقر على أيقونة القلب.",
+  "noPreviousOrders": "ليس لديك طلبات سابقة",
+  "startOrdering": "لدينا الآلاف من المنتجات المتاحة من مختلف البائعين. ابدأ الطلب الآن!",
+  "loading": "جارى التحميل ...",
+  "updateAddress": "تغيير العنوان",
+  "updatePassword": "تغيير كلمة المرور",
+  "shoppingCart": "عربة التسوق",
+  "remove": "ازالة",
+  "Quantity": "الكمية",
+  "Shipping and taxes calculated at checkout": "يتم حساب الشحن والضرائب عند إتمام الشراء",
+  "subtotal": "الإجمالي الفرعي",
+  "Continue Shopping": "استمر بالتسوق",
+  "or": "أو",
+  "reviewYourOrder": "راجع طلبك"
 }
