@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../public/utils/functions";
 
 interface MenuItem {
   title: string;
@@ -22,6 +23,11 @@ export default function SidePanel({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const token = sessionStorage.getItem("accessToken");
+  const user = getUser(token);
+  const email = user?.email;
+  console.log("this is user email:", email);
+
   const handleLogout = () => {
     dispatch(signOut());
     navigate("/");
@@ -32,9 +38,7 @@ export default function SidePanel({
     <div className="bg-white w-80 min-h-screen start-0 top-0 p-10 ps-16 max-laptop:hidden">
       <div className="border-b-2 border-gray-200 pb-6">
         <p className="font-bold text-gray-700">{t("hala")}</p>
-        <p className="font-light text-xs text-gray-400 break-words">
-          abanoub.medhat.seif@gmail.com
-        </p>
+        <p className="font-light text-xs text-gray-400 break-words">{email} </p>
       </div>
       <div className="py-5 border-b-2 border-gray-200">
         {menuItems.map((item) => (
