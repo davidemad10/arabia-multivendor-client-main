@@ -166,7 +166,7 @@ export default function Orders() {
   }
 
   if (error) {
-    return <div>Error loading user information.</div>;
+    return <div>Error loading user Orders.</div>;
   }
   return (
     <div className="bg-white w-full mx-auto my-5 p-10">
