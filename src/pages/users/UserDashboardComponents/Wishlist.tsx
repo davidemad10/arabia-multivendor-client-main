@@ -1,9 +1,22 @@
 import { t } from "i18next";
 import "../../../styles/wishlist.css";
+import Loader from "../../../components/reusables/Loader";
 
 const wishlist = [];
 
 export default function Wishlist() {
+  // if (isLoading) {
+  //   return (
+  //     <div className="mt-44 flex justify-center items-center">
+  //       <Loader isLoading={true}></Loader>
+  //     </div>
+  //   );
+  // }
+
+  // if (error) {
+  //   return <div>Error loading user information.</div>;
+  // }
+
   return (
     <div className="bg-white w-full mx-auto my-5 p-10">
       {wishlist.length > 0 ? (

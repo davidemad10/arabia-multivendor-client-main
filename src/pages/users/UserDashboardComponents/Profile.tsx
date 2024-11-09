@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useState } from "react";
+import Loader from "../../../components/reusables/Loader";
 
 export default function Profile() {
   const [requestLoading, setRequestLoading] = useState(false);
@@ -82,7 +83,11 @@ export default function Profile() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mt-44 flex justify-center items-center">
+        <Loader isLoading={true}></Loader>
+      </div>
+    );
   }
 
   if (error) {

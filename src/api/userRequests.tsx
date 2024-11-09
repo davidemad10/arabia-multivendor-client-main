@@ -181,7 +181,7 @@ export const getUserCart = async (id: string) => {
 export const updateOrderItem = async (id: string, quantity: number) => {
   try {
     const token = sessionStorage.getItem("accessToken");
-    const response = await axiosInstance.delete(`/order/updatecart/${id}`, {
+    const response = await axiosInstance.patch(`/order/updatecart/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
