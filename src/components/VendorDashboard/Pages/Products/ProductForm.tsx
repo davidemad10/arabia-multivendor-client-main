@@ -22,26 +22,30 @@ export default function ProductForm({
   handleAddProduct,
 }) {
   const [categories, setCategories] = useState([]);
-  const [colors, setColors] = useState([]);
 
+  // Submit handler
+  const handleSubmit = async (values) => {
+    try {
+
+      await onSubmit(values);
+      enqueueSnackbar("Product submitted successfully!", { variant: "success" });
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      enqueueSnackbar("Failed to submit product. Please try again.", { variant: "error" });
+    }
+  };
+
+  // Validation schema
   const schema = z.object({
     productName: z.string().min(2, { message: "Product name is required" }),
     category: z.string().min(1, { message: "Category is required" }),
-    color: z.string().min(1, { message: "Color is required" }),
     brand: z.string().optional(),
-    specifications: z.string().optional(),
     image_uploads: z
-      .string()
-      .url({ message: "Must be a valid URL" })
-      .optional(),
+      .instanceof(FileList)
+      .refine((files) => files.length > 0, { message: "Image upload is required" }),
     price_before_discount: z.number().positive({ message: "Must be positive" }),
     price_after_discount: z.number().positive({ message: "Must be positive" }),
     stock_quantity: z.number().min(0, { message: "Stock must be 0 or more" }),
-    total_sold: z.number().min(0, { message: "Total sold must be 0 or more" }),
-    total_views: z
-      .number()
-      .min(0, { message: "Total views must be 0 or more" }),
-    supplier: z.string().min(1, { message: "Supplier is required" }),
   });
 
   const formik = useFormik({
@@ -50,20 +54,13 @@ export default function ProductForm({
       category: "",
       color: "",
       brand: "",
-      image_uploads: "",
-      // image_uploads: "",
-      // image_uploads: "",
+      image_uploads: null,
       price_before_discount: 0,
       price_after_discount: 0,
       stock_quantity: 0,
-      supplier: "",
     },
     validationSchema: toFormikValidationSchema(schema),
-    onSubmit: async (values) => {
-      if (onSubmit) {
-        onSubmit(values);
-      }
-    },
+    onSubmit: handleSubmit,
   });
 
   useEffect(() => {
@@ -76,16 +73,9 @@ export default function ProductForm({
       })
       .catch((error) => console.error("Error fetching categories:", error));
 
-      // Fetch colors
-      // fetch("http://127.0.0.1:8000/en/api/products/colors/")
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     console.log("Colors Data:", data); // Debugging log
-      //     setColors(data.results || data || []); // Adjust based on actual response structure
-      //   })
-      //   .catch((error) => console.error("Error fetching colors:", error));
-  }, []);
+    }, []);
 
+    
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box className="flex flex-wrap gap-9">
@@ -96,18 +86,13 @@ export default function ProductForm({
           </FormLabel>
           <TextField
             className="w-full"
-            autoComplete="productName"
             name="productName"
-            required
             id="productName"
             onBlur={formik.handleBlur}
             value={formik.values.productName}
             onChange={formik.handleChange}
-            error={
-              formik.touched.productName && Boolean(formik.errors.productName)
-            }
+            error={formik.touched.productName && Boolean(formik.errors.productName)}
             helperText={formik.touched.productName && formik.errors.productName}
-            color={formik.errors.productName ? "error" : "primary"}
           />
         </FormControl>
 
@@ -136,34 +121,15 @@ export default function ProductForm({
                 value={category.translations.en.name}
                 sx={{ color: "black" }}
               >
-
                 {/* change the  language to arabic to see the arabic name */}
-                {isArabic ? category.translations.en.name : category.translations.en.name}
+                {isArabic
+                  ? category.translations.en.name
+                  : category.translations.en.name}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        {/* Color Dropdown */}
-        {/* <FormControl className="w-5/12">
-          <FormLabel htmlFor="color">
-            {isArabic ? "اللون" : t("color")}
-          </FormLabel>
-          <Select
-            name="color"
-            id="color"
-            value={formik.values.color}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.color && Boolean(formik.errors.color)}
-          >
-            {colors.map((color) => (
-              <MenuItem key={color.id} value={color.id}>
-                {isArabic ? color.name_ar : color.name_en}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
 
         {/* Brand */}
         <FormControl className="w-5/12">
@@ -183,32 +149,32 @@ export default function ProductForm({
           />
         </FormControl>
 
+
         {/* Image Uploads */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="Image upload">
+          <FormLabel htmlFor="image_uploads">
             {isArabic ? "ارفع الصورة" : t("Image upload")}
-          </FormLabel>{" "}
+          </FormLabel>
           <input
             type="file"
             multiple
             id="image_uploads"
             name="image_uploads"
-            onChange={(event) =>
-              formik.setFieldValue("image_uploads", event.currentTarget.files)
-            }
+            onChange={(event) => formik.setFieldValue("image_uploads", event.currentTarget.files)}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.image_uploads && formik.errors.image_uploads && (
+            <p className="text-red-600">{formik.errors.image_uploads}</p>
+          )}
         </FormControl>
 
         {/* Price Before Discount */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="price_before_discount">
-            {t("price Before Discount")}
-          </FormLabel>
+          <FormLabel htmlFor="price_before_discount">{t("price Before Discount")}</FormLabel>
           <TextField
             className="w-full"
             type="number"
             name="price_before_discount"
-            required
             id="price_before_discount"
             onBlur={formik.handleBlur}
             value={formik.values.price_before_discount}
@@ -221,7 +187,6 @@ export default function ProductForm({
               formik.touched.price_before_discount &&
               formik.errors.price_before_discount
             }
-            color={formik.errors.price_before_discount ? "error" : "primary"}
           />
         </FormControl>
 
@@ -275,7 +240,7 @@ export default function ProductForm({
         </FormControl>
 
         {/* Supplier */}
-        <FormControl className="w-5/12">
+        {/* <FormControl className="w-5/12">
           <FormLabel htmlFor="supplier">{t("supplier")}</FormLabel>
           <TextField
             className="w-full"
@@ -289,21 +254,14 @@ export default function ProductForm({
             helperText={formik.touched.supplier && formik.errors.supplier}
             color={formik.errors.supplier ? "error" : "primary"}
           />
-        </FormControl>
+        </FormControl> */}
       </Box>
-
       <Button
         type="submit"
-        disabled={!formik.dirty && formik.isValid}
         variant="contained"
+        // disabled={!formik.dirty || !formik.isValid}
         className="w-1/5"
-        sx={{
-          background: "primary",
-          borderRadius: "3px",
-          marginTop: "30px",
-          color: "inherit",
-        }}
-        onClick={handleAddProduct}
+        sx={{ background: "primary", borderRadius: "3px", marginTop: "30px" }}
       >
         <p className="font-semibold">{buttons}</p>
       </Button>

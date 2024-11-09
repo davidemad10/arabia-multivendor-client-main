@@ -1,4 +1,3 @@
-
 import { Typography, Button } from "@mui/material";
 import ProductForm from "./ProductForm";
 import { useState } from "react";
@@ -15,42 +14,25 @@ export default function AddProduct() {
 
   // onSubmit function to handle form submission
   const handleSubmit = async (productData: any) => {
+    const token = localStorage.getItem("authToken");
     try {
-      // Prepare the form data
-      const formData = new FormData();
-      for (const key in productData) {
-        if (key === "image_uploads" && productData[key]) {
-          // Append each image file if image_uploads is an array of files
-          Array.from(productData[key]).forEach((file: File) => {
-            formData.append("image_uploads", file);
-          });
-        } else {
-          formData.append(key, productData[key]);
-        }
-      }
+      console.log("product data :", productData);
+      const response = await axiosInstance.post(
+        "/products/",
+        {
+          productData,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
 
-        try {
-          const response = await axiosInstance.post(
-            "/products/",
-            {
-              formData,
-            },
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          );
-          console.log("API response (Send OTP to the email) :", response);
-        } catch (error: any) {
-console.log("Error (Send OTP to the email) :", error);
+          withCredentials: true,
         }
-      // const response = await fetch('http://127.0.0.1:8000/en/api/products/', {
-      //   method: "POST",
-      //   body: formData,
-      // });
+      );
+      console.log("API response (Send OTP to the email) :", response);
 
       if (response.ok) {
         console.log("Product Data:", productData);
@@ -78,10 +60,14 @@ console.log("Error (Send OTP to the email) :", error);
         {isArabic ? "إضافة المنتج بالعربية" : "Add Product in Arabic"}
       </Button>
       <ProductForm
-        product={undefined}
+        product={FormData}
         onSubmit={handleSubmit}
-        buttons={isArabic ? "أضف المنتج باللغة العربية" : "Add Product in English"}
-        isArabic={isArabic} handleAddProduct={handleSubmit}      />
+        buttons={
+          isArabic ? "أضف المنتج باللغة العربية" : "Add Product in English"
+        }
+        isArabic={isArabic}
+        handleAddProduct={handleSubmit}
+      />
     </>
   );
 }
