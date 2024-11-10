@@ -142,6 +142,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
             letterSpacing: 1,
             textTransform: "uppercase",
             marginRight: "auto",
+            marginLeft:2,
             marginTop: "5px",
           }}
           noWrap
@@ -187,6 +188,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
             fontSize: open ? 12 : 0,
             transition: "0.75s",
             color: theme.palette.error.main,
+
           }}
         >
           Vendor

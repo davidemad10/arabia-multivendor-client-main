@@ -8,7 +8,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { enqueueSnackbar } from "notistack";
 import { z } from "zod";
 import { t } from "i18next";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -19,7 +18,6 @@ export default function ProductForm({
   onSubmit,
   buttons,
   isArabic,
-  handleAddProduct,
 }) {
   const [categories, setCategories] = useState([]);
 
@@ -28,10 +26,9 @@ export default function ProductForm({
     try {
 
       await onSubmit(values);
-      enqueueSnackbar("Product submitted successfully!", { variant: "success" });
+      console.log(" Product submitted localy successfully");
     } catch (error) {
       console.error("Error submitting product:", error);
-      enqueueSnackbar("Failed to submit product. Please try again.", { variant: "error" });
     }
   };
 
