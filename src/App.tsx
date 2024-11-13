@@ -60,7 +60,7 @@ function App() {
           <Route path="/Wallet"  element={<Wallet totalBalance={0} />}></Route>
           <Route path="/Earnings" element={<Earnings totalEarnings={0} monthlyEarnings={[]} weeklyEarnings={[]} />}></Route>
           <Route path="/Discount" element={<Discount />}></Route>
-          <Route  path="/VendorProfile" element={<VendorProfile avatarUrl={""} name={""} email={""} phone={""} address={""} description={""} />}></Route>
+          <Route  path="/VendorProfile" element={<VendorProfile name={""} email={""}/>}></Route>
         </Route>
         
       </Routes>

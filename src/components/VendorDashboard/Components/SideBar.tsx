@@ -122,6 +122,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
 
   const theme = useTheme();
   const navigate = useNavigate();
+  const userName = localStorage.getItem("username");
 
   return (
     <Drawer variant="permanent" open={open}>
@@ -130,7 +131,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
           <Box
             component="img"
             src="../../../../public/icons/4895665.png"
-            alt="Logo"
+            alt={userName}
             sx={{ height: 65, width: 65, marginRight: 0, marginLeft: 0 }}
           />
         </Link>
@@ -170,7 +171,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
             border: "2px solid gray",
             transition: "0.5s",
           }}
-          alt="User Image"
+          alt={userName}
           src="/static/images/avatar/2.jpg"
         />
         <Typography
@@ -178,7 +179,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
           variant="body1"
           sx={{ fontSize: open ? 17 : 0, transition: "0.75s" }}
         >
-          Name
+          {userName}
         </Typography>
         <Typography
           align="center"

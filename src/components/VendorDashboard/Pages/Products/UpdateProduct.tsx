@@ -42,17 +42,28 @@ export default function ProductGrid() {
         console.log("API response:", response.data);
 
         // Map API response to the structure expected by DataGrid rows
-        const formattedRows = response.data.results.map((product) => ({
-          id: product.id,
-          name: product.translations.en.name,
-          category: product.category.translations.en.name,
-          brand: product.brand.translations.en.name,
-          stock: product.stock_quantity,
-          totalSold: product.total_sold,
-          discount:
-            product.price_before_discount - product.price_after_discount,
-          price: product.price_after_discount,
-        }));
+        const formattedRows = response.data.results.map(
+          (product: {
+            id: any;
+            translations: { en: { name: any } };
+            category: { translations: { en: { name: any } } };
+            brand: { translations: { en: { name: any } } };
+            stock_quantity: any;
+            total_sold: any;
+            price_before_discount: number;
+            price_after_discount: number;
+          }) => ({
+            id: product.id,
+            name: product.translations.en.name,
+            category: product.category.translations.en.name,
+            brand: product.brand.translations.en.name,
+            stock: product.stock_quantity,
+            totalSold: product.total_sold,
+            discount:
+              product.price_before_discount - product.price_after_discount,
+            price: product.price_after_discount,
+          })
+        );
 
         setRows(formattedRows);
         setRowCount(response.data.count); // Set total count for pagination
@@ -118,9 +129,9 @@ export default function ProductGrid() {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
-  
+
             withCredentials: true,
           }
         );
