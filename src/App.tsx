@@ -14,6 +14,15 @@ import BrandProducts from "./pages/common/BrandProducts";
 import UserProfile from "./layouts/UserProfile";
 import UserDashboard from "./pages/users/UserDashboard";
 import CartPage from "./pages/users/Cart";
+import VendorDashboard from "./components/VendorDashboard/VedorDashboard";
+import Dashboard from "./components/VendorDashboard/Pages/Dashboard/Dashboard";
+import AddProduct from "./components/VendorDashboard/Pages/Products/AddProduct";
+import UpdateProduct from "./components/VendorDashboard/Pages/Products/UpdateProduct";
+import Orders from "./components/VendorDashboard/Pages/Orders/Orders";
+import Wallet from "./components/VendorDashboard/Pages/Wallet/Wallet";
+import Earnings from "./components/VendorDashboard/Pages/Earnings/Earnings";
+import Discount from "./components/VendorDashboard/Pages/Discount/Discount";
+import VendorProfile from "./components/VendorDashboard/Pages/VendorProfile/VendorProfile";
 
 function App() {
   return (
@@ -39,6 +48,21 @@ function App() {
           <Route index element={<UserDashboard></UserDashboard>}></Route>
           <Route path="cart" element={<CartPage></CartPage>}></Route>
         </Route>
+
+        
+         {/* Vendor  dashboard Routes */}
+      
+        <Route element={<VendorDashboard />}>
+          <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
+          <Route path="/AddProducts" element={<AddProduct />}></Route>
+          <Route path="/UpdateProduct" element={<UpdateProduct />}></Route>
+          <Route path="/Orders" element={<Orders />}></Route>
+          <Route path="/Wallet"  element={<Wallet totalBalance={0} />}></Route>
+          <Route path="/Earnings" element={<Earnings totalEarnings={0} monthlyEarnings={[]} weeklyEarnings={[]} />}></Route>
+          <Route path="/Discount" element={<Discount />}></Route>
+          <Route  path="/VendorProfile" element={<VendorProfile name={""} email={""}/>}></Route>
+        </Route>
+        
       </Routes>
       <ToastContainer></ToastContainer>
     </div>
