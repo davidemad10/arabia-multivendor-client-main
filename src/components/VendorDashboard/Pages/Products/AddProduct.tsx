@@ -21,13 +21,13 @@ export default function AddProduct() {
       const response = await axiosInstance.post(
         "/products/",
         {
-          productData,
+          ...productData,
         },
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
 
           withCredentials: true,
@@ -37,14 +37,18 @@ export default function AddProduct() {
 
       if (response.ok) {
         console.log("Product Data:", productData);
-        enqueueSnackbar("Product submitted successfully!", { variant: "success" });
-
+        enqueueSnackbar("Product submitted successfully!", {
+          variant: "success",
+        });
       } else {
         alert("Failed to add product");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      enqueueSnackbar("An error occurred while adding the product, Error: " + error, { variant: "error" });
+      enqueueSnackbar(
+        "An error occurred while adding the product, Error: " + error,
+        { variant: "error" }
+      );
     }
   };
 
