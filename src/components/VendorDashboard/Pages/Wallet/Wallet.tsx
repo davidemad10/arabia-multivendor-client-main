@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -11,15 +11,31 @@ import {
   Alert,
 } from '@mui/material';
 
-interface WalletProps {
-  totalBalance: number;
-}
+const API_URL = 'http://127.0.0.1:8000/en/api/dashboard/vendor/2e4740d3-8174-4635-9938-a18145d762ce/order-summary/';
 
-const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
+interface WalletProps {}
+
+const Wallet: React.FC<WalletProps> = () => {
+  const [totalBalance, setTotalBalance] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [requestedAmount, setRequestedAmount] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const feePercentage = 2; // Set fee percentage
+
+  useEffect(() => {
+    // Fetch total revenue from the API
+    const fetchTotalRevenue = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setTotalBalance(parseFloat(data.total_revenue));
+      } catch (error) {
+        console.error("Error fetching total revenue:", error);
+      }
+    };
+
+    fetchTotalRevenue();
+  }, []);
 
   const handleRequestMoneyClick = () => {
     setIsModalOpen(true);
@@ -53,7 +69,7 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
           <Card sx={{ backgroundColor: 'green', color: 'white' }}>
             <CardContent>
               <Typography variant="h5">Total Balance</Typography>
-              <Typography variant="h3">${totalBalance=5}</Typography>
+              <Typography variant="h3">${totalBalance.toFixed(2)}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -114,5 +130,6 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
     </Box>
   );
 };
+
 
 export default Wallet;

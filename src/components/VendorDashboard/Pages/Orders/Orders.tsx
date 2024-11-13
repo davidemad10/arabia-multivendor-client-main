@@ -1,62 +1,50 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import axiosInstance from "../../../../api/axiosInstance";
 
 const OrdersDashboard = () => {
-  const [orders] = useState([
-    {
-      id: 1,
-      orderNumber: "1001",
-      customer: "John Doe",
-      total: 150,
-      status: "in progress",
-      date: "2024-10-01",
-    },
-    {
-      id: 2,
-      orderNumber: "1002",
-      customer: "Jane Smith",
-      total: 200,
-      status: "penndimg",
-      date: "2024-10-03",
-    },
-    {
-      id: 3,
-      orderNumber: "1003",
-      customer: "Alice Brown",
-      total: 300,
-      status: "approved",
-      date: "2024-10-05",
-    },
-    // Add more orders as needed
-  ]);
+  const [orderSummary, setOrderSummary] = useState({
+    total_orders: 0,
+    total_products_count: 0,
+    total_revenue: "0.00",
+    weekly_revenue: "0.00",
+    monthly_revenue: "0.00",
+  });
+  const [orders, setOrders] = useState([]);
 
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  useEffect(() => {
+    const fetchOrderSummary = async () => {
+      try {
+        const vendorId = localStorage.getItem("userid");
+        const response = await axiosInstance.get(`en/api/dashboard/vendor/${vendorId}/order-summary/`);
+        setOrderSummary(response.data);
+      } catch (error) {
+        console.error("Failed to fetch order summary:", error);
+      }
+    };
+
+    const fetchOrderDetails = async () => {
+      try {
+        const vendorId = localStorage.getItem("userid");
+        const response = await axiosInstance.get(`en/api/dashboard/vendor/${vendorId}/productorderdetails/`);
+        setOrders(response.data); // Assuming the response data is an array of order details
+      } catch (error) {
+        console.error("Failed to fetch order details:", error);
+      }
+    };
+
+    fetchOrderSummary();
+    fetchOrderDetails();
+  }, []);
 
   const columns = [
-    {
-      field: "orderNumber",
-      headerName: "Order #",
-      flex: 1,
-      headerAlign: "center",
-    },
-    {
-      field: "customer",
-      headerName: "Customer",
-      flex: 1,
-      headerAlign: "center",
-    },
-    {
-      field: "total",
-      headerName: "Total Amount ($)",
-      flex: 0.5,
-      headerAlign: "center",
-    },
-    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
-    { field: "date", headerName: "Date", flex: 1, headerAlign: "center" },
+    { field: "customer_name", headerName: "Customer Name", width: 200 },
+    { field: "product_name", headerName: "Product Name", width: 200 },
+    { field: "order_date", headerName: "Order Date", width: 200 },
+    { field: "quantity", headerName: "Quantity", width: 100 },
+    { field: "total_price", headerName: "Total Price ($)", width: 150 },
   ];
 
   return (
@@ -71,20 +59,31 @@ const OrdersDashboard = () => {
           <Card sx={{ backgroundColor: "#133E87", color: "white" }}>
             <CardContent>
               <Typography variant="h5">Total Orders</Typography>
-              <Typography variant="h3">{totalOrders}</Typography>
+              <Typography variant="h3">{orderSummary.total_orders}</Typography>
               <ShoppingCartIcon fontSize="large" />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ backgroundColor: "#A34343", color: "white" }}>
+
+        {/* <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#287233", color: "white" }}>
             <CardContent>
-              <Typography variant="h5">Total Revenue</Typography>
-              <Typography variant="h3">${totalRevenue}</Typography>
+              <Typography variant="h5">Weekly Revenue</Typography>
+              <Typography variant="h3">${orderSummary.weekly_revenue}</Typography>
               <AttachMoneyIcon fontSize="large" />
             </CardContent>
           </Card>
         </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#663399", color: "white" }}>
+            <CardContent>
+              <Typography variant="h5">Monthly Revenue</Typography>
+              <Typography variant="h3">${orderSummary.monthly_revenue}</Typography>
+              <AttachMoneyIcon fontSize="large" />
+            </CardContent>
+          </Card>
+        </Grid> */}
+
       </Grid>
 
       {/* Orders Table */}

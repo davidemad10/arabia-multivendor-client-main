@@ -13,6 +13,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, useNavigate } from "react-router-dom";
 import LanguageSelector from "../Locales/LanguageSelector";
+import { t } from "i18next";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../../redux/slices/userSlice";
+import { FaSignOutAlt } from "react-icons/fa";
 
 interface AppBarProps extends MuiAppBarProps {
   open: boolean;
@@ -63,6 +67,15 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
       },
     });
   };
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(signOut());
+    navigate("/");
+    console.log("User logged out");
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -105,7 +118,7 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
               sx={{
                 color: "inherit",
                 fontSize: 32,
-                fontWeight:"300",
+                fontWeight: "300",
                 fontFamily: "'Poppins', sans-serif ",
                 letterSpacing: 1,
                 textTransform: "uppercase",
@@ -144,7 +157,7 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
             </IconButton>
           )}
 
-          <LanguageSelector/>
+          <LanguageSelector />
 
           <IconButton
             color="inherit"
@@ -165,8 +178,15 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={handleProfileClick}>
+              <PersonOutlineOutlinedIcon />
+              Profile
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <FaSignOutAlt className="menu-icon" />
+
+              {t("logout")}
+            </MenuItem>
           </Menu>
         </Stack>
       </Toolbar>

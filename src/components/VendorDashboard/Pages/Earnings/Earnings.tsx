@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Grid } from '@mui/material';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import axios from 'axios';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-interface EarningsProps {
-  totalEarnings: number;
-  monthlyEarnings: number[];
-  weeklyEarnings: number[];
-}
+interface EarningsProps {}
 
-const Earnings: React.FC<EarningsProps> = ({ totalEarnings, monthlyEarnings, weeklyEarnings }) => {
+const Earnings: React.FC<EarningsProps> = () => {
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [monthlyEarnings, setMonthlyEarnings] = useState<number[]>([]);
+  const [weeklyEarnings, setWeeklyEarnings] = useState<number[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const vendorId = '2e4740d3-8174-4635-9938-a18145d762ce';
+        const response = await axios.get(`http://127.0.0.1:8000/en/api/dashboard/vendor/${vendorId}/order-summary/`);
+        const data = response.data;
+
+        // Update the state with the fetched data
+        setTotalEarnings(parseFloat(data.total_revenue));
+        
+        // Parse the monthly and weekly revenue data as arrays of numbers for charts
+        setMonthlyEarnings([parseFloat(data.monthly_revenue)]);  // Assuming single monthly revenue, repeated to simulate a trend
+        setWeeklyEarnings([parseFloat(data.weekly_revenue)]);    // Assuming single weekly revenue, repeated to simulate trend
+
+      } catch (error) {
+        console.error("Failed to fetch earnings data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // Line chart data for monthly earnings
   const monthlyData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -56,10 +79,10 @@ const Earnings: React.FC<EarningsProps> = ({ totalEarnings, monthlyEarnings, wee
   };
 
   // Calculate average monthly earnings safely
-  const averageMonthlyEarnings = monthlyEarnings.length > 0 ? (monthlyEarnings.reduce((a, b) => a + b, 0) / monthlyEarnings.length).toFixed(2) : 0;
+  const averageMonthlyEarnings = monthlyEarnings.length > 0 ? (monthlyEarnings.reduce((a, b) => a + b, 0) / monthlyEarnings.length) : 0;
   
   // Calculate average weekly earnings safely
-  const averageWeeklyEarnings = weeklyEarnings.length > 0 ? (weeklyEarnings.reduce((a, b) => a + b, 0) / weeklyEarnings.length).toFixed(2) : 0;
+  const averageWeeklyEarnings = weeklyEarnings.length > 0 ? (weeklyEarnings.reduce((a, b) => a + b, 0) / weeklyEarnings.length): 0;
 
   return (
     <Box sx={{ padding: '20px' }}>
@@ -81,7 +104,7 @@ const Earnings: React.FC<EarningsProps> = ({ totalEarnings, monthlyEarnings, wee
           <Card sx={{ backgroundColor: '#2196f3', color: 'white' }}>
             <CardContent>
               <Typography variant="h6">Monthly Earnings</Typography>
-              <Typography variant="h4">${averageMonthlyEarnings}</Typography>
+              <Typography variant="h4">${averageMonthlyEarnings.toFixed(2)}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -89,7 +112,7 @@ const Earnings: React.FC<EarningsProps> = ({ totalEarnings, monthlyEarnings, wee
           <Card sx={{ backgroundColor: '#ff9800', color: 'white' }}>
             <CardContent>
               <Typography variant="h6">Weekly Earnings</Typography>
-              <Typography variant="h4">${averageWeeklyEarnings}</Typography>
+              <Typography variant="h4">${averageWeeklyEarnings.toFixed(2)}</Typography>
             </CardContent>
           </Card>
         </Grid>
