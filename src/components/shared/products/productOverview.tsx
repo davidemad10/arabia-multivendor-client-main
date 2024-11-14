@@ -46,11 +46,11 @@ export default function ProductOverview({ product }) {
             <div className="flex flex-col items-center lg:items-start max-w-fit">
               {/* Main Image */}
               <div className="w-96 h-96 aspect-h-3 aspect-w-2 overflow-hidden rounded-lg">
-                <img
+                {/* <img
                   alt={product.translations.en.name}
                   src={mainImage.image} // Use the new thumbnail
                   className="h-full w-full object-cover object-center"
-                />
+                /> */}
               </div>
 
               {/* Thumbnail Images */}
