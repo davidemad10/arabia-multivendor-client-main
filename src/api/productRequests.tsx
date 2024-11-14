@@ -5,9 +5,9 @@ export const fetchProducts = async () => {
   return response.data;
 };
 
-export const fetchProduct = async (sku: number) => {
+export const fetchProduct = async (id: string) => {
   try {
-    const response = await axiosInstance.get(`/products/${sku}`);
+    const response = await axiosInstance.get(`/products/${id}`);
     return response.data;
   } catch (error: any) {
     return {

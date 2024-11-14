@@ -13,10 +13,10 @@ const CartPage = () => {
     queryFn: () => getUserCart(),
   });
 
-  const handleQuantityChange = async (itemId: string, increment: number) => {
+  const handleQuantityChange = async (itemId: string, quantity: number) => {
     try {
-      const response = await updateOrderItem(itemId, increment);
-      console.log(`Item ID: ${itemId}, Quantity Change: ${increment}`);
+      const response = await updateOrderItem(itemId, quantity);
+      console.log(`Item ID: ${itemId}, Quantity Change: ${quantity}`);
       console.log(response);
       refetch();
     } catch (error) {

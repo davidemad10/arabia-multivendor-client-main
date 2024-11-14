@@ -28,7 +28,7 @@ function App() {
             element={<VendorSignUp></VendorSignUp>}
           ></Route>
           <Route
-            path="/products/:sku"
+            path="/products/:id"
             element={<ProductDetails></ProductDetails>}
           ></Route>
           <Route path="/category/:category" element={<CategoryPage />} />
