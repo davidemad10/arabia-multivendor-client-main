@@ -101,5 +101,8 @@
   "subtotal": "الإجمالي الفرعي",
   "Continue Shopping": "استمر بالتسوق",
   "or": "أو",
-  "reviewYourOrder": "راجع طلبك"
+  "reviewYourOrder": "راجع طلبك",
+  "cartEmpty": "سلة التسوق الخاصة بك فارغة",
+  "startShopping": "أضف بعض العناصر إلى سلة التسوق الخاصة بك لبدء التسوق!",
+  "price": "السعر"
 }

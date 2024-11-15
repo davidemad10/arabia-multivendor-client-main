@@ -265,12 +265,15 @@ const products = [
 ];
 
 export default function ProductDetails() {
-  const { sku } = useParams();
+  const { id } = useParams();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["product", sku],
-    queryFn: () => fetchProduct(sku),
+    queryKey: ["product", id],
+    queryFn: () => fetchProduct(id),
+    retry: false,
   });
+
+  if (!data) return <div className="min-h-screen">Product not found.</div>;
 
   if (isLoading)
     return (
@@ -285,11 +288,12 @@ export default function ProductDetails() {
     );
   if (error) return <div className="min-h-screen">{error.message}</div>;
 
-  return (
-    <div>
-      <ProductOverview product={data} />
-      <ProductInfo product={data} />
-      <ProductsYouMayLike products={products} />
-    </div>
-  );
+  if (data)
+    return (
+      <div>
+        <ProductOverview product={data} />
+        <ProductInfo product={data} />
+        <ProductsYouMayLike products={products} />
+      </div>
+    );
 }
