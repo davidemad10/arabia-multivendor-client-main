@@ -51,6 +51,9 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen, setMode }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
 
+
+
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

@@ -3,28 +3,27 @@ import {
   Button,
   FormControl,
   FormLabel,
+  IconButton,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { z } from "zod";
 import { t } from "i18next";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../../../api/axiosInstance";
+import InfoIcon from "@mui/icons-material/Info";
 
-export default function ProductForm({
-  product,
-  onSubmit,
-  buttons,
-  isArabic,
-}) {
+export default function ProductForm({ product, onSubmit, buttons }) {
   const [categories, setCategories] = useState([]);
+  const [brand, setBrand] = useState([]);
 
   // Submit handler
   const handleSubmit = async (values) => {
     try {
-
       await onSubmit(values);
       console.log(" Product submitted localy successfully");
     } catch (error) {
@@ -37,9 +36,9 @@ export default function ProductForm({
     productName: z.string().min(2, { message: "Product name is required" }),
     category: z.string().min(1, { message: "Category is required" }),
     brand: z.string().optional(),
-    image_uploads: z
-      .instanceof(FileList)
-      .refine((files) => files.length > 0, { message: "Image upload is required" }),
+    image_uploads: z.instanceof(FileList).refine((files) => files.length > 0, {
+      message: "Image upload is required",
+    }),
     price_before_discount: z.number().positive({ message: "Must be positive" }),
     price_after_discount: z.number().positive({ message: "Must be positive" }),
     stock_quantity: z.number().min(0, { message: "Stock must be 0 or more" }),
@@ -61,25 +60,46 @@ export default function ProductForm({
   });
 
   useEffect(() => {
-    // Fetch categories
-    fetch("http://127.0.0.1:8000/en/api/products/category/")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Categories Data:", data); // Debugging log
-        setCategories(data.results || data || []); // Adjust based on actual response structure
+    // Fetch categories using Axios instance
+    axiosInstance
+      .get("/products/category/")
+      .then((response) => {
+        console.log("Categories Data:", response.data);
+        setCategories(response.data.results || response.data || []);
       })
-      .catch((error) => console.error("Error fetching categories:", error));
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
-    }, []);
+  useEffect(() => {
+    // Fetch brands using Axios instance
+    axiosInstance
+      .get("/products/brand/")
+      .then((response) => {
+        console.log("brand Data:", response.data);
+        setBrand(response.data.results || response.data || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
-    
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box className="flex flex-wrap gap-9">
-        {/* Product Name */}
+        {/* Product Name In English*/}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="productName">
-            {isArabic ? "اسم المنتج" : t("productName")}
+          <FormLabel htmlFor="productName" className="flex items-center">
+            {t("Product Name")}
+            <Tooltip
+              title="Enter the Product Name In ENGLISH here"
+              placement="right"
+            >
+              <IconButton size="small" aria-label="Info about product name">
+                <InfoIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </FormLabel>
           <TextField
             className="w-full"
@@ -88,16 +108,43 @@ export default function ProductForm({
             onBlur={formik.handleBlur}
             value={formik.values.productName}
             onChange={formik.handleChange}
-            error={formik.touched.productName && Boolean(formik.errors.productName)}
+            error={
+              formik.touched.productName && Boolean(formik.errors.productName)
+            }
             helperText={formik.touched.productName && formik.errors.productName}
           />
         </FormControl>
 
+        {/* Product Name In Arabic*/}
+        {/* <FormControl className="w-5/12">
+          <FormLabel htmlFor="productName" className="flex items-center">
+            {t("Product Name In Arabic")}
+            <Tooltip
+              title="Enter the Product Name In ARABIC here"
+              placement="right"
+            >
+              <IconButton size="small" aria-label="Info about product name">
+                <InfoIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </FormLabel>
+          <TextField
+            className="w-full"
+            name="productName"
+            id="productName"
+            onBlur={formik.handleBlur}
+            value={formik.values.productName}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.productName && Boolean(formik.errors.productName)
+            }
+            helperText={formik.touched.productName && formik.errors.productName}
+          />
+        </FormControl> */}
+
         {/* Category */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="category">
-            {isArabic ? "الفئة" : t("category")}
-          </FormLabel>
+          <FormLabel htmlFor="category">{t("category")}</FormLabel>
           <Select
             className="w-full"
             name="category"
@@ -119,21 +166,16 @@ export default function ProductForm({
                 sx={{ color: "black" }}
               >
                 {/* change the  language to arabic to see the arabic name */}
-                {isArabic
-                  ? category.translations.en.name
-                  : category.translations.en.name}
+                {category.translations.en.name}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
-
         {/* Brand */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="brand">
-            {isArabic ? "الماركة" : t("Brand")}
-          </FormLabel>
-          <TextField
+          <FormLabel htmlFor="brand">{t("brand")}</FormLabel>
+          <Select
             className="w-full"
             name="brand"
             id="brand"
@@ -141,23 +183,36 @@ export default function ProductForm({
             value={formik.values.brand}
             onChange={formik.handleChange}
             error={formik.touched.brand && Boolean(formik.errors.brand)}
-            helperText={formik.touched.brand && formik.errors.brand}
-            color={formik.errors.brand ? "error" : "primary"}
-          />
+            sx={{
+              color: "black",
+              backgroundColor: "white",
+              "& .MuiSelect-icon": { color: "black" }, // Set arrow icon color if needed
+            }}
+          >
+            {brand.map((brand) => (
+              <MenuItem
+                key={brand.id}
+                value={brand.translations.en.name} // Adjust based on your data structure
+                sx={{ color: "black" }}
+              >
+                {/* Change the language to Arabic to see the Arabic name */}
+                {brand.translations.en.name}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
-
 
         {/* Image Uploads */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="image_uploads">
-            {isArabic ? "ارفع الصورة" : t("Image upload")}
-          </FormLabel>
+          <FormLabel htmlFor="image_uploads">{t("Image upload")}</FormLabel>
           <input
             type="file"
             multiple
             id="image_uploads"
             name="image_uploads"
-            onChange={(event) => formik.setFieldValue("image_uploads", event.currentTarget.files)}
+            onChange={(event) =>
+              formik.setFieldValue("image_uploads", event.currentTarget.files)
+            }
             onBlur={formik.handleBlur}
           />
           {formik.touched.image_uploads && formik.errors.image_uploads && (
@@ -167,7 +222,9 @@ export default function ProductForm({
 
         {/* Price Before Discount */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="price_before_discount">{t("price Before Discount")}</FormLabel>
+          <FormLabel htmlFor="price_before_discount">
+            {t("price Before Discount")}
+          </FormLabel>
           <TextField
             className="w-full"
             type="number"

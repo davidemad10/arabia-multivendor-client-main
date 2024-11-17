@@ -3,14 +3,9 @@ import ProductForm from "./ProductForm";
 import { useState } from "react";
 import axiosInstance from "../../../../api/axiosInstance";
 import { enqueueSnackbar } from "notistack";
+import { t } from "i18next";
 
 export default function AddProduct() {
-  const [isArabic, setIsArabic] = useState(false);
-
-  // Handler to switch to Arabic version of the form
-  const handleAddProductArabic = () => {
-    setIsArabic(!isArabic);
-  };
 
   // onSubmit function to handle form submission
   const handleSubmit = async (productData: any) => {
@@ -55,23 +50,14 @@ export default function AddProduct() {
   return (
     <>
       <Typography style={{ fontSize: 40, marginBottom: 20 }}>
-        {isArabic ? "إضافة منتج" : "Add Product"}
+        {t("Add Product")}
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddProductArabic}
-        style={{ marginBottom: 20, color: "inherit" }}
-      >
-        {isArabic ? "إضافة المنتج بالعربية" : "Add Product in Arabic"}
-      </Button>
       <ProductForm
         product={FormData}
         onSubmit={handleSubmit}
         buttons={
-          isArabic ? "أضف المنتج باللغة العربية" : "Add Product in English"
+          "Add Product"
         }
-        isArabic={isArabic}
       />
     </>
   );

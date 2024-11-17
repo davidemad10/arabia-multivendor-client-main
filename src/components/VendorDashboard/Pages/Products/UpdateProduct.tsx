@@ -239,7 +239,6 @@ export default function ProductGrid() {
             product={currentProduct}
             onSubmit={formik.handleSubmit}
             buttons={"Update Product"}
-            isArabic={undefined}
           />
         </DialogContent>
       </Dialog>
