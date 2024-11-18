@@ -35,7 +35,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
   };
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
-  const userId = user.user_id; 
+  const userId = user.user_id;
 
   // Validation schema
 
@@ -47,22 +47,25 @@ export default function ProductForm({ product, onSubmit, buttons }) {
     brand: z
       .number()
       .positive({ message: "Brand must be a positive number (pk)." }),
-    color: z.array(z.string()).nonempty({
+    color: z.number().positive({
       message: "Color is required and should be a list of strings.",
     }),
-    size: z.string().min(1, { message: "Size is required." }),
+    size: z.number().min(1, { message: "Size is required." }),
     specifications: z
       .string()
       .min(1, { message: "Specifications are required." }),
-    supplier: z.string().min(1, { message: "Supplier is required." }).default( userId ),
+    supplier: z
+      .string()
+      .min(1, { message: "Supplier is required." })
+      .default(userId),
     image_uploads: z
       .array(z.instanceof(File))
       .nonempty({ message: "Image uploads must be a list of files." }),
     price_before_discount: z
       .number()
       .positive({ message: "Must be positive." }),
-    price_after_discount: z.number().positive({ message: "Must be positive."}),
-    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more."}),
+    price_after_discount: z.number().positive({ message: "Must be positive." }),
+    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more." }),
   });
 
   const formik = useFormik({
@@ -77,7 +80,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
       price_before_discount: 0,
       price_after_discount: 0,
       stock_quantity: 0,
-      supplier: {userId},
+      supplier: { userId },
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: handleSubmit,
@@ -203,7 +206,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             {categories.map((category) => (
               <MenuItem
                 key={category.id}
-                value={category.translations.en.name}
+                value={category?.id}
                 sx={{ color: "black" }}
               >
                 {/* change the  language to arabic to see the arabic name */}
@@ -233,7 +236,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             {brand.map((brand) => (
               <MenuItem
                 key={brand.id}
-                value={brand.translations.en.name} // Adjust based on your data structure
+                value={brand?.id} // Adjust based on your data structure
                 sx={{ color: "black" }}
               >
                 {/* Change the language to Arabic to see the Arabic name */}
@@ -286,7 +289,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             }}
           >
             {sizes.map((size) => (
-              <MenuItem key={size.id} value={size.id} sx={{ color: "black" }}>
+              <MenuItem key={size.id} value={size?.id} sx={{ color: "black" }}>
                 {size.name}
               </MenuItem>
             ))}
@@ -356,7 +359,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
         </FormControl>
 
         {/* Image Uploads */}
-        <FormControl className="w-5/12">
+        {/* <FormControl className="w-5/12">
           <FormLabel htmlFor="image_uploads">{t("Image Upload")}</FormLabel>
           <input
             type="file"
@@ -372,8 +375,27 @@ export default function ProductForm({ product, onSubmit, buttons }) {
           {formik.touched.image_uploads && formik.errors.image_uploads && (
             <p className="text-red-600">{formik.errors.image_uploads}</p>
           )}
+        </FormControl> */}
+
+        <FormControl className="w-5/12">
+          <FormLabel htmlFor="image_uploads">{t("Image Upload")}</FormLabel>
+          <input
+            type="file"
+            multiple
+            id="image_uploads"
+            name="image_uploads"
+            accept="image/*"
+            onChange={(event) => {
+              const files = Array.from(event.currentTarget.files || []); // Convert FileList to an array
+              formik.setFieldValue("image_uploads", files); // Set the files array into Formik's state
+            }}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.image_uploads && formik.errors.image_uploads && (
+            <p className="text-red-600">{formik.errors.image_uploads}</p>
+          )}
         </FormControl>
-          
+
         {/* Price Before Discount */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="price_before_discount">
@@ -449,9 +471,13 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         <FormControl className="w-5/12">
           <FormLabel htmlFor="supplier">{t("Supplier ID")}</FormLabel>
-          <TextField className="w-full"  disabled value={userId} name="supplier" />
+          <TextField
+            className="w-full"
+            disabled
+            value={userId}
+            name="supplier"
+          />
         </FormControl>
-
       </Box>
       <Button
         type="submit"

@@ -23,6 +23,7 @@ import Wallet from "./components/VendorDashboard/Pages/Wallet/Wallet";
 import Earnings from "./components/VendorDashboard/Pages/Earnings/Earnings";
 import Discount from "./components/VendorDashboard/Pages/Discount/Discount";
 import VendorProfile from "./components/VendorDashboard/Pages/VendorProfile/VendorProfile";
+import Miky from "./components/VendorDashboard/Pages/Products/miky";
 
 function App() {
   return (
@@ -49,20 +50,31 @@ function App() {
           <Route path="cart" element={<CartPage></CartPage>}></Route>
         </Route>
 
-        
-         {/* Vendor  dashboard Routes */}
-      
+        {/* Vendor  dashboard Routes */}
+
         <Route element={<VendorDashboard />}>
           <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
+          <Route path="/miky" element={<Miky></Miky>}></Route>
           <Route path="/AddProducts" element={<AddProduct />}></Route>
           <Route path="/UpdateProduct" element={<UpdateProduct />}></Route>
           <Route path="/Orders" element={<Orders />}></Route>
-          <Route path="/Wallet"  element={<Wallet totalBalance={0} />}></Route>
-          <Route path="/Earnings" element={<Earnings totalEarnings={0} monthlyEarnings={[]} weeklyEarnings={[]} />}></Route>
+          <Route path="/Wallet" element={<Wallet totalBalance={0} />}></Route>
+          <Route
+            path="/Earnings"
+            element={
+              <Earnings
+                totalEarnings={0}
+                monthlyEarnings={[]}
+                weeklyEarnings={[]}
+              />
+            }
+          ></Route>
           <Route path="/Discount" element={<Discount />}></Route>
-          <Route  path="/VendorProfile" element={<VendorProfile name={""} email={""}/>}></Route>
+          <Route
+            path="/VendorProfile"
+            element={<VendorProfile name={""} email={""} />}
+          ></Route>
         </Route>
-        
       </Routes>
       <ToastContainer></ToastContainer>
     </div>
