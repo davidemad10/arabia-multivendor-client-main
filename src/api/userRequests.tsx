@@ -231,3 +231,44 @@ export const updateOrderItem = async (id: string, quantity: number) => {
     return { error: error.response?.data || error.message };
   }
 };
+
+// Placeholder function to fetch user address
+export const getUserAddress = async () => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ address: "123 Main Street, City, Country" }); // Replace with actual API response
+    }, 1000);
+  });
+};
+
+// Placeholder function to fetch user phone
+export const getUserPhone = async () => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ phone: "+1234567890" }); // Replace with actual API response
+    }, 1000);
+  });
+};
+
+// Placeholder function to process payment
+export const processPayment = async (paymentData) => {
+  // Simulate API call
+  console.log("Payment Data Sent to Backend:", paymentData);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (
+        paymentData.paymentMethod === "visa" &&
+        !paymentData.visaDetails.cardNumber
+      ) {
+        reject(new Error("Visa details missing"));
+      } else {
+        resolve({
+          status: "success",
+          message: "Payment processed successfully",
+        });
+      }
+    }, 1500);
+  });
+};

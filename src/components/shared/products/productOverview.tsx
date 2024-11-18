@@ -83,8 +83,8 @@ export default function ProductOverview({ product }) {
               {product.translations.en.name}
             </h1>
             <p className="text-sm text-gray-600">
-              {product.category.translations.en.name} |{" "}
-              {product.brand.translations.en.name}
+              {product.category_details.translations.en.name} |{" "}
+              {product.brand_details.translations.en.name}
             </p>
             <p className="text-xl sm:text-2xl lg:text-3xl tracking-tight text-gray-900">
               {product.price_after_discount} <Trans i18nKey="currency" />
@@ -104,7 +104,7 @@ export default function ProductOverview({ product }) {
                 <Trans i18nKey="available colors" />
               </h3>
               <div className="mt-2 flex space-x-2">
-                {product.color.map((color) => (
+                {product.color_details.map((color) => (
                   <span
                     className={classNames(
                       "h-6 w-6 rounded-full border border-gray-300 cursor-pointer mx-2",

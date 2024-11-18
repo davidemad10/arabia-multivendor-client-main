@@ -162,7 +162,7 @@ const SideCart: React.FC<SideCartProps> = ({ isCartOpen, setSideCart }) => {
                 </p>
                 <div className="mt-6">
                   <a
-                    href="#"
+                    href="/profile/cart"
                     className="flex items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                   >
                     {t("reviewYourOrder")}

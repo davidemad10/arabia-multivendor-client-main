@@ -6,6 +6,7 @@ import {
 } from "../../api/userRequests";
 import Loader from "../../components/reusables/Loader";
 import { t } from "i18next";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery({
@@ -132,9 +133,11 @@ const CartPage = () => {
         <h3 className="text-2xl font-semibold text-gray-900">
           Total: ${data?.data.total_price.toFixed(2)}
         </h3>
-        <button className="mt-6 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-800">
-          Proceed to Checkout
-        </button>
+        <Link to={"/profile/checkout"}>
+          <button className="mt-6 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-800">
+            Proceed to Checkout
+          </button>
+        </Link>
       </div>
     </div>
   );
