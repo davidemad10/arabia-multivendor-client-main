@@ -23,23 +23,11 @@ export default function AddProduct() {
       formData.append("brand", productData.brand.toString());       // Backend expects brand ID
   
       // Handle color (array of IDs)
-      if (productData.color && Array.isArray(productData.color)) {
-        productData.color.forEach((colorId: number) =>
-          formData.append("color[]", colorId.toString())
-        );
-      } else {
-        formData.append("color[]", ""); // Default empty value if no color selected
-      }
+      formData.append("color", productData.color.toString());
   
       // Handle size (array of IDs)
-      if (productData.size && Array.isArray(productData.size)) {
-        productData.size.forEach((sizeId: number) =>
-          formData.append("size[]", sizeId.toString())
-        );
-      } else {
-        formData.append("size[]", ""); // Default empty value if no size selected
-      }
-  
+      formData.append("size", productData.size.toString());
+
       // Append specifications (JSON object or stringified JSON)
       if (productData.specifications) {
         formData.append(

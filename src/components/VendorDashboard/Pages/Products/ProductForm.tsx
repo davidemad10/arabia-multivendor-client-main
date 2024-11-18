@@ -16,6 +16,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../../api/axiosInstance";
 import InfoIcon from "@mui/icons-material/Info";
+import { getUser } from "../../../../../public/utils/functions";
 
 export default function ProductForm({ product, onSubmit, buttons }) {
   const [categories, setCategories] = useState([]);
@@ -32,6 +33,9 @@ export default function ProductForm({ product, onSubmit, buttons }) {
       console.error("Error submitting product:", error);
     }
   };
+  const token = sessionStorage.getItem("accessToken");
+  const user = getUser(token);
+  const userId = user.user_id; 
 
   // Validation schema
 
@@ -50,15 +54,15 @@ export default function ProductForm({ product, onSubmit, buttons }) {
     specifications: z
       .string()
       .min(1, { message: "Specifications are required." }),
-    supplier: z.string().min(1, { message: "Supplier is required." }),
+    supplier: z.string().min(1, { message: "Supplier is required." }).default( userId ),
     image_uploads: z
       .array(z.instanceof(File))
       .nonempty({ message: "Image uploads must be a list of files." }),
     price_before_discount: z
       .number()
       .positive({ message: "Must be positive." }),
-    price_after_discount: z.number().positive({ message: "Must be positive." }),
-    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more." }),
+    price_after_discount: z.number().positive({ message: "Must be positive."}),
+    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more."}),
   });
 
   const formik = useFormik({
@@ -69,11 +73,11 @@ export default function ProductForm({ product, onSubmit, buttons }) {
       color: null,
       size: null,
       specifications: [{ key: "", value: "" }],
-      supplier: "",
       image_uploads: [],
       price_before_discount: 0,
       price_after_discount: 0,
       stock_quantity: 0,
+      supplier: {userId},
     },
     validationSchema: toFormikValidationSchema(schema),
     onSubmit: handleSubmit,
@@ -113,7 +117,6 @@ export default function ProductForm({ product, onSubmit, buttons }) {
   const fetchColors = async () => {
     const response = await axiosInstance.get("/products/color/");
     setColors(response.data);
-    console.log("respooooooooonseeeeeeeeeeeeee coloooooooooooooooooor", colors);
   };
 
   const fetchSizes = async () => {
@@ -180,7 +183,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Category */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="category">{t("category")}</FormLabel>
+          <FormLabel htmlFor="category">{t("Category")}</FormLabel>
           <Select
             className="w-full"
             name="category"
@@ -212,7 +215,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Brand */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="brand">{t("brand")}</FormLabel>
+          <FormLabel htmlFor="brand">{t("Brand")}</FormLabel>
           <Select
             className="w-full"
             name="brand"
@@ -242,7 +245,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Color */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="color">{t("color")}</FormLabel>
+          <FormLabel htmlFor="color">{t("Color")}</FormLabel>
           <Select
             className="w-full"
             name="color"
@@ -267,7 +270,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Size */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="size">{t("size")}</FormLabel>
+          <FormLabel htmlFor="size">{t("Size")}</FormLabel>
           <Select
             className="w-full"
             name="size"
@@ -354,7 +357,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Image Uploads */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="image_uploads">{t("Image upload")}</FormLabel>
+          <FormLabel htmlFor="image_uploads">{t("Image Upload")}</FormLabel>
           <input
             type="file"
             multiple
@@ -374,7 +377,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
         {/* Price Before Discount */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="price_before_discount">
-            {t("price Before Discount")}
+            {t("Price Before Discount")}
           </FormLabel>
           <TextField
             className="w-full"
@@ -398,7 +401,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
         {/* Price After Discount */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="price_after_discount">
-            {t("price After Discount")}
+            {t("Price After Discount")}
           </FormLabel>
           <TextField
             className="w-full"
@@ -423,7 +426,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
 
         {/* Stock Quantity */}
         <FormControl className="w-5/12">
-          <FormLabel htmlFor="stock_quantity">{t("stock Quantity")}</FormLabel>
+          <FormLabel htmlFor="stock_quantity">{t("Stock Quantity")}</FormLabel>
           <TextField
             className="w-full"
             type="number"
@@ -443,6 +446,12 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             color={formik.errors.stock_quantity ? "error" : "primary"}
           />
         </FormControl>
+
+        <FormControl className="w-5/12">
+          <FormLabel htmlFor="supplier">{t("Supplier ID")}</FormLabel>
+          <TextField className="w-full"  disabled value={userId} name="supplier" />
+        </FormControl>
+
       </Box>
       <Button
         type="submit"
