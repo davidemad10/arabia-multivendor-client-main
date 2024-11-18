@@ -56,18 +56,6 @@ export default function Header() {
                 </Link>
               </div>
               {/* Search Bar */}
-              {/* <div className="w-1/2 laptop:w-4/12 desktop:w-2/5 desktop:mr-20 mx-6 justify-center">
-                <div className="relative">
-                  <input
-                    placeholder={t("search")}
-                    type="text"
-                    className="border placeholder:text-sm outline-none focus:border-Red border-gray-400 h-12 text-lg rounded-md p-4 pr-10 pl-4 w-full"
-                  />
-                  <div className="absolute top-0 right-0 flex items-center justify-center h-full w-10 text-gray-400 text-xl">
-                    <FiSearch />
-                  </div>
-                </div>
-              </div> */}
               <SearchBar />
 
               {/* Mobile Menu Button */}
