@@ -7,8 +7,7 @@ import {
   CardContent,
   Grid,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { getUserInfo } from "../../../../api/userRequests";
+
 import { getUser } from "../../../../../public/utils/functions";
 
 interface VendorProfileProps {

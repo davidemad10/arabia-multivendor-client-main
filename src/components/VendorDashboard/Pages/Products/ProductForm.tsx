@@ -20,6 +20,8 @@ import InfoIcon from "@mui/icons-material/Info";
 export default function ProductForm({ product, onSubmit, buttons }) {
   const [categories, setCategories] = useState([]);
   const [brand, setBrand] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [sizes, setSizes] = useState([]);
 
   // Submit handler
   const handleSubmit = async (values) => {
@@ -32,25 +34,43 @@ export default function ProductForm({ product, onSubmit, buttons }) {
   };
 
   // Validation schema
+
   const schema = z.object({
     productName: z.string().min(2, { message: "Product name is required" }),
-    category: z.string().min(1, { message: "Category is required" }),
-    brand: z.string().optional(),
-    image_uploads: z.instanceof(FileList).refine((files) => files.length > 0, {
-      message: "Image upload is required",
+    category: z
+      .number()
+      .positive({ message: "Category must be a positive number (pk)." }),
+    brand: z
+      .number()
+      .positive({ message: "Brand must be a positive number (pk)." }),
+    color: z.array(z.string()).nonempty({
+      message: "Color is required and should be a list of strings.",
     }),
-    price_before_discount: z.number().positive({ message: "Must be positive" }),
-    price_after_discount: z.number().positive({ message: "Must be positive" }),
-    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more" }),
+    size: z.string().min(1, { message: "Size is required." }),
+    specifications: z
+      .string()
+      .min(1, { message: "Specifications are required." }),
+    supplier: z.string().min(1, { message: "Supplier is required." }),
+    image_uploads: z
+      .array(z.instanceof(File))
+      .nonempty({ message: "Image uploads must be a list of files." }),
+    price_before_discount: z
+      .number()
+      .positive({ message: "Must be positive." }),
+    price_after_discount: z.number().positive({ message: "Must be positive." }),
+    stock_quantity: z.number().min(0, { message: "Stock must be 0 or more." }),
   });
 
   const formik = useFormik({
     initialValues: {
       productName: "",
-      category: "",
-      color: "",
-      brand: "",
-      image_uploads: null,
+      category: null,
+      brand: null,
+      color: null,
+      size: null,
+      specifications: [{ key: "", value: "" }],
+      supplier: "",
+      image_uploads: [],
       price_before_discount: 0,
       price_after_discount: 0,
       stock_quantity: 0,
@@ -84,6 +104,22 @@ export default function ProductForm({ product, onSubmit, buttons }) {
         console.error("Error fetching categories:", error);
       });
   }, []);
+
+  useEffect(() => {
+    fetchColors();
+    fetchSizes();
+  }, []);
+
+  const fetchColors = async () => {
+    const response = await axiosInstance.get("/products/color/");
+    setColors(response.data);
+    console.log("respooooooooonseeeeeeeeeeeeee coloooooooooooooooooor", colors);
+  };
+
+  const fetchSizes = async () => {
+    const response = await axiosInstance.get("/products/size/");
+    setSizes(response.data);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -131,14 +167,14 @@ export default function ProductForm({ product, onSubmit, buttons }) {
           <TextField
             className="w-full"
             name="productName"
-            id="productName"
+            id="productNameArabic"
             onBlur={formik.handleBlur}
-            value={formik.values.productName}
+            value={formik.values.productNameArabic}
             onChange={formik.handleChange}
             error={
-              formik.touched.productName && Boolean(formik.errors.productName)
+              formik.touched.productName && Boolean(formik.errors.productNameArabic)
             }
-            helperText={formik.touched.productName && formik.errors.productName}
+            helperText={formik.touched.productName && formik.errors.productNameArabic}
           />
         </FormControl> */}
 
@@ -151,7 +187,9 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             id="category"
             onBlur={formik.handleBlur}
             value={formik.values.category}
-            onChange={formik.handleChange}
+            onChange={(event) =>
+              formik.setFieldValue("category", event.target.value)
+            } // Set the ID of the selected category
             error={formik.touched.category && Boolean(formik.errors.category)}
             sx={{
               color: "black",
@@ -202,6 +240,118 @@ export default function ProductForm({ product, onSubmit, buttons }) {
           </Select>
         </FormControl>
 
+        {/* Color */}
+        <FormControl className="w-5/12">
+          <FormLabel htmlFor="color">{t("color")}</FormLabel>
+          <Select
+            className="w-full"
+            name="color"
+            id="color"
+            onBlur={formik.handleBlur}
+            value={formik.values.color}
+            onChange={formik.handleChange}
+            error={formik.touched.color && Boolean(formik.errors.color)}
+            sx={{
+              color: "black",
+              backgroundColor: "white",
+              "& .MuiSelect-icon": { color: "black" },
+            }}
+          >
+            {colors.map((color) => (
+              <MenuItem key={color.id} value={color.id} sx={{ color: "black" }}>
+                {color.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Size */}
+        <FormControl className="w-5/12">
+          <FormLabel htmlFor="size">{t("size")}</FormLabel>
+          <Select
+            className="w-full"
+            name="size"
+            id="size"
+            onBlur={formik.handleBlur}
+            value={formik.values.size}
+            onChange={formik.handleChange}
+            error={formik.touched.size && Boolean(formik.errors.size)}
+            sx={{
+              color: "black",
+              backgroundColor: "white",
+              "& .MuiSelect-icon": { color: "black" },
+            }}
+          >
+            {sizes.map((size) => (
+              <MenuItem key={size.id} value={size.id} sx={{ color: "black" }}>
+                {size.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Specifications */}
+        <FormControl className="w-5/12">
+          <FormLabel htmlFor="specifications">{t("Specifications")}</FormLabel>
+          <div className="flex flex-col gap-2">
+            {formik.values.specifications.map(
+              (spec: { key: string; value: string }, index: number) => (
+                <div key={index} className="flex gap-2 items-center">
+                  <TextField
+                    className="w-1/2"
+                    label={t("Key")}
+                    value={spec.key}
+                    onChange={(e) => {
+                      const newSpecifications = [
+                        ...formik.values.specifications,
+                      ];
+                      newSpecifications[index].key = e.target.value;
+                      formik.setFieldValue("specifications", newSpecifications);
+                    }}
+                  />
+                  <TextField
+                    className="w-1/2"
+                    label={t("Value")}
+                    value={spec.value}
+                    onChange={(e) => {
+                      const newSpecifications = [
+                        ...formik.values.specifications,
+                      ];
+                      newSpecifications[index].value = e.target.value;
+                      formik.setFieldValue("specifications", newSpecifications);
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => {
+                      const newSpecifications =
+                        formik.values.specifications.filter(
+                          (_, i) => i !== index
+                        );
+                      formik.setFieldValue("specifications", newSpecifications);
+                    }}
+                  >
+                    {t("Remove")}
+                  </Button>
+                </div>
+              )
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                formik.setFieldValue("specifications", [
+                  ...formik.values.specifications,
+                  { key: "", value: "" },
+                ])
+              }
+            >
+              {t("Add Specification")}
+            </Button>
+          </div>
+        </FormControl>
+
         {/* Image Uploads */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="image_uploads">{t("Image upload")}</FormLabel>
@@ -210,6 +360,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             multiple
             id="image_uploads"
             name="image_uploads"
+            accept="image/*"
             onChange={(event) =>
               formik.setFieldValue("image_uploads", event.currentTarget.files)
             }
@@ -219,7 +370,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             <p className="text-red-600">{formik.errors.image_uploads}</p>
           )}
         </FormControl>
-
+          
         {/* Price Before Discount */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="price_before_discount">
@@ -292,23 +443,6 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             color={formik.errors.stock_quantity ? "error" : "primary"}
           />
         </FormControl>
-
-        {/* Supplier */}
-        {/* <FormControl className="w-5/12">
-          <FormLabel htmlFor="supplier">{t("supplier")}</FormLabel>
-          <TextField
-            className="w-full"
-            name="supplier"
-            required
-            id="supplier"
-            onBlur={formik.handleBlur}
-            value={formik.values.supplier}
-            onChange={formik.handleChange}
-            error={formik.touched.supplier && Boolean(formik.errors.supplier)}
-            helperText={formik.touched.supplier && formik.errors.supplier}
-            color={formik.errors.supplier ? "error" : "primary"}
-          />
-        </FormControl> */}
       </Box>
       <Button
         type="submit"
