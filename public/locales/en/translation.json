@@ -105,5 +105,6 @@
   "cartEmpty": "Your cart is empty",
   "startShopping": "Add some items to your cart to start shopping!",
   "price": "Price",
-  "confirmYourAddress": "Please confirm your address"
+  "confirmYourAddress": "Please confirm your address",
+  "confirmPhone": "Confirm phone number"
 }

@@ -1,29 +1,28 @@
-import { orange } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import { useState } from "react";
-import Profile from "./UserDashboardComponents/Profile";
-import Wishlist from "./UserDashboardComponents/Wishlist";
-import Orders from "./UserDashboardComponents/Orders";
 import Address from "./UserDashboardComponents/Address";
-import PasswordIcon from "@mui/icons-material/Password";
-import SidePanel from "../../components/user/SidePanel";
-import Password from "./UserDashboardComponents/Password";
-
-const menuItems = [
-  {
-    title: "address",
-    component: <Address address="confirmYourAddress"></Address>,
-  },
-  {
-    title: "phone number",
-    component: <Password></Password>,
-  },
-];
+import Phone from "./checkoutComponents/Phone";
+import Payment from "./checkoutComponents/Payment";
 
 export default function CheckoutPage() {
+  const menuItems = [
+    {
+      title: "address",
+      component: (
+        <Address
+          address="confirmYourAddress"
+          navigate={() => setActivepanel("phone")}
+        ></Address>
+      ),
+    },
+    {
+      title: "phone",
+      component: <Phone navigate={() => setActivepanel("payment")}></Phone>,
+    },
+    {
+      title: "payment",
+      component: <Payment></Payment>,
+    },
+  ];
   const [activePanel, setActivepanel] = useState("address");
 
   return (

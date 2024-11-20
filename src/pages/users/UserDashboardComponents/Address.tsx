@@ -21,11 +21,13 @@ import { enqueueSnackbar } from "notistack";
 
 interface AddressDataProps {
   address?: string;
+  navigate?: () => void;
 }
 
 // Functional component with default props
 const AddressData: React.FC<AddressDataProps> = ({
   address = "addressInfo",
+  navigate = () => console.log("navigate"),
 }) => {
   const [requestLoading, setRequestLoading] = useState(false);
   const token = sessionStorage.getItem("accessToken");
@@ -58,6 +60,11 @@ const AddressData: React.FC<AddressDataProps> = ({
     validationSchema: toFormikValidationSchema(schema),
     enableReinitialize: true,
     onSubmit: async (values) => {
+      if (!formik.dirty) {
+        console.log("not dirty");
+        navigate && navigate();
+        return;
+      }
       try {
         setRequestLoading(true);
         const shipping_address = values;
@@ -85,6 +92,7 @@ const AddressData: React.FC<AddressDataProps> = ({
         });
       } finally {
         setRequestLoading(false);
+        navigate && navigate();
       }
     },
   });
@@ -227,7 +235,7 @@ const AddressData: React.FC<AddressDataProps> = ({
           ) : (
             <Button
               type="submit"
-              disabled={!formik.dirty && formik.isValid}
+              disabled={!formik.isValid}
               variant="contained"
               className="w-1/5"
               sx={{
