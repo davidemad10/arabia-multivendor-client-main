@@ -104,5 +104,6 @@
   "reviewYourOrder": "Review your order",
   "cartEmpty": "Your cart is empty",
   "startShopping": "Add some items to your cart to start shopping!",
-  "price": "Price"
+  "price": "Price",
+  "confirmYourAddress": "Please confirm your address"
 }
