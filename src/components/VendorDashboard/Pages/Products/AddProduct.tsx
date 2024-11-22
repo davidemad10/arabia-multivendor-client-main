@@ -3,6 +3,7 @@ import ProductForm from "./ProductForm";
 import axiosInstance from "../../../../api/axiosInstance";
 import { enqueueSnackbar } from "notistack";
 import { t } from "i18next";
+import { getUser } from "../../../../../public/utils/functions";
 
 export default function AddProduct() {
 
@@ -10,11 +11,14 @@ export default function AddProduct() {
   const handleSubmit = async (productData: any) => {
     const token = sessionStorage.getItem("accessToken");
     console.log("Token:", token);
+
+    const user = getUser(token);
+    const userId = user.user_id;
   
     try {
       // Create a FormData object
       const formData = new FormData();
-  
+
       // Append product data fields
       formData.append("productName", productData.productName);
   
@@ -36,26 +40,24 @@ export default function AddProduct() {
             ? productData.specifications
             : JSON.stringify(productData.specifications)
         );
+      }
 
-      }
-      if (productData.image_uploads && productData.image_uploads instanceof FileList) {
-        Array.from(productData.image_uploads).forEach((file: File) => {
-          formData.append("image_uploads[]", file); // Ensure array format by using "image_uploads[]"
-        });
-      } else if (productData.image_uploads && Array.isArray(productData.image_uploads)) {
+      // Handle image uploads
+      if (Array.isArray(productData.image_uploads)) {
         productData.image_uploads.forEach((file: File) => {
-          formData.append("image_uploads[]", file); // Ensure array format
+          formData.append("image_uploads[]", file); // Append each file object
         });
-      } else {
-        console.warn("No valid files found for image_uploads");
       }
-      
       // Append other numeric and text fields
-      formData.append("price_before_discount", productData.price_before_discount.toString());
-      formData.append("price_after_discount", productData.price_after_discount.toString());
-      formData.append("stock_quantity", productData.stock_quantity.toString());
-      formData.append("supplier", productData.supplier); // Assuming this is a text field
+      formData.append("price_before_discount", productData.price_before_discount);
+      formData.append("price_after_discount", productData.price_after_discount);
+      formData.append("stock_quantity", productData.stock_quantity);
+      formData.append("supplier", userId); // Assuming this is a text field
   
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
       // Send FormData to the API
       const response = await axiosInstance.post("/products/", formData, {
         headers: {

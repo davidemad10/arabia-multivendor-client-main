@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
-import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
+import { Box, Card, CardContent, Typography, Grid, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import axiosInstance from "../../../../api/axiosInstance";
+import { getUser } from "../../../../../public/utils/functions";
 
 const OrdersDashboard = () => {
+
+  const [rows, setRows] = useState([]);
+
   const [orderSummary, setOrderSummary] = useState({
     total_orders: 0,
     total_products_count: 0,
@@ -13,12 +17,14 @@ const OrdersDashboard = () => {
     monthly_revenue: "0.00",
   });
   const [orders, setOrders] = useState([]);
+  const token = sessionStorage.getItem("accessToken");
+  const user = getUser(token);
+  const vendorId = user.user_id;
 
   useEffect(() => {
     const fetchOrderSummary = async () => {
       try {
-        const vendorId = localStorage.getItem("userid");
-        const response = await axiosInstance.get(`en/api/dashboard/vendor/${vendorId}/order-summary/`);
+        const response = await axiosInstance.get(`/dashboard/vendor/${vendorId}/order-summary/`);
         setOrderSummary(response.data);
       } catch (error) {
         console.error("Failed to fetch order summary:", error);
@@ -27,8 +33,7 @@ const OrdersDashboard = () => {
 
     const fetchOrderDetails = async () => {
       try {
-        const vendorId = localStorage.getItem("userid");
-        const response = await axiosInstance.get(`en/api/dashboard/vendor/${vendorId}/productorderdetails/`);
+        const response = await axiosInstance.get(`/dashboard/vendor/${vendorId}/productorderdetails/`);
         setOrders(response.data); // Assuming the response data is an array of order details
       } catch (error) {
         console.error("Failed to fetch order details:", error);
@@ -37,14 +42,60 @@ const OrdersDashboard = () => {
 
     fetchOrderSummary();
     fetchOrderDetails();
-  }, []);
+  }, [vendorId]);
 
-  const columns = [
-    { field: "customer_name", headerName: "Customer Name", width: 200 },
-    { field: "product_name", headerName: "Product Name", width: 200 },
-    { field: "order_date", headerName: "Order Date", width: 200 },
-    { field: "quantity", headerName: "Quantity", width: 100 },
-    { field: "total_price", headerName: "Total Price ($)", width: 150 },
+
+  const handleEdit = (row) => {
+    console.log("Editing order:", row);
+    // Implement your edit logic here
+  };
+
+
+  const columns: GridColDef[] = [
+    {
+      field: "name",
+      headerName: "Product Name",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "category",
+      headerName: "Category",
+      flex: 1,
+      headerAlign: "center",
+    },
+    { field: "brand", headerName: "Brand", flex: 1, headerAlign: "center" },
+    {
+      field: "stock",
+      headerName: "Stock Quantity",
+      flex: 1,
+      headerAlign: "center",
+    },
+    {
+      field: "totalSold",
+      headerName: "Total Sold",
+      flex: 0.5,
+      headerAlign: "center",
+    },
+    {
+      field: "discount",
+      headerName: "Discount Amount",
+      flex: 1,
+      headerAlign: "center",
+    },
+    { field: "price", headerName: "Price", flex: 1, headerAlign: "center" },
+    {
+      field: "update",
+      headerName: "Update",
+      flex: 0.5,
+      sortable: false,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <IconButton onClick={() => handleEdit(params.row)} color="primary">
+          <EditIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   return (
@@ -64,26 +115,6 @@ const OrdersDashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-
-        {/* <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ backgroundColor: "#287233", color: "white" }}>
-            <CardContent>
-              <Typography variant="h5">Weekly Revenue</Typography>
-              <Typography variant="h3">${orderSummary.weekly_revenue}</Typography>
-              <AttachMoneyIcon fontSize="large" />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ backgroundColor: "#663399", color: "white" }}>
-            <CardContent>
-              <Typography variant="h5">Monthly Revenue</Typography>
-              <Typography variant="h3">${orderSummary.monthly_revenue}</Typography>
-              <AttachMoneyIcon fontSize="large" />
-            </CardContent>
-          </Card>
-        </Grid> */}
-
       </Grid>
 
       {/* Orders Table */}

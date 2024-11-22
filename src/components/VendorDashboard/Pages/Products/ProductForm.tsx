@@ -18,7 +18,7 @@ import axiosInstance from "../../../../api/axiosInstance";
 import InfoIcon from "@mui/icons-material/Info";
 import { getUser } from "../../../../../public/utils/functions";
 
-export default function ProductForm({ product, onSubmit, buttons }) {
+export default function ProductForm({ onSubmit, buttons }) {
   const [categories, setCategories] = useState([]);
   const [brand, setBrand] = useState([]);
   const [colors, setColors] = useState([]);
@@ -52,15 +52,17 @@ export default function ProductForm({ product, onSubmit, buttons }) {
     }),
     size: z.number().min(1, { message: "Size is required." }),
     specifications: z
-      .string()
-      .min(1, { message: "Specifications are required." }),
-    supplier: z
-      .string()
-      .min(1, { message: "Supplier is required." })
-      .default(userId),
+      .array(
+        z.object({
+          key: z.string().min(1, { message: "Key is required." }),
+          value: z.string().min(1, { message: "Value is required." }),
+        })
+      )
+      .min(1, { message: "Specifications must have at least one item." }),
     image_uploads: z
       .array(z.instanceof(File))
       .nonempty({ message: "Image uploads must be a list of files." }),
+
     price_before_discount: z
       .number()
       .positive({ message: "Must be positive." }),
@@ -71,10 +73,10 @@ export default function ProductForm({ product, onSubmit, buttons }) {
   const formik = useFormik({
     initialValues: {
       productName: "",
-      category: null,
-      brand: null,
-      color: null,
-      size: null,
+      category: 0,
+      brand: 0,
+      color: 0,
+      size: 0,
       specifications: [{ key: "", value: "" }],
       image_uploads: [],
       price_before_discount: 0,
@@ -377,6 +379,7 @@ export default function ProductForm({ product, onSubmit, buttons }) {
           )}
         </FormControl> */}
 
+        {/* Image Uploads */}
         <FormControl className="w-5/12">
           <FormLabel htmlFor="image_uploads">{t("Image Upload")}</FormLabel>
           <input
@@ -386,8 +389,8 @@ export default function ProductForm({ product, onSubmit, buttons }) {
             name="image_uploads"
             accept="image/*"
             onChange={(event) => {
-              const files = Array.from(event.currentTarget.files || []); // Convert FileList to an array
-              formik.setFieldValue("image_uploads", files); // Set the files array into Formik's state
+              const files = Array.from(event.currentTarget.files || []);
+              formik.setFieldValue("image_uploads", files); // Store the array of File objects
             }}
             onBlur={formik.handleBlur}
           />
