@@ -1,12 +1,7 @@
 // src/components/Dashboard.tsx
 
-import React from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-} from '@mui/material';
+import React from "react";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
 import {
   PieChart,
   Pie,
@@ -17,21 +12,19 @@ import {
   XAxis,
   YAxis,
   Legend,
-} from 'recharts';
+} from "recharts";
 
 const Dashboard: React.FC = () => {
   const dataOrders = [
-    { name: 'Total Orders', value: 400 },
-    { name: 'Transit Orders', value: 300 },
-    { name: 'Returned Orders', value: 100 },
-    { name: 'Pending Orders', value: 200 },
+    { name: "Total Orders", value: 400 },
+    { name: "Transit Orders", value: 300 },
+    { name: "Returned Orders", value: 100 },
+    { name: "Pending Orders", value: 200 },
   ];
 
-  const dataSales = [
-    { name: 'Total Sales', value: 5000 },
-  ];
+  const dataSales = [{ name: "Total Sales", value: 5000 }];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
     <Grid container spacing={3}>
@@ -65,7 +58,11 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardContent>
             <Typography variant="h6">Transit Orders</Typography>
-            <BarChart width={400} height={300} data={[{ name: 'Transit Orders', value: 300 }]}>
+            <BarChart
+              width={400}
+              height={300}
+              data={[{ name: "Transit Orders", value: 300 }]}
+            >
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
@@ -81,7 +78,11 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardContent>
             <Typography variant="h6">Returned Orders</Typography>
-            <BarChart width={400} height={300} data={[{ name: 'Returned Orders', value: 100 }]}>
+            <BarChart
+              width={400}
+              height={300}
+              data={[{ name: "Returned Orders", value: 100 }]}
+            >
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
@@ -97,7 +98,11 @@ const Dashboard: React.FC = () => {
         <Card>
           <CardContent>
             <Typography variant="h6">Pending Orders</Typography>
-            <BarChart width={400} height={300} data={[{ name: 'Pending Orders', value: 200 }]}>
+            <BarChart
+              width={400}
+              height={300}
+              data={[{ name: "Pending Orders", value: 200 }]}
+            >
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />

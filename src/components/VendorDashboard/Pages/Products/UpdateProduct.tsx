@@ -65,7 +65,7 @@ export default function ProductGrid() {
             price: parseFloat(product.price_after_discount), // Converted to a number
           })
         );
-        
+
         setRows(formattedRows);
         setRowCount(response.data.count); // Set total count for pagination
       } catch (error) {

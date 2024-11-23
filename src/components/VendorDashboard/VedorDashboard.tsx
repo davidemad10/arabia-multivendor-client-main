@@ -24,7 +24,7 @@ export default function VendorDashboard() {
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <ThemeProvider theme={theme} >
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar open={open} onDrawerOpen={handleDrawerOpen} setMode={setMode} />
@@ -33,7 +33,6 @@ export default function VendorDashboard() {
           <Toolbar />
 
           <Outlet></Outlet>
-          
         </Box>
       </Box>
     </ThemeProvider>
