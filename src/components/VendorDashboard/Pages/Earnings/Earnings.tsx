@@ -32,11 +32,11 @@ const Earnings: React.FC<EarningsProps> = () => {
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [monthlyEarnings, setMonthlyEarnings] = useState<number[]>([]);
   const [weeklyEarnings, setWeeklyEarnings] = useState<number[]>([]);
-  
+
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
-  const vendorId = user?.user_id; 
-  
+  const vendorId = user?.user_id;
+
   useEffect(() => {
     const fetchData = async () => {
       try {

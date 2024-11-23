@@ -125,8 +125,6 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
   const navigate = useNavigate();
   const userName = localStorage.getItem("username");
 
-
-
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
 
@@ -144,12 +142,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
         <Typography
           sx={{
             fontSize: 20,
-            fontWeight:"300",
+            fontWeight: "300",
             fontFamily: "'Poppins', sans-serif",
             letterSpacing: 1,
             textTransform: "uppercase",
             marginRight: "auto",
-            marginLeft:2,
+            marginLeft: 2,
             marginTop: "5px",
           }}
           noWrap
@@ -177,7 +175,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
             border: "2px solid gray",
             transition: "0.5s",
           }}
-          alt={user.full_name ||""}
+          alt={user.full_name || ""}
           src="/static/images/avatar/2.jpg"
         />
         <Typography
@@ -185,7 +183,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
           variant="body1"
           sx={{ fontSize: open ? 17 : 0, transition: "0.75s" }}
         >
-          {user.full_name ||""}
+          {user.full_name || ""}
         </Typography>
         <Typography
           align="center"
@@ -195,7 +193,6 @@ const SideBar: React.FC<SideBarProps> = ({ open, onDrawerClose }) => {
             fontSize: open ? 12 : 0,
             transition: "0.75s",
             color: theme.palette.error.main,
-
           }}
         >
           Vendor

@@ -19,7 +19,6 @@ const Profile: React.FC<VendorProfileProps> = () => {
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
 
-
   return (
     <Box sx={{ padding: 5 }}>
       <Typography
@@ -64,7 +63,7 @@ const Profile: React.FC<VendorProfileProps> = () => {
                 variant="h6"
                 sx={{ color: "#691F1F", fontWeight: 800, marginTop: 2 }}
               >
-                { user.full_name || ""}
+                {user.full_name || ""}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={8}>
