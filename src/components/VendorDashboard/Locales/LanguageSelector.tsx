@@ -20,8 +20,12 @@ export default function LanguageSelector() {
     //   {i18n.language == "en" ? "العربية" : "English"}
     // </button>
 
-<IconButton color="inherit" style={{ marginInline: 15 }} onClick={() => changeLng(i18n.language == "en" ? "ar" : "en")}>
-<TranslateIcon />
-</IconButton>
+    <IconButton
+      color="inherit"
+      style={{ marginInline: 15 }}
+      onClick={() => changeLng(i18n.language == "en" ? "ar" : "en")}
+    >
+      <TranslateIcon />
+    </IconButton>
   );
 }

@@ -25,6 +25,7 @@ import Discount from "./components/VendorDashboard/Pages/Discount/Discount";
 import VendorProfile from "./components/VendorDashboard/Pages/VendorProfile/VendorProfile";
 import CheckoutPage from "./pages/users/checkout";
 
+
 function App() {
   return (
     <div className="rtl:font-Almarai ltr:font-Poppins">
@@ -58,6 +59,7 @@ function App() {
 
         <Route element={<VendorDashboard />}>
           <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
+          <Route path="/miky" element={<Miky></Miky>}></Route>
           <Route path="/AddProducts" element={<AddProduct />}></Route>
           <Route path="/UpdateProduct" element={<UpdateProduct />}></Route>
           <Route path="/Orders" element={<Orders />}></Route>

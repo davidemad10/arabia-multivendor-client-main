@@ -1,73 +1,103 @@
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import ProductForm from "./ProductForm";
-import { useState } from "react";
 import axiosInstance from "../../../../api/axiosInstance";
 import { enqueueSnackbar } from "notistack";
+import { t } from "i18next";
+import { getUser } from "../../../../../public/utils/functions";
 
 export default function AddProduct() {
-  const [isArabic, setIsArabic] = useState(false);
-
-  // Handler to switch to Arabic version of the form
-  const handleAddProductArabic = () => {
-    setIsArabic(!isArabic);
-  };
-
   // onSubmit function to handle form submission
   const handleSubmit = async (productData: any) => {
     const token = sessionStorage.getItem("accessToken");
-    console.log("token :" + token);
+    console.log("Token:", token);
+
+    const user = getUser(token);
+    const userId = user.user_id;
+
     try {
-      console.log("product data :", productData);
-      const response = await axiosInstance.post(
-        "/products/",
-        {
-          productData,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
+      // Create a FormData object
+      const formData = new FormData();
 
-          withCredentials: true,
-        }
+      // Append product data fields
+      formData.append("productName", productData.productName);
+
+      // Append category and brand IDs
+      formData.append("category", productData.category.toString()); // Backend expects category ID
+      formData.append("brand", productData.brand.toString()); // Backend expects brand ID
+
+      // Handle color (array of IDs)
+      formData.append("color", productData.color.toString());
+
+      // Handle size (array of IDs)
+      formData.append("size", productData.size.toString());
+
+      // Append specifications (JSON object or stringified JSON)
+      if (productData.specifications) {
+        formData.append(
+          "specifications",
+          typeof productData.specifications === "string"
+            ? productData.specifications
+            : JSON.stringify(productData.specifications)
+        );
+      }
+
+      // Handle image uploads
+      if (Array.isArray(productData.image_uploads)) {
+        productData.image_uploads.forEach((file: File) => {
+          formData.append("image_uploads", file); // Append each file object
+        });
+      }
+      // Append other numeric and text fields
+      formData.append(
+        "price_before_discount",
+        productData.price_before_discount
       );
-      console.log("API response (Send OTP to the email) :", response);
+      formData.append("price_after_discount", productData.price_after_discount);
+      formData.append("stock_quantity", productData.stock_quantity);
+      formData.append("supplier", userId); // Assuming this is a text field
 
-      if (response.ok) {
-        console.log("Product Data:", productData);
-        enqueueSnackbar("Product submitted successfully!", { variant: "success" });
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+      // Send FormData to the API
+      const response = await axiosInstance.post("/products/", formData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
 
+      console.log("API response:", response);
+
+      // Success handling
+      if (response.status === 200 || response.status === 201) {
+        console.log("Product Data Submitted:", productData);
+        enqueueSnackbar("Product submitted successfully!", {
+          variant: "success",
+        });
       } else {
         alert("Failed to add product");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      enqueueSnackbar("An error occurred while adding the product, Error: " + error, { variant: "error" });
+      enqueueSnackbar(
+        `An error occurred while adding the product: ${error.message || error}`,
+        { variant: "error" }
+      );
     }
   };
 
   return (
     <>
       <Typography style={{ fontSize: 40, marginBottom: 20 }}>
-        {isArabic ? "إضافة منتج" : "Add Product"}
+        {t("Add Product")}
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddProductArabic}
-        style={{ marginBottom: 20, color: "inherit" }}
-      >
-        {isArabic ? "إضافة المنتج بالعربية" : "Add Product in Arabic"}
-      </Button>
       <ProductForm
         product={FormData}
         onSubmit={handleSubmit}
-        buttons={
-          isArabic ? "أضف المنتج باللغة العربية" : "Add Product in English"
-        }
-        isArabic={isArabic}
+        buttons={"Add Product"}
       />
     </>
   );

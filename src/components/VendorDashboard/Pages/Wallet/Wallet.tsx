@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -9,17 +9,40 @@ import {
   Modal,
   TextField,
   Alert,
-} from '@mui/material';
+} from "@mui/material";
+import { getUser } from "../../../../../public/utils/functions";
+import axiosInstance from "../../../../api/axiosInstance";
 
-interface WalletProps {
-  totalBalance: number;
-}
+const token = sessionStorage.getItem("accessToken");
+const user = getUser(token);
+const vendorId = user?.user_id;
 
-const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
+interface WalletProps {}
+
+const Wallet: React.FC<WalletProps> = () => {
+  const [totalBalance, setTotalBalance] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [requestedAmount, setRequestedAmount] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const feePercentage = 2; // Set fee percentage
+
+  useEffect(() => {
+    // Fetch total revenue from the API
+    const fetchTotalRevenue = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/dashboard/vendor/${vendorId}/order-summary/`
+        );
+        const data = response.data;
+
+        setTotalBalance(parseFloat(data.total_revenue));
+      } catch (error) {
+        console.error("Error fetching total revenue:", error);
+      }
+    };
+
+    fetchTotalRevenue();
+  }, []);
 
   const handleRequestMoneyClick = () => {
     setIsModalOpen(true);
@@ -32,9 +55,16 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
   };
 
   const handleRequestSubmit = () => {
-    if (typeof requestedAmount === "number" && requestedAmount <= totalBalance) {
+    if (
+      typeof requestedAmount === "number" &&
+      requestedAmount <= totalBalance
+    ) {
       const amountAfterFee = requestedAmount * (1 - feePercentage / 100);
-      alert(`Your request has been submitted. After a ${feePercentage}% fee, you'll receive $${amountAfterFee.toFixed(2)}.`);
+      alert(
+        `Your request has been submitted. After a ${feePercentage}% fee, you'll receive $${amountAfterFee.toFixed(
+          2
+        )}.`
+      );
       handleCloseModal();
     } else {
       setError("Requested amount cannot exceed the total balance.");
@@ -42,7 +72,7 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
   };
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box sx={{ padding: "20px" }}>
       <Typography variant="h4" gutterBottom>
         Wallet
       </Typography>
@@ -50,30 +80,40 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
       {/* Total Balance Summary */}
       <Grid container spacing={3} sx={{ marginBottom: 10 }}>
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ backgroundColor: 'green', color: 'white' }}>
+          <Card sx={{ backgroundColor: "green", color: "white" }}>
             <CardContent>
               <Typography variant="h5">Total Balance</Typography>
-              <Typography variant="h3">${totalBalance=5}</Typography>
+              <Typography variant="h3">${totalBalance.toFixed(2)}</Typography>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
       {/* Request Money Button */}
-      <Button variant="contained" color="primary" size="large" onClick={handleRequestMoneyClick}>
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        onClick={handleRequestMoneyClick}
+      >
         Request Money
       </Button>
 
       {/* Request Money Modal */}
-      <Modal open={isModalOpen} onClose={handleCloseModal} aria-labelledby="request-money-modal" aria-describedby="modal-to-request-money">
+      <Modal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="request-money-modal"
+        aria-describedby="modal-to-request-money"
+      >
         <Box
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             width: 400,
-            bgcolor: 'background.paper',
+            bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
@@ -103,10 +143,16 @@ const Wallet: React.FC<WalletProps> = ({ totalBalance }) => {
           )}
 
           <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-            Note: A {feePercentage}% fee will be deducted from the requested amount.
+            Note: A {feePercentage}% fee will be deducted from the requested
+            amount.
           </Typography>
 
-          <Button variant="contained" color="primary" fullWidth onClick={handleRequestSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleRequestSubmit}
+          >
             Submit Request
           </Button>
         </Box>

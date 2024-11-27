@@ -1,62 +1,114 @@
-import React, { useState } from "react";
-import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import axiosInstance from "../../../../api/axiosInstance";
+import { getUser } from "../../../../../public/utils/functions";
 
 const OrdersDashboard = () => {
-  const [orders] = useState([
-    {
-      id: 1,
-      orderNumber: "1001",
-      customer: "John Doe",
-      total: 150,
-      status: "in progress",
-      date: "2024-10-01",
-    },
-    {
-      id: 2,
-      orderNumber: "1002",
-      customer: "Jane Smith",
-      total: 200,
-      status: "penndimg",
-      date: "2024-10-03",
-    },
-    {
-      id: 3,
-      orderNumber: "1003",
-      customer: "Alice Brown",
-      total: 300,
-      status: "approved",
-      date: "2024-10-05",
-    },
-    // Add more orders as needed
-  ]);
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [orderSummary, setOrderSummary] = useState({
+    total_orders: 0,
+    total_products_count: 0,
+    total_revenue: "0.00",
+    weekly_revenue: "0.00",
+    monthly_revenue: "0.00",
+  });
 
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  const token = sessionStorage.getItem("accessToken");
+  const user = getUser(token);
+  const vendorId = user?.user_id;
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      setLoading(true); // Start loading
+      try {
+        // Fetch order summary
+        const summaryResponse = await axiosInstance.get(
+          `/dashboard/vendor/${vendorId}/order-summary/`
+        );
+        setOrderSummary(summaryResponse.data);
+
+        // Fetch order details
+        const ordersResponse = await axiosInstance.get(
+          `/dashboard/vendor/${vendorId}/productorderdetails/`
+        );
+
+        console.log(
+          "ordersResponseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          ordersResponse
+        );
+        // Map API response to match the DataGrid row structure
+        const formattedOrders = ordersResponse.data.map((order) => ({
+          id: order.order_id, // Unique key for DataGrid
+          customerName: order.customer_name,
+          productName: order.product_name,
+          orderDate: new Date(order.order_date).toLocaleDateString(), // Format date
+          quantity: order.quantity,
+          totalPrice: order.total_price,
+        }));
+        setRows(formattedOrders);
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      } finally {
+        setLoading(false); // End loading
+      }
+    };
+
+    fetchOrderData();
+  }, [vendorId]);
 
   const columns = [
     {
-      field: "orderNumber",
-      headerName: "Order #",
+      field: "id",
+      headerName: "Order ID",
       flex: 1,
       headerAlign: "center",
+      align: "center",
     },
     {
-      field: "customer",
-      headerName: "Customer",
+      field: "customerName",
+      headerName: "Customer Name",
       flex: 1,
       headerAlign: "center",
+      align: "center",
     },
     {
-      field: "total",
-      headerName: "Total Amount ($)",
+      field: "productName",
+      headerName: "Product Name",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "orderDate",
+      headerName: "Order Date",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
       flex: 0.5,
       headerAlign: "center",
+      align: "center",
     },
-    { field: "status", headerName: "Status", flex: 1, headerAlign: "center" },
-    { field: "date", headerName: "Date", flex: 1, headerAlign: "center" },
+    {
+      field: "totalPrice",
+      headerName: "Total Price",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
   ];
 
   return (
@@ -71,20 +123,12 @@ const OrdersDashboard = () => {
           <Card sx={{ backgroundColor: "#133E87", color: "white" }}>
             <CardContent>
               <Typography variant="h5">Total Orders</Typography>
-              <Typography variant="h3">{totalOrders}</Typography>
+              <Typography variant="h3">{orderSummary.total_orders}</Typography>
               <ShoppingCartIcon fontSize="large" />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ backgroundColor: "#A34343", color: "white" }}>
-            <CardContent>
-              <Typography variant="h5">Total Revenue</Typography>
-              <Typography variant="h3">${totalRevenue}</Typography>
-              <AttachMoneyIcon fontSize="large" />
-            </CardContent>
-          </Card>
-        </Grid>
+        {/* Add more cards for other summaries if needed */}
       </Grid>
 
       {/* Orders Table */}
@@ -92,27 +136,38 @@ const OrdersDashboard = () => {
         <Typography variant="h6" gutterBottom>
           Order Details
         </Typography>
-        <DataGrid
-          slots={{
-            toolbar: GridToolbar,
-          }}
-          rows={orders}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10]}
-          disableSelectionOnClick
-          sx={{
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "#f5f5f5",
-              fontWeight: "bold",
-              textAlign: "center",
-            },
-            "& .MuiDataGrid-cell": {
-              padding: 1,
-              textAlign: "center",
-            },
-          }}
-        />
+        {loading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="400px"
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <DataGrid
+            slots={{
+              toolbar: GridToolbar,
+            }}
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5, 10]}
+            disableSelectionOnClick
+            sx={{
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#f5f5f5",
+                fontWeight: "bold",
+                textAlign: "center",
+              },
+              "& .MuiDataGrid-cell": {
+                padding: 1,
+                textAlign: "center",
+              },
+            }}
+          />
+        )}
       </Box>
     </Box>
   );

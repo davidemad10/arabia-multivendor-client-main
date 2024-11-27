@@ -44,24 +44,25 @@ export default function ProductGrid() {
         // Map API response to the structure expected by DataGrid rows
         const formattedRows = response.data.results.map(
           (product: {
-            id: any;
-            translations: { en: { name: any } };
-            category: { translations: { en: { name: any } } };
-            brand: { translations: { en: { name: any } } };
-            stock_quantity: any;
-            total_sold: any;
-            price_before_discount: number;
-            price_after_discount: number;
+            id: string;
+            productName: string | null;
+            category_details: { translations: { en: { name: string } } };
+            brand_details: { translations: { en: { name: string } } };
+            stock_quantity: number;
+            total_sold: number;
+            price_before_discount: string;
+            price_after_discount: string;
           }) => ({
             id: product.id,
-            name: product.translations.en.name,
-            category: product.category.translations.en.name,
-            brand: product.brand.translations.en.name,
+            name: product.productName, // Adjusted for new structure
+            category: product.category_details.translations.en.name,
+            brand: product.brand_details.translations.en.name,
             stock: product.stock_quantity,
             totalSold: product.total_sold,
             discount:
-              product.price_before_discount - product.price_after_discount,
-            price: product.price_after_discount,
+              parseFloat(product.price_before_discount) -
+              parseFloat(product.price_after_discount), // Ensure proper number calculation
+            price: parseFloat(product.price_after_discount), // Converted to a number
           })
         );
 
@@ -239,7 +240,6 @@ export default function ProductGrid() {
             product={currentProduct}
             onSubmit={formik.handleSubmit}
             buttons={"Update Product"}
-            isArabic={undefined}
           />
         </DialogContent>
       </Dialog>

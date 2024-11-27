@@ -7,19 +7,14 @@ import {
   Grid,
   TextField,
   Button,
-
 } from "@mui/material";
 
 import { IconButton, InputAdornment } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 
-
-
 const Discount: React.FC = () => {
-
   const [promoCode, setPromoCode] = useState("");
   const [promoPercentage, setPromoPercentage] = useState<number | "">("");
-
 
   const generatePromoCode = () => {
     const characters =
@@ -31,15 +26,12 @@ const Discount: React.FC = () => {
     setPromoCode(code);
   };
 
-
   const handleGeneratePromoCode = () => {
     if (promoPercentage) {
       console.log(`Generating promo code with ${promoPercentage}% discount`);
       // Here you would send a request to your backend to generate a promo code
     }
-
-  }
-
+  };
 
   return (
     <Box sx={{ padding: "20px" }}>
@@ -48,7 +40,6 @@ const Discount: React.FC = () => {
       </Typography>
 
       <Grid container spacing={3}>
-
         {/* Generate Promo Code Section */}
         <Grid item xs={12} sm={6}>
           <Card>
@@ -67,7 +58,8 @@ const Discount: React.FC = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={generatePromoCode} edge="end">
-                        <AutorenewIcon/> <Typography sx={{fontSize:15}}>generate</Typography>
+                        <AutorenewIcon />{" "}
+                        <Typography sx={{ fontSize: 15 }}>generate</Typography>
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -83,9 +75,12 @@ const Discount: React.FC = () => {
                 sx={{ marginBottom: 2 }}
                 InputProps={{
                   startAdornment: (
-                    <Typography sx={{fontSize:15 , fontWeight:"700" , marginRight:3}}>%</Typography>
+                    <Typography
+                      sx={{ fontSize: 15, fontWeight: "700", marginRight: 3 }}
+                    >
+                      %
+                    </Typography>
                   ),
-                  
                 }}
               />
 
