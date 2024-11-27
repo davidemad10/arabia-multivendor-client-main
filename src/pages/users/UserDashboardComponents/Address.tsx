@@ -19,7 +19,16 @@ import { getUserInfo, updateUserInfo } from "../../../api/userRequests";
 import { getUser } from "../../../../public/utils/functions";
 import { enqueueSnackbar } from "notistack";
 
-const AddressData = () => {
+interface AddressDataProps {
+  address?: string;
+  navigate?: () => void;
+}
+
+// Functional component with default props
+const AddressData: React.FC<AddressDataProps> = ({
+  address = "addressInfo",
+  navigate = () => console.log("navigate"),
+}) => {
   const [requestLoading, setRequestLoading] = useState(false);
   const token = sessionStorage.getItem("accessToken");
   const user = getUser(token);
@@ -31,12 +40,12 @@ const AddressData = () => {
   });
 
   const schema = z.object({
-    country: z.string().optional(),
-    state: z.string().optional(),
-    city: z.string().optional(),
-    postal_code: z.string().max(15).optional(),
-    address_1: z.string().optional(),
-    address_2: z.string().optional(),
+    country: z.string(),
+    state: z.string(),
+    city: z.string(),
+    postal_code: z.string().max(15),
+    address_1: z.string(),
+    address_2: z.string(),
   });
 
   const formik = useFormik({
@@ -51,6 +60,11 @@ const AddressData = () => {
     validationSchema: toFormikValidationSchema(schema),
     enableReinitialize: true,
     onSubmit: async (values) => {
+      if (!formik.dirty) {
+        console.log("not dirty");
+        navigate && navigate();
+        return;
+      }
       try {
         setRequestLoading(true);
         const shipping_address = values;
@@ -78,6 +92,7 @@ const AddressData = () => {
         });
       } finally {
         setRequestLoading(false);
+        navigate && navigate();
       }
     },
   });
@@ -89,7 +104,7 @@ const AddressData = () => {
   return (
     <>
       <div className="bg-white w-full mx-auto my-5 p-10">
-        <p className="text-gray-700 font-semibold mb-5">{t("addressInfo")}</p>
+        <p className="text-gray-700 font-semibold mb-5">{t(address)}</p>
         <form onSubmit={formik.handleSubmit}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {/* Country */}
@@ -220,7 +235,7 @@ const AddressData = () => {
           ) : (
             <Button
               type="submit"
-              disabled={!formik.dirty && formik.isValid}
+              disabled={!formik.isValid}
               variant="contained"
               className="w-1/5"
               sx={{
