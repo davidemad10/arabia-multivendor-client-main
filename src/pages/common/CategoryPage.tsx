@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
-import { Product } from "../../types";
-import ProductCard from "../../components/reusables/ProductCard";
-import AccordionUsage from "../../components/shared/products/AccordionUsage";
-import FilterSidebar from "../../components/shared/products/FilterSidebar";
-import Loader from "../../components/reusables/Loader";
-import Menu from "../../components/reusables/Menu";
-import { Button } from "@headlessui/react";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axiosInstance from '../../api/axiosInstance';
+import { Product } from '../../types';
+import ProductCard from '../../components/reusables/ProductCard';
+import AccordionUsage from '../../components/shared/products/AccordionUsage';
+import FilterSidebar from '../../components/shared/products/FilterSidebar';
+import Loader from '../../components/reusables/Loader';
+import Menu from '../../components/reusables/Menu';
+import { Button } from '@headlessui/react';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isPending, setIsPending] = useState<boolean>(true);
-  const [sortOption, setSortOption] = useState<string>("");
+  const [sortOption, setSortOption] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const productsPerPage = 2; // Limit of products per page
 
@@ -38,30 +38,30 @@ export default function CategoryPage() {
           p: page,
         },
       });
-      console.log("API response:", response);
+      console.log('API response:', response);
 
       const mappedProducts: Product[] = response.data.results.map(
         (product: any) => ({
           id: product.id,
-          name: product.translations.en.name,
-          image: product.images[0]?.image || "",
-          price: product.price_after_discount,
-          oldPrice: product.price_before_discount,
-          rating: product.total_views,
+          name: product.productName || '',
+          image: product.images[0]?.image || '',
+          price: product.price_after_discount || '',
+          oldPrice: product.price_before_discount || '',
+          rating: product.total_views || 0,
           isBestSeller: product.total_sold > 50,
-          description: product.translations.en.description,
-          slug: product.slug,
-          category: product.category.translations.en.name,
-          brand: product.brand.translations.en.name,
-          size: product.size.name,
-          color: product.color.name,
+          description: product.productDescription || '', // Updated for correct field
+          slug: product.slug || '',
+          category: product.category_details?.translations?.en?.name || '',
+          brand: product.brand_details?.translations?.en?.name || '',
+          size: product.size_details?.[0]?.name || '', // Updated to access array
+          color: product.color_details?.[0]?.name || '', // Updated to access array
         })
       );
 
       setProducts(mappedProducts);
       setFilteredProducts(mappedProducts);
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      console.error('Failed to fetch products:', error);
     } finally {
       setIsPending(false);
     }
@@ -103,9 +103,9 @@ export default function CategoryPage() {
 
     if (sortOption) {
       updatedProducts = updatedProducts.sort((a, b) => {
-        if (sortOption === "Price: High to Low") return b.price - a.price;
-        if (sortOption === "Price: Low to High") return a.price - b.price;
-        if (sortOption === "Best Rated") return b.rating - a.rating;
+        if (sortOption === 'Price: High to Low') return b.price - a.price;
+        if (sortOption === 'Price: Low to High') return a.price - b.price;
+        if (sortOption === 'Best Rated') return b.rating - a.rating;
         return 0;
       });
     }
@@ -130,7 +130,7 @@ export default function CategoryPage() {
     setSelectedBrands([]);
     setPriceRange(null);
     setSelectedRatings([1, 5]);
-    setSortOption("");
+    setSortOption('');
     setFilteredProducts(products);
   };
 

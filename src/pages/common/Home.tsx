@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
-import HeroSlider from "../../components/shared/advertisement/HeroSlider";
-import CategoriesSlider from "../../components/shared/products/CategoriesSlider";
-import ProductsSlider from "../../components/shared/products/ProductsSlider";
-import { Helmet } from "react-helmet";
-import BrandsSlider from "../../components/shared/products/BrandsSlider";
-import axiosInstance from "../../api/axiosInstance";
-import { Categories, Product } from "../../types";
+import React, { useEffect, useState, useCallback } from 'react';
+import HeroSlider from '../../components/shared/advertisement/HeroSlider';
+import CategoriesSlider from '../../components/shared/products/CategoriesSlider';
+import ProductsSlider from '../../components/shared/products/ProductsSlider';
+import { Helmet } from 'react-helmet';
+import BrandsSlider from '../../components/shared/products/BrandsSlider';
+import axiosInstance from '../../api/axiosInstance';
+import { Categories, Product } from '../../types';
 
 export default function Home() {
   const [categories, setCategories] = useState<Categories[]>([]);
@@ -19,10 +19,10 @@ export default function Home() {
     const fetchCategories = async () => {
       setLoading((prev) => ({ ...prev, categories: true }));
       try {
-        const response = await axiosInstance.get("/products/category/");
+        const response = await axiosInstance.get('/products/category/');
         setCategories(response.data);
       } catch (error) {
-        console.error("Failed to fetch categories:", error);
+        console.error('Failed to fetch categories:', error);
       } finally {
         setLoading((prev) => ({ ...prev, categories: false }));
       }
@@ -46,21 +46,22 @@ export default function Home() {
             productsData[category.slug] = response.data.results.map(
               (product: any) => ({
                 id: product.id,
-                name: product.translations.en.name,
-                image: product.images[0]?.image,
-                price: product.price_after_discount,
-                oldPrice: product.price_before_discount,
-                rating: product.total_views,
+                name: product.productName || '', // No `translations.en.name`, using `productName`
+                image: product.images?.[0]?.image || '', // Handling nested structure
+                price: product.price_after_discount || '',
+                oldPrice: product.price_before_discount || '',
+                rating: product.total_views || 0,
                 isBestSeller: product.total_sold > 50,
-                description: product.translations.en.description,
-                slug: product.slug,
+                description: product.productDescription || '', // No `translations.en.description`, using `productDescription`
+                slug: product.slug || '',
               })
             );
           })
         );
         setCategoryProducts(productsData);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error('Failed to fetch products:', error);
+        console.log(productsData);
       } finally {
         setLoading((prev) => ({ ...prev, products: false }));
       }
@@ -74,29 +75,29 @@ export default function Home() {
   const slidersData = [
     {
       id: 1,
-      category: "example-category",
+      category: 'example-category',
       translations: {
         en: {
           image:
-            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg",
+            'https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg',
         },
         ar: {
           image:
-            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg",
+            'https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1188351907.jpg',
         },
       },
     },
     {
       id: 2,
-      category: "example-category",
+      category: 'example-category',
       translations: {
         en: {
           image:
-            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg",
+            'https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg',
         },
         ar: {
           image:
-            "https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg",
+            'https://www.shutterstock.com/image-vector/vector-realistic-isolated-neon-sign-260nw-1228522084.jpg',
         },
       },
     },
