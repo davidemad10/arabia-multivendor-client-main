@@ -10,12 +10,15 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProductOverview({ product }) {
-  const [mainImage, setMainImage] = useState(product.images[0]);
+  const fallbackImage = "https://via.placeholder.com/150"; // Fallback image URL
+  const [mainImage, setMainImage] = useState(
+    product.images[0]?.image || fallbackImage
+  );
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState("");
 
   const averageRating = parseFloat(
-    calculateAverageRating(product.reviews).toString()
+    calculateAverageRating(product.reviews || []).toString()
   );
 
   return (
@@ -26,14 +29,13 @@ export default function ProductOverview({ product }) {
             role="list"
             className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
           >
-            {/* Breadcrumbs */}
             <li className="text-sm">
               <a
                 href="#"
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600"
               >
-                {product.translations.en.name} {/* Use the new name */}
+                {product.translations.en.name}
               </a>
             </li>
           </ol>
@@ -42,58 +44,67 @@ export default function ProductOverview({ product }) {
         <div className="flex flex-col lg:flex-row w-full">
           {/* Image gallery */}
           <div className="flex-1 mt-6 px-6 sm:px-6 lg:px-8 flex justify-center">
-            {/* Main Container for Main Image and Thumbnails */}
             <div className="flex flex-col items-center lg:items-start max-w-fit">
-              {/* Main Image */}
               <div className="w-96 h-96 aspect-h-3 aspect-w-2 overflow-hidden rounded-lg">
                 <img
                   alt={product.translations.en.name}
-                  src={mainImage.image} // Use the new thumbnail
+                  src={mainImage}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
-
-              {/* Thumbnail Images */}
               <div className="mx-auto mt-4 flex space-x-4 justify-center lg:justify-start">
-                {product.images.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`w-20 h-20 aspect-h-1 aspect-w-1 overflow-hidden rounded-lg cursor-pointer border-2 ${
-                      mainImage.image === image.image
-                        ? "border-blue-500"
-                        : "border-transparent"
-                    } hover:border-blue-500 transition-all duration-300`}
-                    onClick={() => setMainImage(image)}
-                  >
-                    <img
-                      alt={product.translations.en.name}
-                      src={image.image}
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-                ))}
+                {product.images.length ? (
+                  product.images.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`w-20 h-20 aspect-h-1 aspect-w-1 overflow-hidden rounded-lg cursor-pointer border-2 ${
+                        mainImage === image.image
+                          ? "border-blue-500"
+                          : "border-transparent"
+                      } hover:border-blue-500 transition-all duration-300`}
+                      onClick={() => setMainImage(image.image)}
+                    >
+                      <img
+                        alt={product.translations.en.name}
+                        src={image.image}
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <span>No images available</span>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Product basic info */}
           <div className="pt-10 px-8 sm:px-6 lg:col-span-2 lg:border-gray-200 lg:pr-8 flex-1">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-              {product.translations.en.name} {/* Use the new name */}
+              {product.translations.en.name}
             </h1>
+            <p className="text-sm text-gray-600">
+              {product.category_details.translations.en.name} |{" "}
+              {product.brand_details.translations.en.name}
+            </p>
             <p className="text-xl sm:text-2xl lg:text-3xl tracking-tight text-gray-900">
-              {product.price_after_discount}
-              {""} {/* Use the new price */}
-              <Trans i18nKey="currency"></Trans>
+              {product.price_after_discount} <Trans i18nKey="currency" />
+              {product.price_before_discount && (
+                <span className="ml-2 text-sm line-through text-gray-500">
+                  {product.price_before_discount} <Trans i18nKey="currency" />
+                </span>
+              )}
             </p>
 
-            {/* Available Colors */}
+            <p className="mt-4 text-gray-700">
+              {product.translations.en.description}
+            </p>
+
             <div className="mt-4">
               <h3 className="text-sm font-medium text-gray-900">
-                <Trans i18nKey="available colors"></Trans>
+                <Trans i18nKey="available colors" />
               </h3>
               <div className="mt-2 flex space-x-2">
-                {product.color.map((color) => (
+                {product.color_details.map((color) => (
                   <span
                     className={classNames(
                       "h-6 w-6 rounded-full border border-gray-300 cursor-pointer mx-2",
@@ -110,9 +121,7 @@ export default function ProductOverview({ product }) {
               </div>
             </div>
 
-            {/* Reviews */}
             <div className="flex items-center mt-6 gap-3">
-              {/* Assuming you have a function to calculate average rating */}
               <Rating
                 name="half-rating-read"
                 defaultValue={averageRating}
@@ -125,7 +134,6 @@ export default function ProductOverview({ product }) {
               </span>
             </div>
 
-            {/* Quantity */}
             <div className="mt-4 flex items-center">
               <h3 className="text-sm font-medium text-gray-900">
                 {t("quantity")}
@@ -139,9 +147,8 @@ export default function ProductOverview({ product }) {
               />
             </div>
 
-            {/* Add to Cart Button */}
             <button className="mt-6 w-full bg-indigo-600 text-white py-2 rounded">
-              <Trans i18nKey="addToCart"></Trans>
+              <Trans i18nKey="addToCart" />
             </button>
           </div>
         </div>

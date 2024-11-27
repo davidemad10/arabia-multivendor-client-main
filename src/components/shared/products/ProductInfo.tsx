@@ -62,13 +62,13 @@ export default function ProductInfo({ product }) {
                   {t("highlights")}
                 </h2>
                 <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
-                  {Object.keys(product.specifications).map(
-                    (specifications, index) => (
+                  {Object.entries(product.specifications).map(
+                    ([key, value], index) => (
                       <li key={index} className="mb-2">
                         <div className="w-full">
                           <div className="p-2">
-                            <strong>{specifications}</strong>
-                            <br /> {product.specifications[specifications]}
+                            <strong>{key}</strong>
+                            <br /> {value}
                           </div>
                         </div>
                       </li>
@@ -92,7 +92,7 @@ export default function ProductInfo({ product }) {
                       <div className="flex-shrink-0">
                         <img
                           className="h-10 w-10 rounded-full object-cover"
-                          src={review.avatar} // Assuming there's an avatar property
+                          src={review.avatar || "fallback-avatar.png"} // Fallback avatar
                           alt={`${review.username}'s avatar`}
                         />
                       </div>

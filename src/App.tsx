@@ -23,7 +23,8 @@ import Wallet from "./components/VendorDashboard/Pages/Wallet/Wallet";
 import Earnings from "./components/VendorDashboard/Pages/Earnings/Earnings";
 import Discount from "./components/VendorDashboard/Pages/Discount/Discount";
 import VendorProfile from "./components/VendorDashboard/Pages/VendorProfile/VendorProfile";
-import Miky from "./components/VendorDashboard/Pages/Products/miky";
+import CheckoutPage from "./pages/users/checkout";
+
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
             element={<VendorSignUp></VendorSignUp>}
           ></Route>
           <Route
-            path="/products/:sku"
+            path="/products/:id"
             element={<ProductDetails></ProductDetails>}
           ></Route>
           <Route path="/category/:category" element={<CategoryPage />} />
@@ -48,6 +49,10 @@ function App() {
         <Route path="/profile" element={<UserProfile></UserProfile>}>
           <Route index element={<UserDashboard></UserDashboard>}></Route>
           <Route path="cart" element={<CartPage></CartPage>}></Route>
+          <Route
+            path="checkout"
+            element={<CheckoutPage></CheckoutPage>}
+          ></Route>
         </Route>
 
         {/* Vendor  dashboard Routes */}

@@ -1,6 +1,7 @@
 import { t } from "i18next";
 import { getUserOrders } from "../../../api/userRequests";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "../../../components/reusables/Loader";
 
 // const orders = [
 //   {
@@ -157,11 +158,15 @@ export default function Orders() {
   console.log(data);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mt-44 flex justify-center items-center">
+        <Loader isLoading={true}></Loader>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error loading user information.</div>;
+    return <div>Error loading user Orders.</div>;
   }
   return (
     <div className="bg-white w-full mx-auto my-5 p-10">
