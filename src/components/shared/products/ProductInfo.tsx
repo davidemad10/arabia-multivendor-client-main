@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { t } from "i18next";
+import { useState } from 'react';
+import { t } from 'i18next';
 
-import { calculateAverageRating } from "../../../constants";
-import { Rating } from "@mui/material";
-import "../../../styles/product-info.css";
+import { calculateAverageRating } from '../../../constants';
+import { Rating } from '@mui/material';
+import '../../../styles/product-info.css';
 
 export default function ProductInfo({ product }) {
-  const [activeTab, setActiveTab] = useState("product-details");
+  const [activeTab, setActiveTab] = useState('product-details');
 
   function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
+    return classes.filter(Boolean).join(' ');
   }
 
   const averageRating = parseFloat(
@@ -22,36 +22,36 @@ export default function ProductInfo({ product }) {
       <div className="flex justify-center gap-6 sm:gap-14 border-b border-gray-300 pb-5">
         <button
           className={classNames(
-            activeTab === "product-details" ? "text-gray-900" : "text-gray-400",
-            "text-sm font-medium hover:text-gray-700 focus:outline-none transition-colors duration-300"
+            activeTab === 'product-details' ? 'text-gray-900' : 'text-gray-400',
+            'text-sm font-medium hover:text-gray-700 focus:outline-none transition-colors duration-300'
           )}
-          onClick={() => setActiveTab("product-details")}
+          onClick={() => setActiveTab('product-details')}
         >
-          {t("productDetails")}
+          {t('productDetails')}
         </button>
         <button
           className={classNames(
-            activeTab === "reviews" ? "text-gray-900" : "text-gray-400",
-            "text-sm font-medium hover:text-gray-700 focus:outline-none transition-colors duration-300"
+            activeTab === 'reviews' ? 'text-gray-900' : 'text-gray-400',
+            'text-sm font-medium hover:text-gray-700 focus:outline-none transition-colors duration-300'
           )}
-          onClick={() => setActiveTab("reviews")}
+          onClick={() => setActiveTab('reviews')}
         >
-          {t("reviews")} ({product.reviews.length})
+          {t('reviews')} ({product.reviews.length})
         </button>
       </div>
 
       {/* Content */}
       <div className="mt-8 mb-9">
         {/* Product Details Tab */}
-        {activeTab === "product-details" && (
+        {activeTab === 'product-details' && (
           <div className="flex flex-col lg:flex-row items-start justify-center gap-8 p-6">
             {/* Product Description */}
             <div className="lg:w-5/12 w-full max-h-40">
               <h2 className="text-lg font-medium text-gray-900">
-                {t("productDetails")}
+                {t('productDetails')}
               </h2>
               <p className="mt-4 text-sm text-gray-600">
-                {product.translations.en.description}
+                {product.productDescription}
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ProductInfo({ product }) {
             {product.specifications && (
               <div className="lg:w-5/12 w-full">
                 <h2 className="text-lg font-medium text-gray-900">
-                  {t("highlights")}
+                  {t('highlights')}
                 </h2>
                 <ul className="mt-4 list-disc pl-5 text-sm text-gray-600 max-h-40 overflow-y-auto custom-scrollbar">
                   {Object.entries(product.specifications).map(
@@ -81,7 +81,7 @@ export default function ProductInfo({ product }) {
         )}
 
         {/* Reviews Tab */}
-        {activeTab === "reviews" && (
+        {activeTab === 'reviews' && (
           <div className="max-w-3xl mx-auto px-4">
             {product.reviews.length > 0 ? (
               <div className="mt-4 max-h-80 space-y-6 overflow-y-auto custom-scrollbar">
@@ -92,7 +92,7 @@ export default function ProductInfo({ product }) {
                       <div className="flex-shrink-0">
                         <img
                           className="h-10 w-10 rounded-full object-cover"
-                          src={review.avatar || "fallback-avatar.png"} // Fallback avatar
+                          src={review.avatar || 'fallback-avatar.png'} // Fallback avatar
                           alt={`${review.username}'s avatar`}
                         />
                       </div>
@@ -121,7 +121,7 @@ export default function ProductInfo({ product }) {
                 ))}
               </div>
             ) : (
-              <div className="text-center min-h-32">{t("noReviews")}</div>
+              <div className="text-center min-h-32">{t('noReviews')}</div>
             )}
           </div>
         )}

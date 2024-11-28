@@ -1,21 +1,19 @@
-import { useState } from "react";
-import { Rating } from "@mui/material";
-import "../../../styles/product-overview.css";
-import { calculateAverageRating } from "../../../constants";
-import { Trans } from "react-i18next";
-import { t } from "i18next";
+import { useState } from 'react';
+import { Rating } from '@mui/material';
+import '../../../styles/product-overview.css';
+import { calculateAverageRating } from '../../../constants';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function ProductOverview({ product }) {
-  const fallbackImage = "https://via.placeholder.com/150"; // Fallback image URL
-  const [mainImage, setMainImage] = useState(
-    product.images[0]?.image || fallbackImage
-  );
+  const fallbackImage = 'https://via.placeholder.com/150'; // Fallback image URL
+  const [mainImage, setMainImage] = useState(fallbackImage);
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState('');
 
   const averageRating = parseFloat(
     calculateAverageRating(product.reviews || []).toString()
@@ -35,7 +33,7 @@ export default function ProductOverview({ product }) {
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600"
               >
-                {product.translations.en.name}
+                {product.productName}
               </a>
             </li>
           </ol>
@@ -47,7 +45,7 @@ export default function ProductOverview({ product }) {
             <div className="flex flex-col items-center lg:items-start max-w-fit">
               <div className="w-96 h-96 aspect-h-3 aspect-w-2 overflow-hidden rounded-lg">
                 <img
-                  alt={product.translations.en.name}
+                  alt={product.productName}
                   src={mainImage}
                   className="h-full w-full object-cover object-center"
                 />
@@ -59,13 +57,13 @@ export default function ProductOverview({ product }) {
                       key={index}
                       className={`w-20 h-20 aspect-h-1 aspect-w-1 overflow-hidden rounded-lg cursor-pointer border-2 ${
                         mainImage === image.image
-                          ? "border-blue-500"
-                          : "border-transparent"
+                          ? 'border-blue-500'
+                          : 'border-transparent'
                       } hover:border-blue-500 transition-all duration-300`}
                       onClick={() => setMainImage(image.image)}
                     >
                       <img
-                        alt={product.translations.en.name}
+                        alt={product.productName}
                         src={image.image}
                         className="h-full w-full object-cover object-center"
                       />
@@ -80,10 +78,10 @@ export default function ProductOverview({ product }) {
 
           <div className="pt-10 px-8 sm:px-6 lg:col-span-2 lg:border-gray-200 lg:pr-8 flex-1">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-              {product.translations.en.name}
+              {product.productName}
             </h1>
             <p className="text-sm text-gray-600">
-              {product.category_details.translations.en.name} |{" "}
+              {product.category_details.translations.en.name} |{' '}
               {product.brand_details.translations.en.name}
             </p>
             <p className="text-xl sm:text-2xl lg:text-3xl tracking-tight text-gray-900">
@@ -95,9 +93,7 @@ export default function ProductOverview({ product }) {
               )}
             </p>
 
-            <p className="mt-4 text-gray-700">
-              {product.translations.en.description}
-            </p>
+            <p className="mt-4 text-gray-700">{product.productDescription}</p>
 
             <div className="mt-4">
               <h3 className="text-sm font-medium text-gray-900">
@@ -107,10 +103,10 @@ export default function ProductOverview({ product }) {
                 {product.color_details.map((color) => (
                   <span
                     className={classNames(
-                      "h-6 w-6 rounded-full border border-gray-300 cursor-pointer mx-2",
+                      'h-6 w-6 rounded-full border border-gray-300 cursor-pointer mx-2',
                       selectedColor === color.name
-                        ? "ring-2 ring-offset-2 ring-indigo-500"
-                        : ""
+                        ? 'ring-2 ring-offset-2 ring-indigo-500'
+                        : ''
                     )}
                     key={color.id}
                     style={{ backgroundColor: color.name.toLowerCase() }}
@@ -130,13 +126,13 @@ export default function ProductOverview({ product }) {
               />
               {averageRating}
               <span>
-                ({product.reviews.length} {t("reviews")})
+                ({product.reviews.length} {t('reviews')})
               </span>
             </div>
 
             <div className="mt-4 flex items-center">
               <h3 className="text-sm font-medium text-gray-900">
-                {t("quantity")}
+                {t('quantity')}
               </h3>
               <input
                 type="number"
