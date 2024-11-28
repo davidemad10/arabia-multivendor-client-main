@@ -1,30 +1,29 @@
-import "./styles/App.css";
-import "./styles/Manual.css";
-import { Route, Routes } from "react-router-dom";
-import RootLayout from "./layouts/root";
-import { Home, Products } from "./pages";
-import ProductDetails from "./pages/common/ProductDetails";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SignIn from "./pages/users/SignIn/SignIn";
-import SignUp from "./pages/users/SignUp/SignUp";
-import VendorSignUp from "./pages/vendor/VendorSignUp";
-import CategoryPage from "./pages/common/CategoryPage";
-import BrandProducts from "./pages/common/BrandProducts";
-import UserProfile from "./layouts/UserProfile";
-import UserDashboard from "./pages/users/UserDashboard";
-import CartPage from "./pages/users/Cart";
-import VendorDashboard from "./components/VendorDashboard/VedorDashboard";
-import Dashboard from "./components/VendorDashboard/Pages/Dashboard/Dashboard";
-import AddProduct from "./components/VendorDashboard/Pages/Products/AddProduct";
-import UpdateProduct from "./components/VendorDashboard/Pages/Products/UpdateProduct";
-import Orders from "./components/VendorDashboard/Pages/Orders/Orders";
-import Wallet from "./components/VendorDashboard/Pages/Wallet/Wallet";
-import Earnings from "./components/VendorDashboard/Pages/Earnings/Earnings";
-import Discount from "./components/VendorDashboard/Pages/Discount/Discount";
-import VendorProfile from "./components/VendorDashboard/Pages/VendorProfile/VendorProfile";
-import CheckoutPage from "./pages/users/checkout";
-
+import './styles/App.css';
+import './styles/Manual.css';
+import { Route, Routes } from 'react-router-dom';
+import RootLayout from './layouts/root';
+import { Home } from './pages';
+import ProductDetails from './pages/common/ProductDetails';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SignIn from './pages/users/SignIn/SignIn';
+import SignUp from './pages/users/SignUp/SignUp';
+import VendorSignUp from './pages/vendor/VendorSignUp';
+import CategoryPage from './pages/common/CategoryPage';
+import BrandProducts from './pages/common/BrandProducts';
+import UserProfile from './layouts/UserProfile';
+import UserDashboard from './pages/users/UserDashboard';
+import CartPage from './pages/users/Cart';
+import VendorDashboard from './components/VendorDashboard/VedorDashboard';
+import Dashboard from './components/VendorDashboard/Pages/Dashboard/Dashboard';
+import AddProduct from './components/VendorDashboard/Pages/Products/AddProduct';
+import UpdateProduct from './components/VendorDashboard/Pages/Products/UpdateProduct';
+import Orders from './components/VendorDashboard/Pages/Orders/Orders';
+import Wallet from './components/VendorDashboard/Pages/Wallet/Wallet';
+import Earnings from './components/VendorDashboard/Pages/Earnings/Earnings';
+import Discount from './components/VendorDashboard/Pages/Discount/Discount';
+import VendorProfile from './components/VendorDashboard/Pages/VendorProfile/VendorProfile';
+import CheckoutPage from './pages/users/checkout';
 
 function App() {
   return (
@@ -59,7 +58,6 @@ function App() {
 
         <Route element={<VendorDashboard />}>
           <Route index path="/VedorDashboard" element={<Dashboard />}></Route>
-          <Route path="/miky" element={<Miky></Miky>}></Route>
           <Route path="/AddProducts" element={<AddProduct />}></Route>
           <Route path="/UpdateProduct" element={<UpdateProduct />}></Route>
           <Route path="/Orders" element={<Orders />}></Route>
@@ -77,7 +75,7 @@ function App() {
           <Route path="/Discount" element={<Discount />}></Route>
           <Route
             path="/VendorProfile"
-            element={<VendorProfile name={""} email={""} />}
+            element={<VendorProfile name={''} email={''} />}
           ></Route>
         </Route>
       </Routes>
